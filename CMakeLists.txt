@@ -1,5 +1,5 @@
 project(helloworld)
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.5)
 
 SET(CMAKE_CXX_STANDARD 17)
 
@@ -15,3 +15,7 @@ add_executable(wireless example/wireless/wireless.cpp)
 add_executable(advanced_gamepad example/advanced_gamepad/main.cpp)
 add_executable(state_machine_example example/state_machine/main.cpp)
 add_executable(test_jsonize example/jsonize/test_jsonize.cpp)
+add_executable(robot_state_client_example example/client/robot_state_client_example.cpp)
+add_executable(sport_client_example example/client/sport_client_example.cpp)
+add_executable(video_client_example example/client/video_client_example.cpp)
+add_executable(vui_client_example example/client/vui_client_example.cpp)

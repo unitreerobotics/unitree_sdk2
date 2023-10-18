@@ -36,6 +36,9 @@ protected:
     int32_t Call(int32_t apiId, const std::string& parameter, std::string& data);
     int32_t Call(int32_t apiId, const std::string& parameter);
 
+    int32_t Call(int32_t apiId, const std::vector<uint8_t>& parameter, std::vector<uint8_t>& data);
+    int32_t Call(int32_t apiId, const std::vector<uint8_t>& parameter);
+
     void RegistApi(int32_t apiId, int32_t proirity = 0);
     int32_t CheckApi(int32_t apiId, int32_t& proirity, int64_t& leaseId);
 

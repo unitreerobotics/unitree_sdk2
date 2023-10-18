@@ -1,11 +1,17 @@
 #include <unitree/robot/go2/vui/vui_client.hpp>
 
-int main()
+int main(int32_t argc, const char** argv)
 {
+    if (argc < 2)
+    {
+        std::cout << "Usage: vui_client_example network_interface_name" << std::endl;
+        exit(0);
+    }
     /*
      * Initilaize ChannelFactory
      */
-    unitree::robot::ChannelFactory::Instance()->Init(0);
+    std::string networkInterface = argv[1];
+    unitree::robot::ChannelFactory::Instance()->Init(0, networkInterface);
     unitree::robot::go2::VuiClient vc;
 
     /*
@@ -16,7 +22,7 @@ int main()
 
     //Test Api
 
-    int level, value = 0;
+    int level = 0, value = 0;
     int ret;
 
     while (true)

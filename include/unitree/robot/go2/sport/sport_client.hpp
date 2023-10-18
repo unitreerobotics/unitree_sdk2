@@ -144,23 +144,23 @@ public:
      */
     int32_t TrajectoryFollow(std::vector<PathPoint>& path);
 
-    /*
-     * @brief GetBodyHeight
-     * @api: 1024
-     */
-    int32_t GetBodyHeight(float& height);
+    // /*
+    //  * @brief GetBodyHeight
+    //  * @api: 1024
+    //  */
+    // int32_t GetBodyHeight();
 
-    /*
-     * @brief GetFootRaiseHeight
-     * @api: 1025
-     */
-    int32_t GetFootRaiseHeight(float& height);
+    // /*
+    //  * @brief GetFootRaiseHeight
+    //  * @api: 1025
+    //  */
+    // int32_t GetFootRaiseHeight(float& height);
 
-    /*
-     * @brief GetSpeedLevel
-     * @api: 1026
-     */
-    int32_t GetSpeedLevel(int&);
+    // /*
+    //  * @brief GetSpeedLevel
+    //  * @api: 1026
+    //  */
+    // int32_t GetSpeedLevel(int&);
 
     /*
      * @brief SwitchJoystick
@@ -180,11 +180,17 @@ public:
      */
     int32_t Wallow();
 
+    // /*
+    //  * @brief Content
+    //  * @api: 1020
+    //  */
+    // int32_t Content();
+
     /*
-     * @brief Content
-     * @api: 1020
+     * @brief Heart
+     * @api: 1036
      */
-    int32_t Content();
+    int32_t Heart();
 
     /*
      * @brief Pose

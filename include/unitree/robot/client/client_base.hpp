@@ -32,6 +32,9 @@ protected:
     int32_t Call(int32_t apiId, const std::string& parameter, std::string& data, int32_t proirity, int64_t leaseId);
     int32_t Call(int32_t apiId, const std::string& parameter, int32_t priority, int64_t leaseId);
 
+    int32_t Call(int32_t apiId, const std::vector<uint8_t>& parameter, std::vector<uint8_t>& bin_data, int32_t proirity, int64_t leaseId);
+    int32_t Call(int32_t apiId, const std::vector<uint8_t>& parameter, int32_t priority, int64_t leaseId);
+
     void SetHeader(RequestHeader& header, int32_t apiId, int64_t leaseId, int32_t priority, bool noReply);
 
 private:

@@ -35,13 +35,13 @@ const int32_t ROBOT_SPORT_API_ID_HELLO              = 1016;
 const int32_t ROBOT_SPORT_API_ID_STRETCH            = 1017;
 const int32_t ROBOT_SPORT_API_ID_TRAJECTORYFOLLOW   = 1018;
 const int32_t ROBOT_SPORT_API_ID_CONTINUOUSGAIT     = 1019;
-const int32_t ROBOT_SPORT_API_ID_CONTENT            = 1020;
+// const int32_t ROBOT_SPORT_API_ID_CONTENT            = 1020;
 const int32_t ROBOT_SPORT_API_ID_WALLOW             = 1021;
 const int32_t ROBOT_SPORT_API_ID_DANCE1             = 1022;
 const int32_t ROBOT_SPORT_API_ID_DANCE2             = 1023;
-const int32_t ROBOT_SPORT_API_ID_GETBODYHEIGHT      = 1024;
-const int32_t ROBOT_SPORT_API_ID_GETFOOTRAISEHEIGHT = 1025;
-const int32_t ROBOT_SPORT_API_ID_GETSPEEDLEVEL      = 1026;
+// const int32_t ROBOT_SPORT_API_ID_GETBODYHEIGHT      = 1024;
+// const int32_t ROBOT_SPORT_API_ID_GETFOOTRAISEHEIGHT = 1025;
+// const int32_t ROBOT_SPORT_API_ID_GETSPEEDLEVEL      = 1026;
 const int32_t ROBOT_SPORT_API_ID_SWITCHJOYSTICK     = 1027;
 const int32_t ROBOT_SPORT_API_ID_POSE               = 1028;
 const int32_t ROBOT_SPORT_API_ID_SCRAPE             = 1029;
@@ -51,6 +51,7 @@ const int32_t ROBOT_SPORT_API_ID_FRONTPOUNCE        = 1032;
 const int32_t ROBOT_SPORT_API_ID_WIGGLEHIPS         = 1033;
 const int32_t ROBOT_SPORT_API_ID_GETSTATE           = 1034;
 const int32_t ROBOT_SPORT_API_ID_ECONOMICGAIT       = 1035;
+const int32_t ROBOT_SPORT_API_ID_HEART              = 1036;
 
 }
 }

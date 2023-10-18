@@ -30,17 +30,9 @@ public:
     void Init();
 
 private:
-    /*initialize lowcmd*/
     void InitLowCmd();
-
-    /*lowstate message handler function for subscriber*/
     void LowStateMessageHandler(const void* messages);
-
-    /*lowcmd write function*/
     void LowCmdWrite();
-
-    /*crc for lowcmd and lowstate*/
-    uint32_t Crc32(uint32_t* ptr, uint32_t len);
 
 private:
     float qInit[3] = {0};
@@ -66,7 +58,7 @@ private:
     ThreadPtr lowCmdWriteThreadPtr;
 };
 
-uint32_t Custom::Crc32(uint32_t* ptr, uint32_t len)
+uint32_t crc32_core(uint32_t* ptr, uint32_t len)
 {
     unsigned int xbit = 0;
     unsigned int data = 0;
@@ -196,7 +188,7 @@ void Custom::LowCmdWrite()
         low_cmd.motor_cmd()[2].tau() = 0;
     }
 
-    low_cmd.crc() = Crc32((uint32_t *)&low_cmd, (sizeof(unitree_go::msg::dds_::LowCmd_)>>2)-1);
+    low_cmd.crc() = crc32_core((uint32_t *)&low_cmd, (sizeof(unitree_go::msg::dds_::LowCmd_)>>2)-1);
     
     lowcmd_publisher->Write(low_cmd);
 }
