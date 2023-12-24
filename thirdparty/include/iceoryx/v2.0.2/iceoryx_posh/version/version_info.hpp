@@ -81,8 +81,8 @@ class VersionInfo
     static const uint64_t SERIALIZATION_STRING_SIZE = 100u;
     using SerializationString_t = cxx::string<SERIALIZATION_STRING_SIZE>;
 
-    static_assert(COMMIT_ID_STRING_SIZE <= SERIALIZATION_STRING_SIZE, "CommitId needs to transfered completely.");
-    static_assert(COMMIT_ID_STRING_SIZE <= BUILD_DATE_STRING_SIZE, "BuildDate needs to transfered completely.");
+    static_assert(COMMIT_ID_STRING_SIZE <= SERIALIZATION_STRING_SIZE, "CommitId needs to transferred completely.");
+    static_assert(COMMIT_ID_STRING_SIZE <= BUILD_DATE_STRING_SIZE, "BuildDate needs to transferred completely.");
     static_assert(cxx::strlen2(ICEORYX_BUILDDATE) < BUILD_DATE_STRING_SIZE,
                   "COMMIT_BUILD_DATE_STRING_SIZE needs to be bigger.");
 

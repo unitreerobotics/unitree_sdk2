@@ -79,7 +79,7 @@ public:
     * the Publisher will not accept any coherent start requests and throw
     * dds::core::PreconditionNotMetError.
     *
-    * @param pub The publisher to supsend publications on.
+    * @param pub The publisher to suspend publications on.
     * @throws dds::core::Error
     *                  An internal error has occurred.
     * @throws dds::core::AlreadyClosedError

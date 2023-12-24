@@ -55,14 +55,14 @@ protected:
     void RegistTopicMessageHandler(const std::string& topic, const DdsMessageHandler& handler)
     {
         mModel.SetTopic<MSG>(topic, handler);
-        LOG_INFO(mLogger, "regist topic reader callback. topic:", topic);
+        LOG_INFO(mLogger, "register topic reader callback. topic:", topic);
     }
 
     template<typename MSG>
     void RegistTopic(const std::string& topic)
     {
         mModel.SetTopic<MSG>(topic);
-        LOG_INFO(mLogger, "regist topic. topic:", topic);
+        LOG_INFO(mLogger, "register topic. topic:", topic);
     }
 
     /*

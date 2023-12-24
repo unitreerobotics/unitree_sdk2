@@ -54,7 +54,7 @@ public:
     /**
      * Create a Time from a number of milliseconds
      *
-     * @param milliseconds number of miliseconds
+     * @param milliseconds number of milliseconds
      */
     static const Time from_millisecs(int64_t milliseconds);
     /**

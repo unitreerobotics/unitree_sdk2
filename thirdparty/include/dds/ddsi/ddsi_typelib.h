@@ -62,7 +62,7 @@ DDS_EXPORT char *ddsi_make_typeid_str (struct ddsi_typeid_str *buf, const ddsi_t
 
 DDS_EXPORT bool ddsi_typeinfo_equal (const ddsi_typeinfo_t *a, const ddsi_typeinfo_t *b, ddsi_type_include_deps_t deps);
 DDS_EXPORT ddsi_typeid_t *ddsi_typeinfo_typeid (const ddsi_typeinfo_t *type_info, ddsi_typeid_kind_t kind);
-DDS_EXPORT ddsi_typeinfo_t *ddsi_typeinfo_deser (const struct ddsi_sertype_cdr_data *ser);
+DDS_EXPORT ddsi_typeinfo_t *ddsi_typeinfo_deser (const struct ddsi_sertype_cdr_data *set);
 DDS_EXPORT void ddsi_typeinfo_fini (ddsi_typeinfo_t *typeinfo);
 DDS_EXPORT ddsi_typeinfo_t * ddsi_typeinfo_dup (const ddsi_typeinfo_t *src);
 DDS_EXPORT const ddsi_typeid_t *ddsi_typeinfo_minimal_typeid (const ddsi_typeinfo_t *typeinfo);
@@ -70,7 +70,7 @@ DDS_EXPORT const ddsi_typeid_t *ddsi_typeinfo_complete_typeid (const ddsi_typein
 DDS_EXPORT bool ddsi_typeinfo_present (const ddsi_typeinfo_t *typeinfo);
 DDS_EXPORT bool ddsi_typeinfo_valid (const ddsi_typeinfo_t *typeinfo);
 
-DDS_EXPORT ddsi_typemap_t *ddsi_typemap_deser (const struct ddsi_sertype_cdr_data *ser);
+DDS_EXPORT ddsi_typemap_t *ddsi_typemap_deser (const struct ddsi_sertype_cdr_data *set);
 DDS_EXPORT void ddsi_typemap_fini (ddsi_typemap_t *typemap);
 
 DDS_EXPORT void ddsi_type_register_dep (struct ddsi_domaingv *gv, const ddsi_typeid_t *src_type_id, struct ddsi_type **dst_dep_type, const struct DDS_XTypes_TypeIdentifier *dep_type_id);
@@ -93,7 +93,7 @@ DDS_EXPORT bool ddsi_type_resolved (struct ddsi_domaingv *gv, const struct ddsi_
 /**
  * @brief Waits for the provided type to be resolved
  *
- * In case the type is succesfully resolved (or was already resolved), this
+ * In case the type is successfully resolved (or was already resolved), this
  * function increases the refcount for this type. Caller should do the unref.
  */
 DDS_EXPORT dds_return_t ddsi_wait_for_type_resolved (struct ddsi_domaingv *gv, const ddsi_typeid_t *type_id, dds_duration_t timeout, struct ddsi_type **type, ddsi_type_include_deps_t resolved_kind, ddsi_type_request_t request);

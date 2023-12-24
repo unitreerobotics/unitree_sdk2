@@ -139,7 +139,7 @@ class optional
     /// @return true if the contained values are not equal, otherwise false
     constexpr bool operator!=(const optional<T>& rhs) const noexcept;
 
-    /// @brief Comparision with nullopt_t for easier unset optional comparison
+    /// @brief Comparison with nullopt_t for easier unset optional comparison
     /// @return true if the optional is set, otherwise false
     constexpr bool operator!=(const nullopt_t&) const noexcept;
 

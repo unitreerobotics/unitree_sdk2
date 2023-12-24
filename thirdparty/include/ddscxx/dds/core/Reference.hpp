@@ -143,7 +143,7 @@ public:
      * Destroys a Reference.
      *
      * There might be an associated garbage collection activity when
-     * the current reference is not empty. When the underlaying delegate
+     * the current reference is not empty. When the underlying delegate
      * is referenced by another Reference object as well, then that
      * delegate will not be destroyed.
      */

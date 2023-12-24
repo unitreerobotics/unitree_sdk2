@@ -39,7 +39,7 @@ enum class ChannelError : uint8_t
 /// @class Channel
 /// @brief A data structure representing a channel between Iceoryx and an external system.
 ///
-/// The class couples related iceoryx and external interfaces that communicate with eachother to form the communication
+/// The class couples related iceoryx and external interfaces that communicate with each other to form the communication
 /// channel.
 /// These interfaces are conceptualized as channel "Terminals".
 ///

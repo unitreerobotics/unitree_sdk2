@@ -152,7 +152,7 @@
    doing a separate set without it, as it reduces the size of
    avlNode_t. But in that case, the FindMin/FindSucc option would no
    longer be a reasonable option because it would be prohibitively
-   expensive, whereas the IterFirst/IterNext option are alway
+   expensive, whereas the IterFirst/IterNext option are always
    efficiently. If one were to do a threaded tree variant, the
    implemetantion of IterFirst/IterNext would become absolute trivial
    and faster still, but at the cost of significantly more overhead in

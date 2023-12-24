@@ -49,7 +49,7 @@ enum class FileLockError
 ///        locks (see man page)
 /// @code
 ///    iox::posix::FileLock::create(nameOfmyLock)
-///        .and_then([] { std::cout << "We aquired the lock!" << std::endl; })
+///        .and_then([] { std::cout << "We acquired the lock!" << std::endl; })
 ///        .or_else([](auto& error) {
 ///            if (error == FileLockError::LOCKED_BY_OTHER_PROCESS)
 ///            {

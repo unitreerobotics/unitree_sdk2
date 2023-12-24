@@ -149,7 +149,7 @@ class IpcInterfaceBase
     /// @param[in] timeout for receiving a message.
     /// @param[in] answer The answer of the IPC channel. If timedReceive
     ///         failed the content of answer is undefined.
-    /// @return If a valid message was received before the timeout occures
+    /// @return If a valid message was received before the timeout occurs
     ///             it returns true, otherwise false.
     ///         It also returns false if clock_gettime() failed
     bool timedReceive(const units::Duration timeout, IpcMessage& answer) const noexcept;
@@ -186,7 +186,7 @@ class IpcInterfaceBase
     /// @return initialization state
     bool isInitialized() const noexcept;
 
-    /// @brief Since there might be an outdated IPC channel due to an unclean temination
+    /// @brief Since there might be an outdated IPC channel due to an unclean termination
     ///        this function closes the IPC channel if it's existing.
     /// @param[in] name of the IPC channel to clean up
     static void cleanupOutdatedIpcChannel(const RuntimeName_t& name) noexcept;
@@ -197,13 +197,13 @@ class IpcInterfaceBase
 
   protected:
     /// @brief Closes and opens an existing IPC channel using the same parameters as before.
-    ///        If the queue was not open, it is just openened.
+    ///        If the queue was not open, it is just opened.
     /// @return true if successfully reopened, false if not
     bool reopen() noexcept;
 
     /// @brief Checks if the IPC channel has its counterpart in the file system
     /// @return If the IPC channel, which corresponds to a descriptor,
-    ///         is still availabe in the file system it returns true,
+    ///         is still available in the file system it returns true,
     ///         otherwise it was deleted or the IPC channel was not open and returns false
     bool ipcChannelMapsToFile() noexcept;
 
@@ -241,7 +241,7 @@ class IpcInterfaceBase
 
     /// @brief If a IPC channel was moved then m_runtimeName was cleared
     ///         and this object gave up the control of that specific
-    ///         IPC channel and therefore shouldnt unlink or close it.
+    ///         IPC channel and therefore shouldn't unlink or close it.
     ///         Otherwise the object which it was moved to can end up with
     ///         an invalid IPC channel descriptor.
     /// @return Returns true if the IPC channel is closable,

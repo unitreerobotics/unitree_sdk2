@@ -181,14 +181,14 @@ class ProcessManager : public ProcessManagerInterface
 
     /// @brief Removes the process from the managed client process list, identified by its id.
     /// @param [in] name The process name which should be removed.
-    /// @param [in] sendAckToProcess Informs process that the termination messsage was received
+    /// @param [in] sendAckToProcess Informs process that the termination message was received
     /// @return Returns true if the process was found and removed from the internal list.
     bool searchForProcessAndRemoveIt(const RuntimeName_t& name, const TerminationFeedback feedback) noexcept;
 
     /// @brief Removes the given process from the managed client process list and the respective resources in shared
     /// memory
     /// @param [in] processIter The process which should be removed.
-    /// @param [in] sendAckToProcess Informs process that the termination messsage was received
+    /// @param [in] sendAckToProcess Informs process that the termination message was received
     /// @return Returns true if the process was found and removed from the internal list.
     bool removeProcessAndDeleteRespectiveSharedMemoryObjects(ProcessList_t::iterator& processIter,
                                                              const TerminationFeedback feedback) noexcept;

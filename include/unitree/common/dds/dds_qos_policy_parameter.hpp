@@ -232,7 +232,7 @@ namespace common
  * Qos Policy Member Name
  */
 #define UT_DDS_QOS_POLICY_MEMBER_NAME_KIND              "kind"
-#define UT_DDS_QOS_POLICY_MEMBER_NAME_PEROID            "peroid"
+#define UT_DDS_QOS_POLICY_MEMBER_NAME_PEROID            "period"
 #define UT_DDS_QOS_POLICY_MEMBER_NAME_CLEANUP_DELAY     "service_cleanup_delay"
 #define UT_DDS_QOS_POLICY_MEMBER_NAME_HISTORY_KIND      "history_kind"
 #define UT_DDS_QOS_POLICY_MEMBER_NAME_HISTORY_DEPTH     "history_depth"

@@ -24,7 +24,7 @@ namespace iox
 {
 namespace popo
 {
-/// @brief ConditionNotifier can notifiy waiting threads and processes using a shared memory condition variable
+/// @brief ConditionNotifier can notify waiting threads and processes using a shared memory condition variable
 class ConditionNotifier
 {
   public:

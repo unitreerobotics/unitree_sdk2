@@ -28,7 +28,7 @@ namespace rp
 /// @brief minimalistic relocatable pointer that can be written and read atomically and can be stored safely in shared
 /// memory.
 /// As the basic RelocatablePointer, it must point to something in the same shared memory segment as itself since the
-/// internally used offset must be an invariant different across adress spaces. Rationale: the default
+/// internally used offset must be an invariant different across address spaces. Rationale: the default
 /// RelocatablePointer cannot be used in an atomic since the copy ctor is nontrivial.
 template <typename T>
 class AtomicRelocatablePointer

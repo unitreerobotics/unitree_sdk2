@@ -10,7 +10,7 @@ namespace robot
 UT_DECL_ERR(UT_ROBOT_OK,                            0,      "Success.")
 UT_DECL_ERR(UT_ROBOT_ERR_UNKNOWN,                   3001,   "Unknown error.")
 UT_DECL_ERR(UT_ROBOT_ERR_CLIENT_SEND,               3102,   "Send request error.")
-UT_DECL_ERR(UT_ROBOT_ERR_CLIENT_API_NOT_REG,        3103,   "Api is not registed.")
+UT_DECL_ERR(UT_ROBOT_ERR_CLIENT_API_NOT_REG,        3103,   "Api is not registered.")
 UT_DECL_ERR(UT_ROBOT_ERR_CLIENT_API_TIMEOUT,        3104,   "Call api timeout error.")
 UT_DECL_ERR(UT_ROBOT_ERR_CLIENT_API_NOT_MATCH,      3105,   "Response api not match error.")
 UT_DECL_ERR(UT_ROBOT_ERR_CLIENT_API_DATA,           3106,   "Response data error.")

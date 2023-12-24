@@ -31,7 +31,7 @@ class PoorMansHeapType
 {
 };
 
-/// @brief Reserves space on stack for placement new instatiation
+/// @brief Reserves space on stack for placement new instantiation
 /// @param Interface base type of all classes which should be stored in here
 /// @param TypeSize maximum size of a child of Interface
 /// @param TypeAlignment alignment which is required for the types

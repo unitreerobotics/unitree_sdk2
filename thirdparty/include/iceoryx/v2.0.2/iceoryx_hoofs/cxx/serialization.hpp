@@ -28,7 +28,7 @@ namespace iox
 namespace cxx
 {
 /// @brief Simple serializer which serials every given type into the following
-///         format: (The type needs to be convertable into a string via cxx::convert::toString)
+///         format: (The type needs to be convertible into a string via cxx::convert::toString)
 ///             LENGTH:DATALENGTH:DATA...
 ///         Example: Serializes "hello", 123, 123.01 into
 ///             5:hello3:1236:123.01
@@ -41,7 +41,7 @@ namespace cxx
 ///     float v3;
 ///     char v4;
 ///
-///     if ( serial.extract(v1, v2, v3, v4) ) {} // succeeds since every value is convertable
+///     if ( serial.extract(v1, v2, v3, v4) ) {} // succeeds since every value is convertible
 ///
 ///     if ( serial.getNth(0, v2) ) {} // fails since "fuu" is not an integer
 ///
@@ -77,22 +77,22 @@ class Serialization
     /// @return serialized string
     operator std::string() const noexcept;
 
-    /// @brief Create Serialization if every arguments is convertable to string
+    /// @brief Create Serialization if every arguments is convertible to string
     ///         via cxx::convert::toString, this means if the argument is either
-    ///         a pod (plain old data) type or is convertable to string (operator std::string())
-    /// @param[in] args list of string convertable data
+    ///         a pod (plain old data) type or is convertible to string (operator std::string())
+    /// @param[in] args list of string convertible data
     /// @return Serialization object which contains the serialized data
     template <typename... Targs>
     static Serialization create(const Targs&... args) noexcept;
 
     /// @brief Extracts the values from the serialization and writes them into the
     ///         the given args, if one value is not
-    ///         convertable it returns false (e.g. convert "hello" to an integer)
+    ///         convertible it returns false (e.g. convert "hello" to an integer)
     ///         It also returns false if the underlying serialization string has a
     ///         wrong syntax
     /// @param[in] t reference where the first value in the serialization will be stored in
     /// @param[in] args reference where the remainding values in the serialization will be stored in
-    /// @return true if extraction of all values was successfull, otherwise false
+    /// @return true if extraction of all values was successful, otherwise false
     template <typename T, typename... Targs>
     bool extract(T& t, Targs&... args) const noexcept;
 

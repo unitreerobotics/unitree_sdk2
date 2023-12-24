@@ -77,7 +77,7 @@ class CyclicIndex
     /// This is intended and includes the case were rhs is "very close to 0" and
     /// and lhs is "close" to the MAX of uint64_t (MAX=2^64-1). Here close means that
     /// the real absolute difference would be larger than 2^63.
-    /// This is excactly the right behaviour to deal with a (theoretically possible)
+    /// This is exactly the right behaviour to deal with a (theoretically possible)
     /// overflow of lhs and can be seen as lhs being interpreted as MAX + its actual value.
     /// In this case, lhs - rhs is positive even though lhs < rhs.
     int64_t operator-(const CyclicIndex<CycleLength, ValueType>& rhs) const noexcept;

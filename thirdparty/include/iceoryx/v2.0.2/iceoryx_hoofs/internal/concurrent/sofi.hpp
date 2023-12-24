@@ -70,7 +70,7 @@ class SoFi
     ///                            is stored here
     /// @concurrent restricted thread safe: single pop, single push no
     ///             push calls from multiple contexts
-    /// @return return true if push was sucessfull else false.
+    /// @return return true if push was successful else false.
     /// @code
     /// (initial situation, SOFI is FULL)
     ///     Start|-----A-------|

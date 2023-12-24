@@ -27,21 +27,21 @@ typedef enum
   CRYPTO_TRANSFORMATION_KIND_NONE = 0,
  /* No encryption.
  One AES128-GMAC authentication tag using the sender_key
- Zero or more AES128-GMAC auth. tags with receiver specfic keys */
+ Zero or more AES128-GMAC auth. tags with receiver specific keys */
   CRYPTO_TRANSFORMATION_KIND_AES128_GMAC = 1,
  /* Authenticated Encryption using AES-128 in Galois Counter Mode
  (GCM) using the sender key.
  The authentication tag using the sender_key obtained from GCM
- Zero or more AES128-GMAC auth. tags with receiver specfic keys */
+ Zero or more AES128-GMAC auth. tags with receiver specific keys */
   CRYPTO_TRANSFORMATION_KIND_AES128_GCM = 2,
  /* No encryption.
  One AES256-GMAC authentication tag using the sender_key
- Zero or more AES256-GMAC auth. tags with receiver specfic keys */
+ Zero or more AES256-GMAC auth. tags with receiver specific keys */
   CRYPTO_TRANSFORMATION_KIND_AES256_GMAC = 3,
  /* Authenticated Encryption using AES-256 in Galois Counter Mode
  (GCM) using the sender key.
  The authentication tag using the sender_key obtained from GCM
- Zero or more AES256-GMAC auth. tags with receiver specfic keys */
+ Zero or more AES256-GMAC auth. tags with receiver specific keys */
   CRYPTO_TRANSFORMATION_KIND_AES256_GCM = 4,
 
   /* INVALID ENUM*/
@@ -62,7 +62,7 @@ struct CryptoTransformIdentifier {
   DDS_Security_CryptoTransformKeyId transformation_key_id;
 };
 
-/** temporary address decleration until it is ready in ddsrt */
+/** temporary address declaration until it is ready in ddsrt */
 typedef uintptr_t          ddsrt_address;   /* word length of the platform */
 
 

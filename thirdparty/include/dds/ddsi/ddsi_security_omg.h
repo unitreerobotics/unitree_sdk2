@@ -320,7 +320,7 @@ bool q_omg_security_check_create_topic(const struct ddsi_domaingv *gv, const dds
  *
  * @returns bool
  * @retval true   Security info set.
- * @retval false  Security info not set (probably unsecure writer).
+ * @retval false  Security info not set (probably insecure writer).
  */
 bool q_omg_get_writer_security_info(const struct ddsi_writer *wr, nn_security_info_t *info);
 
@@ -391,7 +391,7 @@ void q_omg_security_deregister_writer(struct ddsi_writer *wr);
  *
  * @returns bool
  * @retval true   Security info set.
- * @retval false  Security info not set (probably unsecure reader).
+ * @retval false  Security info not set (probably insecure reader).
  */
 bool q_omg_get_reader_security_info(const struct ddsi_reader *rd, nn_security_info_t *info);
 
@@ -505,7 +505,7 @@ bool q_omg_security_is_remote_rtps_protected(const struct ddsi_proxy_participant
  * proxy participant.
  *
  * @param[in] proxypp  Proxy participant to set security info on.
- * @param[in] plist    Paramater list, possibly contains security info.
+ * @param[in] plist    Parameter list, possibly contains security info.
  */
 void set_proxy_participant_security_info(struct ddsi_proxy_participant *proxypp, const ddsi_plist_t *plist);
 
@@ -580,7 +580,7 @@ bool q_omg_security_register_remote_participant(struct ddsi_participant *pp, str
 void q_omg_security_set_remote_participant_authenticated(struct ddsi_participant *pp, struct ddsi_proxy_participant *proxypp);
 
 /**
- * @brief Removes a registered proxy participant from administation of the authentication,
+ * @brief Removes a registered proxy participant from administration of the authentication,
  *        access control and crypto plugins.
  *
  * @param[in] proxypp            The proxy participant.
@@ -737,7 +737,7 @@ void q_omg_security_deregister_remote_writer(const struct ddsi_proxy_writer *pwr
  * into the given proxy reader.
  *
  * @param[in] prd      Proxy reader to set security info on.
- * @param[in] plist    Paramater list, possibly contains security info.
+ * @param[in] plist    Parameter list, possibly contains security info.
  */
 void set_proxy_reader_security_info(struct ddsi_proxy_reader *prd, const ddsi_plist_t *plist);
 
@@ -797,7 +797,7 @@ bool q_omg_security_check_remote_reader_permissions(const struct ddsi_proxy_read
  *
  * @param[in] entity            The endpoint common attributes.
  * @param[in] proxypp_sec_info  The security info of the proxy participant
- * @param[in] plist             Paramater list which may contain security info.
+ * @param[in] plist             Parameter list which may contain security info.
  * @param[in] info              The proxy endpoint security info to be set.
  */
 void q_omg_get_proxy_endpoint_security_info(const struct ddsi_entity_common *entity, nn_security_info_t *proxypp_sec_info, const ddsi_plist_t *plist, nn_security_info_t *info);

@@ -47,7 +47,7 @@ public:
    *
    * @param[in, out] props The entity whose members might be represented by a parameter list.
    *
-   * @return Whether the operation was completed succesfully.
+   * @return Whether the operation was completed successfully.
    */
   bool start_struct(entity_properties_t &props);
 

@@ -48,7 +48,7 @@ typedef struct ddsrt_dynlib *ddsrt_dynlib_t;
  *
  * @param[in]   name        Library file name.
  * @param[in]   translate   Automatic name translation on/off.
- * @param[out]  handle      Library handle that will be assigned after successfull operation. It is assigned to NULL if loading fails.
+ * @param[out]  handle      Library handle that will be assigned after successful operation. It is assigned to NULL if loading fails.
  *
  * @returns A dds_return_t indicating success or failure.
  *

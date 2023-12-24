@@ -38,7 +38,7 @@ enum class TACOMode
 
 /// @brief
 /// TACO is an acronym for Thread Aware exChange Ownership.
-/// Exchanging data between thread needs some synchonization mechanism.
+/// Exchanging data between thread needs some synchronization mechanism.
 /// This can be done with a mutex or atomics. If the data structure is larger
 /// than 64 bit or if more than one value need to be accessed in a synchronized
 /// manner, a mutex would be the only option.
@@ -49,7 +49,7 @@ enum class TACOMode
 /// @param T       DataType to be stored
 /// @param Context Enum class with all the thread context that access the TACO.
 ///                The enum must start with 0, must have ascending values and
-///                the last vaule must be called END_OF_LIST.
+///                the last value must be called END_OF_LIST.
 ///
 /// @code
 /// #include "iceoryx_hoofs/internal/concurrent/taco.hpp"

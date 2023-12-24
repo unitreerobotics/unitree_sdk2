@@ -83,7 +83,7 @@ class GatewayGeneric : public gateway_t
     virtual void discover(const capro::CaproMessage& msg) noexcept = 0;
     ///
     /// @brief forward Forward data between the two terminals of the channel used by the implementation.
-    /// @param channel The channel to propogate data across.
+    /// @param channel The channel to propagate data across.
     ///
     virtual void forward(const channel_t& channel) noexcept = 0;
 
@@ -119,12 +119,12 @@ class GatewayGeneric : public gateway_t
     /// @brief findChannel Searches for a channel for the given service in the internally stored collection and returns
     /// it one exists.
     /// @param service The service to find a channel for.
-    /// @return An optional containining the matching channel if one exists, otherwise an empty optional.
+    /// @return An optional containing the matching channel if one exists, otherwise an empty optional.
     ///
     cxx::optional<channel_t> findChannel(const capro::ServiceDescription& service) const noexcept;
 
     ///
-    /// @brief forEachChannel Executs the given function for each channel in the internally stored collection.
+    /// @brief forEachChannel Executes the given function for each channel in the internally stored collection.
     /// @param f The function to execute.
     /// @note This operation allows thread-safe access to the internal collection.
     ///

@@ -98,7 +98,7 @@ class AccessController
     /// @brief Write permission entries stored by the AccessController to a file identified by a file descriptor.
     /// @param[f_fileDescriptor] identifier for a file (can be regular file, shared memory file, message queue file...
     /// everything is a file).
-    /// @return true if succesful. If false, you can assume that the file has not been touched at all.
+    /// @return true if successful. If false, you can assume that the file has not been touched at all.
     bool writePermissionsToFile(const int32_t f_fileDescriptor) const noexcept;
 
   private:

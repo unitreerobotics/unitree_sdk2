@@ -773,7 +773,7 @@ static struct cfgelem channel_cfgelems[] = {
       "The mapping is as follows: 1-8 background traffic; 9-40 excellent "
       "traffic; 41-55 audio/video traffic; 56 voice traffic; 57-63 control "
       "traffic.\n"
-      "When an application is run without Administrative priveleges then "
+      "When an application is run without Administrative privileges then "
       "only the diffserv value of 0, 8, 40 or 56 is allowed.</p>"
     ),
     BEHIND_FLAG("DDS_HAS_NETWORK_CHANNELS")
@@ -902,7 +902,7 @@ static struct cfgelem compatibility_cfgelems[] = {
       "less interoperability with other implementations. Currently three "
       "modes are defined:</p>\n"
       "<ul><li><i>pedantic</i>: very strictly conform to the specification, "
-      "ultimately for compliancy testing, but currently of little value "
+      "ultimately for compliance testing, but currently of little value "
       "because it adheres even to what will most likely turn out to be "
       "editing errors in the DDSI standard. Arguably, as long as no errata "
       "have been published it is the current text that is in effect, and "
@@ -1617,7 +1617,7 @@ static struct cfgelem sizing_cfgelems[] = {
       "receive buffer. Must be greater than the maximum packet size by a "
       "modest amount (too large packets are dropped). Each allocation is "
       "shrunk immediately after processing a message, or freed "
-      "straightaway.</p>"),
+      "straight away.</p>"),
     UNIT("memsize")),
   END_MARKER
 };

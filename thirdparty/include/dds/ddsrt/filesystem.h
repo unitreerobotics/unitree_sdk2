@@ -65,7 +65,7 @@ DDS_EXPORT dds_return_t ddsrt_opendir(const char *name, ddsrt_dir_handle_t *dir)
  *
  * Possible results:
  * - return DDS_RETCODE_OK if directory identified by the handle
- *     is succesfully closed
+ *     is successfully closed
  * - return DDS_RETCODE_ERROR if the handle is invalid.
  */
 DDS_EXPORT dds_return_t ddsrt_closedir(ddsrt_dir_handle_t d);
@@ -98,8 +98,8 @@ DDS_EXPORT dds_return_t ddsrt_stat(const char *path, struct ddsrt_stat *buf);
 
 /** \brief Transforms the given filepath into a platform specific filepath.
  *
- * This translation function will replace any platform file seperator into
- * the fileseperator of the current platform. Doulbe quotes are removed
+ * This translation function will replace any platform file separator into
+ * the fileseperator of the current platform. Double quotes are removed
  * as well.
  *
  * Precondition:
@@ -111,7 +111,7 @@ DDS_EXPORT dds_return_t ddsrt_stat(const char *path, struct ddsrt_stat *buf);
  */
 DDS_EXPORT char* ddsrt_file_normalize(const char *filepath);
 
-/** \brief Get file seperator
+/** \brief Get file separator
  *
  * Possible Results:
  * - "<file-seperator-string>"

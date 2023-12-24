@@ -257,7 +257,7 @@ public:
     /**
      * @brief Returns a pointer to the derived sertype.
      *
-     * Returns a nullptr if no type can be derived succesfully.
+     * Returns a nullptr if no type can be derived successfully.
      *
      * @param[in] data_representation The type of data representation to use.
      *

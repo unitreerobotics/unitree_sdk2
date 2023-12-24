@@ -534,7 +534,7 @@ dds::sub::detail::DataReader<T>::init(ObjectDelegate::weak_ref_type weak_ref)
     this->sub_.delegate()->add_datareader(*this);
 
     // Because listeners are added after reader is created (which is in enabled state, because
-    // disabled state is not yet supported), events could have occured before listeners were
+    // disabled state is not yet supported), events could have occurred before listeners were
     // registered. Therefore the event handlers for those events are called here.
     if (this->listener_get()) {
         dds::core::status::StatusMask readerStatus = status_changes();

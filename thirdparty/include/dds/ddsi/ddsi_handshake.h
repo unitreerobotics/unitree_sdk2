@@ -125,9 +125,9 @@ void ddsi_handshake_register(struct ddsi_participant *pp, struct ddsi_proxy_part
 /**
  * @brief Remove the handshake associated with the specified participants.
  *
- * This function will remove the handshake from the handshake administation and release
+ * This function will remove the handshake from the handshake administration and release
  * the handshake. When the handshake argument is not specified the handshake is searched
- * in the handshake administation.
+ * in the handshake administration.
  *
  * @param[in] pp         The local participant.
  * @param[in] proxypp    The remote participant.

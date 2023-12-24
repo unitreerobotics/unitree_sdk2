@@ -34,7 +34,7 @@ class SharedMemoryUser
   public:
     /// @brief Constructor
     /// @param[in] topicSize size of the shared memory management segment
-    /// @param[in] segmentManagerAddr adress of the segment manager that does the final mapping of memory in the process
+    /// @param[in] segmentManagerAddr address of the segment manager that does the final mapping of memory in the process
     /// @param[in] segmentId of the relocatable shared memory segment
     /// address space
     SharedMemoryUser(const size_t topicSize,

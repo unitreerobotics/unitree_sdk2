@@ -128,7 +128,7 @@ typedef void (*ddsi_serdata_to_ser_t) (const struct ddsi_serdata *d, size_t off,
 typedef struct ddsi_serdata * (*ddsi_serdata_to_ser_ref_t) (const struct ddsi_serdata *d, size_t off, size_t sz, ddsrt_iovec_t *ref);
 
 /* Release a lock on serialised data
-   - ref was previousy filled by ddsi_serdata_to_ser_ref_t */
+   - ref was previously filled by ddsi_serdata_to_ser_ref_t */
 typedef void (*ddsi_serdata_to_ser_unref_t) (struct ddsi_serdata *d, const ddsrt_iovec_t *ref);
 
 /* Turn serdata into an application sample (or just the key values if only key values are

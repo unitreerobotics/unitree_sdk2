@@ -321,7 +321,7 @@ private:
                 {
                     if (!mDataQueuePtr->Put(MSG_PTR(new MSG(m)), true))
                     {
-                        LOG_WARNING(mLogger, "earliest mesage was evicted. type:", DdsGetTypeName(MSG));
+                        LOG_WARNING(mLogger, "earliest message was evicted. type:", DdsGetTypeName(MSG));
                     }
                 }
                 else

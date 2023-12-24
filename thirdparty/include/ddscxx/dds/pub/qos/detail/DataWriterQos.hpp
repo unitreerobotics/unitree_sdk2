@@ -35,7 +35,7 @@
  *
  * @par Attributes
  * @anchor anchor_dds_pub_datawriter_qos_defaults
- * QosPolicy                               | Desciption                                                                 | Default Value
+ * QosPolicy                               | Description                                                                 | Default Value
  * --------------------------------------- | -------------------------------------------------------------------------- | --------------------
  * dds::core::policy::UserData             | Additional information (@ref DCPS_QoS_UserData "info")                     | UserData::UserData(empty)
  * dds::core::policy::Durability           | Data storage settings for late joiners (@ref DCPS_QoS_Durability "info")   | Durability::Volatile()
@@ -49,7 +49,7 @@
  * dds::core::policy::TransportPriority    | Priority hint for transport layer (@ref DCPS_QoS_TransportPriority "info") | TransportPriority::TTransportPriority(0)
  * dds::core::policy::Lifespan             | Maximum duration of validity of data (@ref DCPS_QoS_Lifespan "info")       | Lifespan::Lifespan(infinite)
  * dds::core::policy::Ownership            | Exclusive ownership or not (@ref DCPS_QoS_Ownership "info")                | Ownership::Shared()
- * dds::core::policy::OwnershipStrength    | Ownership strenght (@ref DCPS_QoS_OwnershipStrength "info")                | OwnershipStrength::OwnershipStrength(0)
+ * dds::core::policy::OwnershipStrength    | Ownership strength (@ref DCPS_QoS_OwnershipStrength "info")                | OwnershipStrength::OwnershipStrength(0)
  * dds::core::policy::WriterDataLifecycle  | Dispose with unregister or not (@ref DCPS_QoS_WriterDataLifecycle "info")  | WriterDataLifecycle::AutoDisposeUnregisteredInstances()
  * dds::core::policy::DataRepresentation   | Supported data representation kinds (@ref DCPS_QoS_DataRepresentation "info") | DataRepresentation::DataRepresentation(dds::core::policy::DataRepresentationId::XCDR1)
  * dds::core::policy::TypeConsistencyEnforcement | Type consistency enforcement policies (@ref DCPS_QoS_TypeConsistencyEnforcement "info") | dds::core::policy::TypeConsistencyKind::DISALLOW_TYPE_COERCION

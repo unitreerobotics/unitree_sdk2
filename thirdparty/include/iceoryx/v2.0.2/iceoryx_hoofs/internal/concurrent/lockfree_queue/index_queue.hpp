@@ -87,7 +87,7 @@ class IndexQueue
     void push(const ValueType index) noexcept;
 
     /// @brief pop an index from the queue in FIFO order if the queue not empty
-    /// @return index if the queue was is empty, nullopt oterwise
+    /// @return index if the queue was is empty, nullopt otherwise
     cxx::optional<ValueType> pop() noexcept;
 
     /// @brief pop an index from the queue in FIFO order if the queue is full

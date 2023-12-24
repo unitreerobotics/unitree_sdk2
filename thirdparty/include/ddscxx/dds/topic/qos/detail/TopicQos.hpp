@@ -35,7 +35,7 @@
  *
  * @par Attributes
  * @anchor anchor_dds_topic_qos_defaults
- * QosPolicy                            | Desciption                                                                 | Default Value
+ * QosPolicy                            | Description                                                                 | Default Value
  * ------------------------------------ | -------------------------------------------------------------------------- | --------------------
  * dds::core::policy::TopicData         | Additional information (@ref DCPS_QoS_TopicData "info")                    | TopicData::TopicData(empty)
  * dds::core::policy::Durability        | Data storage settings for late joiners (@ref DCPS_QoS_Durability "info")   | Durability::Volatile()

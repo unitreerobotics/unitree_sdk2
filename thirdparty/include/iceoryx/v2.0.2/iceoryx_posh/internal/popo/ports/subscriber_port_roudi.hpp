@@ -29,7 +29,7 @@ namespace iox
 namespace popo
 {
 /// @brief The SubscriberPortRouDi provides the API for accessing a subscriber port from the RouDi middleware daemon
-/// side. The subscriber port is divided in the sevaral parts like SubscriberPortData, SubscriberPortRouDi and
+/// side. The subscriber port is divided in the several parts like SubscriberPortData, SubscriberPortRouDi and
 /// SubscriberPortUser. The SubscriberPortRouDi provides service discovery functionality that is based on CaPro
 /// messages. With this API the dynamic connections between publisher and subscriber ports can be established
 class SubscriberPortRouDi : public BasePort
@@ -50,7 +50,7 @@ class SubscriberPortRouDi : public BasePort
     const SubscriberOptions& getOptions() const noexcept;
 
     /// @brief get an optional CaPro message that requests changes to the subscription state of the subscriber
-    /// @return CaPro message with new subscription requet, empty optional if no state change
+    /// @return CaPro message with new subscription request, empty optional if no state change
     virtual cxx::optional<capro::CaproMessage> tryGetCaProMessage() noexcept = 0;
 
     /// @brief dispatch a CaPro message to the subscriber for processing

@@ -131,7 +131,7 @@ dds_security_fsm_set_debug(struct dds_security_fsm *fsm, dds_security_fsm_debug 
  * Assignment for the state machine to transisiton to the next state.
  *
  * @param fsm       The state machine
- * @param event_id  Indicate where to transisition to (outcome of current state)
+ * @param event_id  Indicate where to transition to (outcome of current state)
  * @param prio      Indicates if the event has to be scheduled with priority.
  */
 DDS_EXPORT void

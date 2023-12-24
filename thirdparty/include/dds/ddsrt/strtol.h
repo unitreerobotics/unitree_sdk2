@@ -121,7 +121,7 @@ ddsrt_atoll(
 /**
  * @brief Convert a string to an unsigned long long integer.
  *
- * @param[in]   str    String to conver into an unsigned long long integer.
+ * @param[in]   str    String to convert into an unsigned long long integer.
  * @param[out]  ullng  An unsigned long long integer where the number is stored.
  *
  * @returns A dds_return_t indicating success or failure.
@@ -159,10 +159,10 @@ ddsrt_lltostr(
 /**
  * @brief Convert an unsigned long long integer into a string.
  *
- * @param[in]   num     Unsigned long long integer to covert into a string.
+ * @param[in]   num     Unsigned long long integer to convert into a string.
  * @param[in]   str     Buffer where string representation is stored.
  * @param[in]   len     Number of bytes available in buffer.
- * @param[out]  endptr  A char* where the adress of the null terminating byte
+ * @param[out]  endptr  A char* where the address of the null terminating byte
  *                      is stored.
  *
  * @returns The value of @str on success, otherwise NULL.

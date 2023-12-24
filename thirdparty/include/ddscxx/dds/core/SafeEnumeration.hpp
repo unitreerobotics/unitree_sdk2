@@ -28,7 +28,7 @@ namespace core
  * manner.
  *
  * safe_enums allow specification of the underlying type,
- * do not implictly convert to integers, and resolve scoping issues.
+ * do not implicitly convert to integers, and resolve scoping issues.
  */
 template<typename def, typename inner = typename def::Type>
 class safe_enum : public def

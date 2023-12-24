@@ -221,7 +221,7 @@ public:
      * @brief
      * Sets the new cursor offset.
      *
-     * Also returs the value the offset has been set to.
+     * Also returns the value the offset has been set to.
      *
      * @param[in] newposition The new offset to set.
      *
@@ -394,7 +394,7 @@ public:
      * @param[in] prop Properties of the entity to start.
      * @param[in] is_set Whether the entity represented by prop is present, if it is an optional entity.
      *
-     * @return Whether the operation was completed succesfully.
+     * @return Whether the operation was completed successfully.
      */
     virtual bool start_member(entity_properties_t &prop, bool is_set = true) { prop.is_present = is_set; return true;}
 
@@ -408,7 +408,7 @@ public:
      *
      * @param[in] is_set Whether the entity represented by prop is present, if it is an optional entity.
      *
-     * @return Whether the operation was completed succesfully.
+     * @return Whether the operation was completed successfully.
      */
     virtual bool finish_member(entity_properties_t &, bool is_set = true) { (void) is_set; return true;}
 
@@ -447,7 +447,7 @@ public:
      *
      * @param[in,out] props The entity whose members might be represented by a parameter list.
      *
-     * @return Whether the operation was completed succesfully.
+     * @return Whether the operation was completed successfully.
      */
     virtual bool start_struct(entity_properties_t &props);
 
@@ -546,7 +546,7 @@ protected:
  * @brief
  * Primitive type stream manipulation functions.
  *
- * These are "endpoints" for write functions, since composit
+ * These are "endpoints" for write functions, since composite
  * (sequence/array/constructed type) functions will decay to these
  * calls.
  */
@@ -565,7 +565,7 @@ protected:
  * @param[out] toread The variable to read into.
  * @param[in] N The number of entities to read.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_arithmetic<T>::value
                                                && !std::is_enum<T>::value
@@ -613,7 +613,7 @@ bool read(S &str, T& toread, size_t N = 1)
  * @param[out] toread The variable to read.
  * @param[in] N The number of entities to read.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, typename I, std::enable_if_t<std::is_integral<I>::value
                                                && std::is_enum<T>::value
@@ -645,7 +645,7 @@ bool read_enum_impl(S& str, T& toread, size_t N)
  * @param[in] towrite The variable to write.
  * @param[in] N The number of entities to write.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_arithmetic<T>::value
                                                && !std::is_enum<T>::value
@@ -694,7 +694,7 @@ bool write(S& str, const T& towrite, size_t N = 1)
  * @param[in] towrite The variable to write.
  * @param[in] N The number of entities to write.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, typename I, std::enable_if_t<std::is_integral<I>::value
                                                && std::is_enum<T>::value
@@ -725,7 +725,7 @@ bool write_enum_impl(S& str, const T& towrite, size_t N)
  * @param[in, out] str The stream whose cursor is moved.
  * @param[in] N The number of entities to move.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_arithmetic<T>::value
                                                && !std::is_enum<T>::value
@@ -760,7 +760,7 @@ bool move(S& str, const T&, size_t N = 1)
  * @param[in] max_sz The variable to move the cursor by, no contents of this variable are used, it is just used to determine the template.
  * @param[in] N The number of entities at most to move.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_arithmetic<T>::value
                                                && !std::is_enum<T>::value
@@ -791,7 +791,7 @@ bool max(S& str, const T& max_sz, size_t N = 1)
  * @param[out] toread The string to read to.
  * @param[in] N The maximum number of characters to read from the stream.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_base_of<cdr_stream, S>::value, bool> = true >
 bool read_string(S& str, T& toread, size_t N)
@@ -835,7 +835,7 @@ bool read_string(S& str, T& toread, size_t N)
  * @param[in] towrite The string to write.
  * @param[in] N The maximum number of characters to write to the stream.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_base_of<cdr_stream, S>::value, bool> = true >
 bool write_string(S& str, const T& towrite, size_t N)
@@ -876,7 +876,7 @@ bool write_string(S& str, const T& towrite, size_t N)
  * @param[in] toincr The string used to move the cursor.
  * @param[in] N The maximum number of characters in the string which the stream is moved by.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_base_of<cdr_stream, S>::value, bool> = true >
 bool move_string(S& str, const T& toincr, size_t N)
@@ -914,7 +914,7 @@ bool move_string(S& str, const T& toincr, size_t N)
  * @param[in] max_sz The string used to move the cursor.
  * @param[in] N The maximum number of characters in the string which the stream is at most moved by.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename S, typename T, std::enable_if_t<std::is_base_of<cdr_stream, S>::value, bool> = true >
 bool max_string(S& str, const T& max_sz, size_t N)

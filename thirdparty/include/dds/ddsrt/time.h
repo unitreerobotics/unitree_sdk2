@@ -112,7 +112,7 @@ DDS_EXPORT void dds_sleepfor (dds_duration_t reltime);
  * @brief Get the current time in nanoseconds since the UNIX Epoch.  Identical
  * to (ddsrt_wctime_t){dds_time()}
  *
- * @returns Curren time.
+ * @returns Current time.
  */
 DDS_EXPORT ddsrt_wctime_t ddsrt_time_wallclock(void);
 
@@ -148,7 +148,7 @@ DDS_EXPORT ddsrt_etime_t ddsrt_time_elapsed(void);
 /**
  * @brief Convert time into a human readable string in RFC 3339 format.
  *
- * Converts the calender time into a null-terminated string in RFC 3339 format.
+ * Converts the calendar time into a null-terminated string in RFC 3339 format.
  * e.g. "2014-10-24 15:32:27-04:00".
  *
  * UTC offset is omitted if time-zone information is unknown.
@@ -290,7 +290,7 @@ DDS_EXPORT void ddsrt_wctime_to_sec_usec (int32_t * __restrict sec, int32_t * __
 /**
  * @brief Convert elapsed time seconds & microseconds
  *
- * @param[in]   t     Elasped time to convert
+ * @param[in]   t     Elapsed time to convert
  * @param[out]  sec   Seconds part
  * @param[out]  usec  Microseconds part
  */

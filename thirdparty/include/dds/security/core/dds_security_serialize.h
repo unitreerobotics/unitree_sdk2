@@ -39,7 +39,7 @@ DDS_Security_Serializer_free(
 
 DDS_EXPORT void
 DDS_Security_Serializer_buffer(
-     DDS_Security_Serializer ser,
+     DDS_Security_Serializer set,
      unsigned char **buffer,
      size_t *size);
 
@@ -66,12 +66,12 @@ DDS_Security_Serialize_DataHolderSeq(
 
 DDS_EXPORT void
 DDS_Security_Serialize_ParticipantBuiltinTopicData(
-     DDS_Security_Serializer ser,
+     DDS_Security_Serializer set,
      DDS_Security_ParticipantBuiltinTopicData *pdata);
 
 DDS_EXPORT void
 DDS_Security_Serialize_KeyMaterial_AES_GCM_GMAC(
-     DDS_Security_Serializer ser,
+     DDS_Security_Serializer set,
      const DDS_Security_KeyMaterial_AES_GCM_GMAC *data);
 
 DDS_EXPORT DDS_Security_Deserializer

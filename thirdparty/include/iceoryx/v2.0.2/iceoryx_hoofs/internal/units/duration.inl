@@ -391,7 +391,7 @@ Duration::multiplyWith(const std::enable_if_t<!std::is_floating_point<T>::value,
     // this cannot be done by dividing through NANOSECS_PER_SEC, since that one is base 1_000_000_000 and the result is
     // base 2^32, therefore the least common multiple can be used to get blocks of full seconds represented with the LSB
     // representing 2^32 nanoseconds;
-    // this can then safely be converted to seconds as well as nanoseconds without loosing precision
+    // this can then safely be converted to seconds as well as nanoseconds without losing precision
 
     // least common multiple of 2^32 and NANOSECONDS_PER_SECOND;
     // for the following calculation it is not important to be the least common multiple, any common multiple will do

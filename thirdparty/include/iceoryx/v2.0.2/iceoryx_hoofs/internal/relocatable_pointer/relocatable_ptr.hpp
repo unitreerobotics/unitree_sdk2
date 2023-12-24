@@ -30,7 +30,7 @@ namespace rp
 ///        (i.e. not to memory outside of the object).
 ///        This is useful to improve copy-efficiency and allow the types build with relocatable
 ///        pointers only to be stored in shared memory.
-///        It is useable like a raw pointer of the corresponding type and can be implicily
+///        It is usable like a raw pointer of the corresponding type and can be implicily
 ///        converted to one.
 ///
 /// @tparam T the native type wrapped by the relocatable_ptr, i.e. relocatable_ptr<T>
@@ -45,7 +45,7 @@ namespace rp
 /// @note relocatable_ptr is not trivially copyable since in general the copy constructor
 ///       requires additional logic. Hence obects that contain it re not trivially
 ///       copyable in the C++ sense. However, if the pointees of a host object containing the
-///       relocatable ptr are all located inside the object and the obect is otherwise trivially
+///       relocatable ptr are all located inside the object and the object is otherwise trivially
 ///       copyable it can be safely copied by memcpy.
 /// @todo specialize for another pointer class for this use case once it is fully defined/understood
 template <typename T>

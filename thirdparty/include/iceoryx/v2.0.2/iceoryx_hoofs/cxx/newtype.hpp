@@ -21,7 +21,7 @@
 #include "iceoryx_hoofs/internal/cxx/newtype/assignment.hpp"
 #include "iceoryx_hoofs/internal/cxx/newtype/comparable.hpp"
 #include "iceoryx_hoofs/internal/cxx/newtype/constructor.hpp"
-#include "iceoryx_hoofs/internal/cxx/newtype/convertable.hpp"
+#include "iceoryx_hoofs/internal/cxx/newtype/convertible.hpp"
 #include "iceoryx_hoofs/internal/cxx/newtype/internal.hpp"
 #include "iceoryx_hoofs/internal/cxx/newtype/protected_constructor.hpp"
 #include "iceoryx_hoofs/internal/cxx/newtype/sortable.hpp"

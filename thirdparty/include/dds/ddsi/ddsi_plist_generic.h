@@ -43,7 +43,7 @@ enum pserop {
   XbPROP, /* boolean: omit in serialized form; skip serialization if false; always true on deserialize */
   XG, /* GUID */
   XK, /* keyhash */
-  XQ, /* arbitary non-nested sequence */
+  XQ, /* arbitrary non-nested sequence */
   Xopt, /* remainder is optional on deser, 0-init if not present */
 } ddsrt_attribute_packed;
 

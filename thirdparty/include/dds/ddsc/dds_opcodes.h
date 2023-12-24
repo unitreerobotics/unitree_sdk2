@@ -384,7 +384,7 @@ enum dds_stream_typecode {
 /**
  * @ingroup serialization
  * @brief primary type code for DDS_OP_ADR, DDS_OP_JEQ
- * Convinience pre-bitshifted values.
+ * Convenience pre-bitshifted values.
  */
 enum dds_stream_typecode_primary {
   DDS_OP_TYPE_1BY = DDS_OP_VAL_1BY << 16, /**< one byte simple type (char, octet) */
@@ -422,7 +422,7 @@ enum dds_stream_typecode_primary {
  * @brief sub-type code
  *  - encodes element type for DDS_OP_TYPE_{SEQ,ARR},
  *  - discriminant type for DDS_OP_TYPE_UNI
- * Convinience pre-bitshifted values.
+ * Convenience pre-bitshifted values.
  */
 enum dds_stream_typecode_subtype {
   DDS_OP_SUBTYPE_1BY = DDS_OP_VAL_1BY << 8, /**< one byte simple type (char, octet) */

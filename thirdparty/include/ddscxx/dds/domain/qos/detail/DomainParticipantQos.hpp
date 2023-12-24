@@ -37,7 +37,7 @@
  *
  * @par Attributes
  * @anchor anchor_dds_domain_domainparticipant_qos_defaults
- * QosPolicy                                           | Desciption                                             | Default Value
+ * QosPolicy                                           | Description                                             | Default Value
  * --------------------------------------------------- | -------------------------------------------------------| --------------------
  * dds::core::policy::UserData                         | Additional information (@ref DCPS_QoS_UserData "info") | UserData::UserData(empty)
  * dds::core::policy::EntityFactory                    | Create enabled (@ref DCPS_QoS_EntityFactory "info")    | EntityFactory::AutoEnable()

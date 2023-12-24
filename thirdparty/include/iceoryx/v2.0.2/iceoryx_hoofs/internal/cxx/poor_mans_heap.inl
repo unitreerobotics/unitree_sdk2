@@ -44,8 +44,8 @@ template <typename Interface, size_t TypeSize, size_t TypeAlignment>
 template <typename Type, typename... CTorArgs>
 void PoorMansHeap<Interface, TypeSize, TypeAlignment>::newInstance(CTorArgs&&... ctorArgs) noexcept
 {
-    static_assert(TypeAlignment >= alignof(Type), "Alignment missmatch! No safe instantiation of Type possible!");
-    static_assert(TypeSize >= sizeof(Type), "Size missmatch! Not enough space to instantiate Type!");
+    static_assert(TypeAlignment >= alignof(Type), "Alignment mismatch! No safe instantiation of Type possible!");
+    static_assert(TypeSize >= sizeof(Type), "Size mismatch! Not enough space to instantiate Type!");
 
     deleteInstance();
 

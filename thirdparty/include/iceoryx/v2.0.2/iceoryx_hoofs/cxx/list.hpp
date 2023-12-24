@@ -99,7 +99,7 @@ class list
     list& operator=(list&& rhs) noexcept;
 
 
-    /// @brief default list operation to retrieve an interator to first list element
+    /// @brief default list operation to retrieve an iterator to first list element
     /// @return iterator to first list element, returns iterator to end() when list is empty
     iterator begin() noexcept;
 
@@ -111,18 +111,18 @@ class list
     /// @return iterator to first list element, returns iterator to end() when list is empty
     const_iterator cbegin() const noexcept;
 
-    /// @brief default list operation to retrieve an interator to end of list (behind last valid element)
-    ///         Terminated when content is attemted to read (operator*, operator->)
+    /// @brief default list operation to retrieve an iterator to end of list (behind last valid element)
+    ///         Terminated when content is attempted to read (operator*, operator->)
     /// @return iterator to end element, does not contain data.
     iterator end() noexcept;
 
     /// @brief default list operation to retrieve an const_iterator to end of list (behind last valid element)
-    ///         Terminated when content is attemted to read (operator*, operator->)
+    ///         Terminated when content is attempted to read (operator*, operator->)
     /// @return iterator to end element, does not contain data.
     const_iterator end() const noexcept;
 
     /// @brief default list operation to retrieve an const_iterator to end of list (behind last valid element)
-    ///         Terminated when content is attemted to read (operator*, operator->)
+    ///         Terminated when content is attempted to read (operator*, operator->)
     /// @return iterator to end element, does not contain data.
     const_iterator cend() const noexcept;
 
@@ -188,7 +188,7 @@ class list
     /// @return successful insertion (true), otherwise no element could be added to list (e.g. full -> false)
     bool push_back(T&& data) noexcept;
 
-    /// @brief remove the first element from the begining of the list
+    /// @brief remove the first element from the beginning of the list
     ///         element destructor will be invoked
     /// @return successful removal (true), otherwise no element could be taken from list (e.g. empty -> false)
     bool pop_front() noexcept;
@@ -223,15 +223,15 @@ class list
     template <typename UnaryPredicate>
     size_type remove_if(UnaryPredicate pred) noexcept;
 
-    /// @brief construct element inplace at begining of list
+    /// @brief construct element inplace at beginning of list
     /// @param[in] args T-typed construction parameters (initializer list)
-    /// @return referene to generated element, return is C++17-conform
+    /// @return reference to generated element, return is C++17-conform
     template <typename... ConstructorArgs>
     T& emplace_front(ConstructorArgs&&... args) noexcept;
 
     /// @brief construct element inplace at end of list
     /// @param[in] args T-typed construction parameters (initializer list)
-    /// @return referene to generated element, return is C++17-conform
+    /// @return reference to generated element, return is C++17-conform
     template <typename... ConstructorArgs>
     T& emplace_back(ConstructorArgs&&... args) noexcept;
 

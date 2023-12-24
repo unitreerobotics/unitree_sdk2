@@ -35,7 +35,7 @@ namespace runtime
 ///    is defined as a invalid entry. A valid entry can contain none or more
 ///    characters.
 ///
-///    A message is a concatination of valid entries separated by the
+///    A message is a concatenation of valid entries separated by the
 ///    separator. A message is defined as valid if all entries contained in
 ///    that message are valid and it ends with the separator or it is empty,
 ///    otherwise it is defined as invalid.
@@ -59,7 +59,7 @@ class IpcMessage
 
     ///  @brief Adds a new entry to the IpcMessage, if the entry is invalid
     ///          no entry is added and the IpcMessage becomes invalid.
-    ///  @param[in] entry Datatype which is convertable to string via std::to_string
+    ///  @param[in] entry Datatype which is convertible to string via std::to_string
     template <typename T>
     IpcMessage& operator<<(const T& entry) noexcept;
 
@@ -108,7 +108,7 @@ class IpcMessage
 
     /// @brief Adds a new entry to the IpcMessage, if the entry is invalid
     ///         no entry is added and the IpcMessage becomes invalid.
-    /// @tparam Datatype which is convertable to string via
+    /// @tparam Datatype which is convertible to string via
     /// std::stringstream
     /// @param[in] entry to add to the message
     template <typename T>

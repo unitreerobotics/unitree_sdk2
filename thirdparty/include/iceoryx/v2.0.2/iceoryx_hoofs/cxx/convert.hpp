@@ -55,7 +55,7 @@ class convert
 
     static constexpr int32_t STRTOULL_BASE = 10;
 
-    /// @brief Converts every type which is either a pod (plain old data) type or is convertable
+    /// @brief Converts every type which is either a pod (plain old data) type or is convertible
     ///         to a string (this means that the operator std::string() is defined)
     /// @param Source type of the value which should be converted to a string
     /// @param[in] t value which should be converted to a string
@@ -64,7 +64,7 @@ class convert
     static typename std::enable_if<!std::is_convertible<Source, std::string>::value, std::string>::type
     toString(const Source& t) noexcept;
 
-    /// @brief Converts every type which is either a pod (plain old data) type or is convertable
+    /// @brief Converts every type which is either a pod (plain old data) type or is convertible
     ///         to a string (this means that the operator std::string() is defined)
     /// @param Source type of the value which should be converted to a string
     /// @param[in] t value which should be converted to a string

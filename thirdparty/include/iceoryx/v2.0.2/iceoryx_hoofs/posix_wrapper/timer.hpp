@@ -184,14 +184,14 @@ class Timer
         cxx::expected<units::Duration, TimerError> timeUntilExpiration() noexcept;
 
         /// @brief In case the callback is not immediately called by the operating system, getOverruns() returns the
-        /// additional overruns that happended in the delay interval
+        /// additional overruns that happened in the delay interval
         /// @note Shall only be called when callback is given
         cxx::expected<uint64_t, TimerError> getOverruns() noexcept;
 
         /// @brief Returns true if the construction of the object was successful
         bool hasError() const noexcept;
 
-        /// @brief Returns the error that occured on constructing the object
+        /// @brief Returns the error that occurred on constructing the object
         TimerError getError() const noexcept;
 
       private:
@@ -212,7 +212,7 @@ class Timer
         uint8_t m_callbackHandleIndex{0u};
 
         /// @todo will be obsolete with creation pattern
-        /// @brief Bool that signals whether the object is fully initalized
+        /// @brief Bool that signals whether the object is fully initialized
         bool m_isInitialized{false};
 
         /// @todo creation pattern
@@ -291,14 +291,14 @@ class Timer
     cxx::expected<units::Duration, TimerError> timeUntilExpiration() noexcept;
 
     /// @brief In case the callback is not immediately called by the operating system, getOverruns() returns the
-    /// additional overruns that happended in the delay interval
+    /// additional overruns that happened in the delay interval
     /// @note Shall only be called when callback is given
     cxx::expected<uint64_t, TimerError> getOverruns() noexcept;
 
     /// @brief Returns true if the construction of the object was successful
     bool hasError() const noexcept;
 
-    /// @brief Returns the error that occured on constructing the object
+    /// @brief Returns the error that occurred on constructing the object
     TimerError getError() const noexcept;
 
   private:

@@ -67,7 +67,7 @@ ddsrt_dtostr(double src, char *str, size_t size);
 /**
  * @brief convert a floating-point number to a string.
  *
- * @param[in]  src   Floating-point number to conver.
+ * @param[in]  src   Floating-point number to convert.
  * @param[in]  str   Buffer where string representation is written.
  * @param[in]  size  Number of bytes available in @str.
  *
