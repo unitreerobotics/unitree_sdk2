@@ -77,7 +77,7 @@ class ServiceRegistry
     void removeServer(const capro::ServiceDescription& serviceDescription) noexcept;
 
     /// @brief Removes given service description from registry if service is found,
-    ///        all occurences are removed
+    ///        all occurrences are removed
     /// @param[in] serviceDescription, service to be removed
     void purge(const capro::ServiceDescription& serviceDescription) noexcept;
 
@@ -91,7 +91,7 @@ class ServiceRegistry
               const cxx::optional<capro::IdString_t>& event,
               cxx::function_ref<void(const ServiceDescriptionEntry&)> callable) const noexcept;
 
-    /// @brief Applys a callable to all entries
+    /// @brief Applies a callable to all entries
     /// @param[in] callable, callable to apply to each entry
     /// @note Can be used to obtain all entries or count them
     void forEach(cxx::function_ref<void(const ServiceDescriptionEntry&)> callable) const noexcept;

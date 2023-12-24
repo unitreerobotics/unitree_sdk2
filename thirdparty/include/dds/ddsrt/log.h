@@ -253,7 +253,7 @@ dds_log_cfg_init(
     FILE *trace_fp);
 
 /**
- * @brief Write a log or trace message for a specific logging configuraiton
+ * @brief Write a log or trace message for a specific logging configuration
  * (categories, id, sinks).
  *
  * Direct use of #dds_log is discouraged. Use #DDS_CINFO, #DDS_CWARNING,

@@ -29,7 +29,7 @@ using IceoryxTerminalPool = cxx::ObjectPool<IceoryxTerminal, MAX_CHANNEL_NUMBER>
 template <typename ExternalTerminal>
 using ExternalTerminalPool = cxx::ObjectPool<ExternalTerminal, MAX_CHANNEL_NUMBER>;
 
-// Statics
+// Statistics
 template <typename IceoryxTerminal, typename ExternalTerminal>
 IceoryxTerminalPool<IceoryxTerminal>
     Channel<IceoryxTerminal, ExternalTerminal>::s_iceoryxTerminals = IceoryxTerminalPool();

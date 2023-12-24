@@ -67,7 +67,7 @@ public:
    * @param[in, out] prop Properties of the member to finish.
    * @param[in] is_set Whether the entity represented by prop is present, if it is an optional entity.
    *
-   * @return Whether the operation was completed succesfully.
+   * @return Whether the operation was completed successfully.
    */
   bool finish_member(entity_properties_t &prop, bool is_set = true);
 
@@ -105,7 +105,7 @@ public:
    *
    * @param[in, out] props The entity whose members might be represented by a parameter list.
    *
-   * @return Whether the operation was completed succesfully.
+   * @return Whether the operation was completed successfully.
    */
   bool start_struct(entity_properties_t &props);
 
@@ -174,7 +174,7 @@ private:
    *
    * Will put the entity size into the streams m_buffer_end stack
    *
-   * @return Whether the read was succesful.
+   * @return Whether the read was successful.
    */
   bool read_d_header();
 
@@ -184,7 +184,7 @@ private:
    *
    * @param[out] props The entity to read the EM-header into.
    *
-   * @return Whether the read was succesful.
+   * @return Whether the read was successful.
    */
   bool read_em_header(entity_properties_t &props);
 
@@ -194,7 +194,7 @@ private:
    *
    * This will be filled with the value through the function finish_d_header when the struct is completed.
    *
-   * @return Whether the write was succesful.
+   * @return Whether the write was successful.
    */
   bool write_d_header();
 
@@ -207,7 +207,7 @@ private:
    *
    * @param[in] is_set Whether the entity represented by prop is present.
    *
-   * @return Whether the read was succesful.
+   * @return Whether the read was successful.
    */
   bool write_optional_tag(bool is_set);
 
@@ -218,7 +218,7 @@ private:
    * In the case of an optional field, but not a parameter list, the xcdrv2 spec states that this field should
    * preceded by a single boolean, indicating its presence or absence.
    *
-   * @return Whether the read was succesful.
+   * @return Whether the read was successful.
    */
   bool move_optional_tag();
 
@@ -228,7 +228,7 @@ private:
    *
    * @param[in, out] prop The entity to write the EM-header for.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool write_em_header(entity_properties_t &prop);
 
@@ -238,7 +238,7 @@ private:
    *
    * Moves the cursor by a 4 byte int.
    *
-   * @return Whether the operation was completed succesfully.
+   * @return Whether the operation was completed successfully.
    */
   bool move_d_header() {return move(*this, uint32_t(0));}
 
@@ -246,7 +246,7 @@ private:
    * @brief
    * Moves the stream's position by the amount that it would after writing the EM-header.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool move_em_header();
 
@@ -254,7 +254,7 @@ private:
    * @brief
    * Finishes the write operation of the D-header.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool finish_d_header();
 
@@ -262,7 +262,7 @@ private:
    * @brief
    * Finishes the write operation of the EM-header.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool finish_em_header();
 
@@ -308,7 +308,7 @@ private:
  * @param[out] toread The variable to read into.
  * @param[in] N The number of entities to read.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool read(xcdr_v2_stream& str, T& toread, size_t N = 1) {
@@ -337,7 +337,7 @@ bool read(xcdr_v2_stream& str, T& toread, size_t N = 1) {
  * @param [in] towrite The variable to write.
  * @param[in] N The number of entities to write.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool write(xcdr_v2_stream& str, const T& towrite, size_t N = 1) {
@@ -365,7 +365,7 @@ bool write(xcdr_v2_stream& str, const T& towrite, size_t N = 1) {
  * @param[in, out] str The stream whose cursor is moved.
  * @param[in] N The number of entities to move.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool move(xcdr_v2_stream& str, const T&, size_t N = 1) {
@@ -394,7 +394,7 @@ bool move(xcdr_v2_stream& str, const T&, size_t N = 1) {
  * @param[in] max_sz The variable to move the cursor by, no contents of this variable are used, it is just used to determine the template.
  * @param[in] N The number of entities at most to move.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool max(xcdr_v2_stream& str, const T& max_sz, size_t N = 1) {

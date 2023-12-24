@@ -80,7 +80,7 @@ struct ddsi_sertype {
    name.
 
    Testing for DDSI_SERTOPIC_HAS_EQUAL_AND_HASH allows one to have a single source
-   that can handle both variants, but there's no binary compatbility. */
+   that can handle both variants, but there's no binary compatibility. */
 #define DDSI_SERTOPIC_HAS_EQUAL_AND_HASH 1
 
 /* It was a bad decision to have a boolean argument in "init" specifying whether

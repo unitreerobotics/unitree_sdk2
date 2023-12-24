@@ -229,7 +229,7 @@ module DDS { module XTypes {
         @external TypeIdentifier key_identifier;
     };
 
-    // Used for Types that have cyclic depencencies with other types
+    // Used for Types that have cyclic dependencies with other types
     @extensibility(APPENDABLE) @nested
     struct StronglyConnectedComponentId {
         TypeObjectHashId sc_component_id; // Hash StronglyConnectedComponent

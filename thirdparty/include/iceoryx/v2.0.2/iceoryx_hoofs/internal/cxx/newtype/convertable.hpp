@@ -24,7 +24,7 @@ namespace cxx
 namespace newtype
 {
 template <typename T>
-struct Convertable
+struct Convertible
 {
 };
 

@@ -23,7 +23,7 @@ int main()
     sleep(5);
     subscriber.CloseChannel();
 
-    std::cout << "reseted. sleep 3" << std::endl;
+    std::cout << "reset. sleep 3" << std::endl;
 
     sleep(3);
     subscriber.InitChannel();
@@ -31,7 +31,7 @@ int main()
     sleep(5);
     subscriber.CloseChannel();
 
-    std::cout << "reseted. sleep 3" << std::endl;
+    std::cout << "reset. sleep 3" << std::endl;
 
     sleep(3);
     subscriber.InitChannel();

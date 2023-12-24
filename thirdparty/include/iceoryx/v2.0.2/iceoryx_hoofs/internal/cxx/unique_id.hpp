@@ -27,12 +27,12 @@ namespace cxx
 {
 /// @brief Unique IDs within a process starting with 1. Monotonic increasing IDs are
 /// created with each call to the constructor. The IDs are copy/move constructible/assignable,
-/// comparable, sortable and convertable to the underlying value type.
+/// comparable, sortable and convertible to the underlying value type.
 class UniqueId : public cxx::NewType<uint64_t,
                                      cxx::newtype::ProtectedConstructByValueCopy,
                                      cxx::newtype::Comparable,
                                      cxx::newtype::Sortable,
-                                     cxx::newtype::Convertable,
+                                     cxx::newtype::Convertible,
                                      cxx::newtype::CopyConstructable,
                                      cxx::newtype::MoveConstructable,
                                      cxx::newtype::CopyAssignable,

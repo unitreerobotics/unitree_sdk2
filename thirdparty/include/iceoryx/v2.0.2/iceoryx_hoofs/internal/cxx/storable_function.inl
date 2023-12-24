@@ -204,7 +204,7 @@ void storable_function<S, signature<ReturnType, Args...>>::copy(const storable_f
     else
     {
         std::cerr << "storable_function: no memory to store copy at destination\n";
-        // no memory avilable in source, assignment could not be performed
+        // no memory available in source, assignment could not be performed
         // (this cannot happen in the static_storage case)
     }
 

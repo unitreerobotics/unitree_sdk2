@@ -40,7 +40,7 @@ class DataReaderListener;
 
 /**
  * @brief
- * DataReader allows the applicatin to access published sample data.
+ * DataReader allows the application to access published sample data.
  *
  * A DataReader allows the application:
  * - to declare the data it wishes to receive (i.e., make a subscription)
@@ -120,7 +120,7 @@ public:
      * content and status filtering, etc, when reading or taking samples. These settings
      * on a Selector can be concatenated.
      *
-     * The DataReader has the select() operation, which can be used to aqcuire the Selector
+     * The DataReader has the select() operation, which can be used to acquire the Selector
      * functionality on the reader implicitly.
      * @code{.cpp}
      * // Take a maximum of 3 new samples of a certain instance.

@@ -23,7 +23,7 @@ namespace iox
 {
 namespace runtime
 {
-/// @brief helper struct which is convertable to string and constructable from a string
+/// @brief helper struct which is convertible to string and constructable from a string
 ///         which is required to send the createNode request over the IPC channel
 struct NodeProperty
 {

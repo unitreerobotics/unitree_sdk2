@@ -50,7 +50,7 @@ inline list<T, Capacity>::list(list&& rhs) noexcept
         emplace(iter, std::move(element));
     }
 
-    // optional clear(), but prefered to have defined state of source
+    // optional clear(), but preferred to have defined state of source
     rhs.clear();
 }
 

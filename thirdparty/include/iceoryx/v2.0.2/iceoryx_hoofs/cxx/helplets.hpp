@@ -194,7 +194,7 @@ auto enumTypeAsUnderlyingType(enum_type const value) noexcept -> typename std::u
 }
 
 /// calls a given functor for every element in a given container
-/// @tparam[in] Container type which must be iteratable
+/// @tparam[in] Container type which must be iterable
 /// @tparam[in] Functor which has one argument, the element type of the container
 /// @param[in] c container which should be iterated
 /// @param[in] f functor which should be applied to every element

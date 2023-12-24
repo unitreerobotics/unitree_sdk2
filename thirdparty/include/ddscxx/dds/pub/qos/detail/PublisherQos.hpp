@@ -35,7 +35,7 @@
  *
  * @par Attributes
  * @anchor anchor_dds_pub_publisher_qos_defaults
- * QosPolicy                               | Desciption                                                            | Default Value
+ * QosPolicy                               | Description                                                            | Default Value
  * --------------------------------------- | --------------------------------------------------------------------- | --------------------
  * dds::core::policy::Presentation         | Data-instance change dependencies (@ref DCPS_QoS_Presentation "info") | Presentation::InstanceAccessScope(coherent=false, ordered=false)
  * dds::core::policy::Partition            | Active partitions (@ref DCPS_QoS_Partition "info")                    | Partition::Partition(empty)

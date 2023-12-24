@@ -35,7 +35,7 @@ extern "C" {
 /**
  * @brief Initialize a mutex.
  *
- * @param[in]  mutex  Mutex to itialize.
+ * @param[in]  mutex  Mutex to initialize.
  */
 DDS_EXPORT void
 ddsrt_mutex_init(
@@ -239,7 +239,7 @@ ddsrt_nonnull_all;
  * Try to acquire a read-write lock while for reading, immediately return if
  * the lock is already exclusively acquired by another thread.
  *
- * @param[in]  rwlock  Read-write lock to aqcuire.
+ * @param[in]  rwlock  Read-write lock to acquire.
  *
  * @post Data related to the critical section must not changed by the
  *       calling thread.

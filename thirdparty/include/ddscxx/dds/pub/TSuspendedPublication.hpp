@@ -71,7 +71,7 @@ public:
      * dissemination of the publications by all contained DataWriter objects
      * of the given Publisher.
      *
-     * @param pub The publisher to supsend publications on.
+     * @param pub The publisher to suspend publications on.
      * @throws dds::core::Error
      *                  An internal error has occurred.
      * @throws dds::core::AlreadyClosedError

@@ -87,7 +87,7 @@ void iox_ws_mark_for_destruction(iox_ws_t const self);
 /// @param[in] subscriberState the state which should be attached
 /// @param[in] id an arbitrary id which will be tagged to the state
 /// @param[in] callback a callback which is attached to the state
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_subscriber_state(iox_ws_t const self,
                                                       iox_sub_t const subscriber,
@@ -103,7 +103,7 @@ ENUM iox_WaitSetResult iox_ws_attach_subscriber_state(iox_ws_t const self,
 /// @param[in] id an arbitrary id which will be tagged to the state
 /// @param[in] callback a callback which is attached to the state
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_subscriber_state_with_context_data(iox_ws_t const self,
                                                                         iox_sub_t const subscriber,
@@ -118,7 +118,7 @@ ENUM iox_WaitSetResult iox_ws_attach_subscriber_state_with_context_data(iox_ws_t
 /// @param[in] subscriberEvent the event which should be attached
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_subscriber_event(iox_ws_t const self,
                                                       iox_sub_t const subscriber,
@@ -134,7 +134,7 @@ ENUM iox_WaitSetResult iox_ws_attach_subscriber_event(iox_ws_t const self,
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_subscriber_event_with_context_data(iox_ws_t const self,
                                                                         iox_sub_t const subscriber,
@@ -148,7 +148,7 @@ ENUM iox_WaitSetResult iox_ws_attach_subscriber_event_with_context_data(iox_ws_t
 /// @param[in] userTrigger the user trigger of the event which should be attached
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_user_trigger_event(iox_ws_t const self,
                                                         iox_user_trigger_t const userTrigger,
@@ -162,7 +162,7 @@ ENUM iox_WaitSetResult iox_ws_attach_user_trigger_event(iox_ws_t const self,
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_user_trigger_event_with_context_data(iox_ws_t const self,
                                                                           iox_user_trigger_t const userTrigger,
@@ -197,7 +197,7 @@ void iox_ws_detach_user_trigger_event(iox_ws_t const self, iox_user_trigger_t co
 /// @param[in] clientEvent the event which should be attached
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_client_event(const iox_ws_t self,
                                                   const iox_client_t client,
@@ -212,7 +212,7 @@ ENUM iox_WaitSetResult iox_ws_attach_client_event(const iox_ws_t self,
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_client_event_with_context_data(iox_ws_t const self,
                                                                     iox_client_t const client,
@@ -227,7 +227,7 @@ ENUM iox_WaitSetResult iox_ws_attach_client_event_with_context_data(iox_ws_t con
 /// @param[in] clientState the state which should be attached
 /// @param[in] eventId an arbitrary id which will be tagged to the state
 /// @param[in] callback a callback which is attached to the state
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_client_state(const iox_ws_t self,
                                                   const iox_client_t client,
@@ -242,7 +242,7 @@ ENUM iox_WaitSetResult iox_ws_attach_client_state(const iox_ws_t self,
 /// @param[in] eventId an arbitrary id which will be tagged to the state
 /// @param[in] callback a callback which is attached to the state
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_client_state_with_context_data(iox_ws_t const self,
                                                                     iox_client_t const client,
@@ -269,7 +269,7 @@ void iox_ws_detach_client_state(iox_ws_t const self, iox_client_t const client, 
 /// @param[in] serverEvent the server which should be attached
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_server_event(const iox_ws_t self,
                                                   const iox_server_t server,
@@ -284,7 +284,7 @@ ENUM iox_WaitSetResult iox_ws_attach_server_event(const iox_ws_t self,
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_server_event_with_context_data(iox_ws_t const self,
                                                                     iox_server_t const server,
@@ -299,7 +299,7 @@ ENUM iox_WaitSetResult iox_ws_attach_server_event_with_context_data(iox_ws_t con
 /// @param[in] serverState the state which should be attached
 /// @param[in] eventId an arbitrary id which will be tagged to the state
 /// @param[in] callback a callback which is attached to the state
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_server_state(const iox_ws_t self,
                                                   const iox_server_t server,
@@ -314,7 +314,7 @@ ENUM iox_WaitSetResult iox_ws_attach_server_state(const iox_ws_t self,
 /// @param[in] eventId an arbitrary id which will be tagged to the state
 /// @param[in] callback a callback which is attached to the state
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_server_state_with_context_data(iox_ws_t const self,
                                                                     iox_server_t const server,
@@ -341,7 +341,7 @@ void iox_ws_detach_server_state(iox_ws_t const self, iox_server_t const server, 
 /// @param[in] serviceDiscoveryEvent the event which should be attached
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult iox_ws_attach_service_discovery_event(const iox_ws_t self,
                                                              const iox_service_discovery_t serviceDiscovery,
@@ -356,7 +356,7 @@ ENUM iox_WaitSetResult iox_ws_attach_service_discovery_event(const iox_ws_t self
 /// @param[in] eventId an arbitrary id which will be tagged to the event
 /// @param[in] callback a callback which is attached to the event
 /// @param[in] contextData a void pointer which is provided as second argument to the callback
-/// @return if the attaching was successfull it returns WaitSetResult_SUCCESS, otherwise
+/// @return if the attaching was successful it returns WaitSetResult_SUCCESS, otherwise
 ///             an enum which describes the error
 ENUM iox_WaitSetResult
 iox_ws_attach_service_discovery_event_with_context_data(iox_ws_t const self,

@@ -398,7 +398,7 @@ typedef struct dds_builtintopic_endpoint
 {
   dds_guid_t key; /**< The GUID that uniquely identifies the endpoint on the network */
   dds_guid_t participant_key; /**< The GUID of the participant this endpoint belongs to. */
-  dds_instance_handle_t participant_instance_handle; /**< The instance handle the participant assigned to this enpoint. */
+  dds_instance_handle_t participant_instance_handle; /**< The instance handle the participant assigned to this endpoint. */
   char *topic_name; /**< The name of the topic, potentially unicode. */
   char *type_name; /**< The name of the type, potentially unicode. */
   dds_qos_t *qos; /**< The QoS of the endpoint */
@@ -1556,7 +1556,7 @@ dds_find_topic_scoped (dds_find_scope_t scope, dds_entity_t participant, const c
  * @returns A dds_return_t indicating success or failure.
  *
  * @retval DDS_RETCODE_OK
- *             The topic descriptor has been succesfully created.
+ *             The topic descriptor has been successfully created.
  * @retval DDS_RETCODE_BAD_PARAMETER
  *             Type_info or descriptor parameter not provided, invalid entity (not a participant) or scope invalid.
  * @retval DDS_RETCODE_PRECONDITION_NOT_MET
@@ -1579,7 +1579,7 @@ dds_create_topic_descriptor (dds_find_scope_t scope, dds_entity_t participant, c
  * @returns A dds_return_t indicating success or failure.
  *
  * @retval DDS_RETCODE_OK
- *             The topic descriptor has been succesfully deleted.
+ *             The topic descriptor has been successfully deleted.
  * @retval DDS_RETCODE_BAD_PARAMETER
  *             No descriptor provided
  * @retval DDS_RETCODE_UNSUPPORTED
@@ -3173,7 +3173,7 @@ dds_waitset_wait_until(
 /**
  * @defgroup reading (Reading Data)
  * @ingroup reader
- * There are a number of ways to aquire data, divided into variations of "read" and "take".
+ * There are a number of ways to acquire data, divided into variations of "read" and "take".
  * The return value of a read/take operation is the number of elements returned. "max_samples"
  * should have the same type, as one can't return more than MAX_INT
  * this way, anyway. X, Y, CX, CY return to the various filtering

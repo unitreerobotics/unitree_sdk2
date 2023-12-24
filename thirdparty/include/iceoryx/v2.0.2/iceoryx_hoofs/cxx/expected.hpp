@@ -131,7 +131,7 @@ class IOX_NO_DISCARD expected;
 ///
 ///     cxx::expected<float> errorOnlyMethod() {
 ///         return callMe().or_else([]{
-///             std::cerr << "Error Occured\n";
+///             std::cerr << "Error Occurred\n";
 ///             /// perform some action
 ///         }).and_then([](cxx::expected<int, float> & result){
 ///             std::cout << "Success, got " << result.value() << std::endl;
@@ -247,7 +247,7 @@ class IOX_NO_DISCARD expected<ErrorType>
     /// @return const reference to the expected itself
     /// @code
     ///     someExpected.or_else([](float& error){
-    ///         std::cout << "error occured : " << error << std::endl;
+    ///         std::cout << "error occurred : " << error << std::endl;
     ///     })
     /// @endcode
     const expected& or_else(const cxx::function_ref<void(ErrorType&)>& callable) const noexcept;
@@ -258,7 +258,7 @@ class IOX_NO_DISCARD expected<ErrorType>
     /// @return const reference to the expected itself
     /// @code
     ///     someExpected.or_else([](float& error){
-    ///         std::cout << "error occured : " << error << std::endl;
+    ///         std::cout << "error occurred : " << error << std::endl;
     ///     })
     /// @endcode
     expected& or_else(const cxx::function_ref<void(ErrorType&)>& callable) noexcept;
@@ -480,7 +480,7 @@ class IOX_NO_DISCARD expected<ValueType, ErrorType>
     /// @return const reference to the expected itself
     /// @code
     ///     someExpected.or_else([](float& result){
-    ///         std::cout << "error occured : " << error << std::endl;
+    ///         std::cout << "error occurred : " << error << std::endl;
     ///     })
     /// @endcode
     const expected& or_else(const cxx::function_ref<void(ErrorType&)>& callable) const noexcept;
@@ -491,7 +491,7 @@ class IOX_NO_DISCARD expected<ValueType, ErrorType>
     /// @return reference to the expected itself
     /// @code
     ///     someExpected.or_else([](float& error){
-    ///         std::cout << "error occured : " << error << std::endl;
+    ///         std::cout << "error occurred : " << error << std::endl;
     ///     })
     /// @endcode
     expected& or_else(const cxx::function_ref<void(ErrorType&)>& callable) noexcept;

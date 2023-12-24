@@ -41,7 +41,7 @@ class ObjectPool
   private:
     static constexpr size_t CHUNKSIZE = sizeof(T);
     using Chunk = char[CHUNKSIZE];
-    using Container = Chunk[CAPACITY]; // we need uninitalized memory without calling any constructors
+    using Container = Chunk[CAPACITY]; // we need uninitialized memory without calling any constructors
                                        // we cannot use typed C arrays for this reason, since it would call T() (maybe
                                        // we could use a one element as CHUNK)
 

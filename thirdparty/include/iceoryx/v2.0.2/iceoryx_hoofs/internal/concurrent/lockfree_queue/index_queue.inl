@@ -53,7 +53,7 @@ void IndexQueue<Capacity, ValueType>::push(const ValueType index) noexcept
     // note that we are always able to succeed to publish since we have
     // enough capacity for all unique indices used
 
-    // case analyis
+    // case analysis
     // (1) loaded value is exactly one cycle behind:
     //     value is from the last cycle
     //     we can try to publish
@@ -135,7 +135,7 @@ bool IndexQueue<Capacity, ValueType>::pop(ValueType& index) noexcept
     // we need the CAS loop here since we may fail due to concurrent pop operations
     // we leave when we detect an empty queue, otherwise we retry the pop operation
 
-    // case analyis
+    // case analysis
     // (1) loaded value has the same cycle:
     //     value was not popped before
     //     try to get ownership

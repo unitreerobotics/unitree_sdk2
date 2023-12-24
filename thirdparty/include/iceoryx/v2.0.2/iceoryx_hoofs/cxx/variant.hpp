@@ -64,7 +64,7 @@ struct in_place_type
 ///
 ///     cxx::variant<int, float> someVariant2(cxx::in_place_type<int>, 12);
 ///
-///     // variant with setted value therefore the index is not invalid
+///     // variant with set value therefore the index is not invalid
 ///     if ( someVariant.index() != INVALID_VARIANT_INDEX ) ...
 /// @endcode
 static constexpr uint64_t INVALID_VARIANT_INDEX = std::numeric_limits<uint64_t>::max();

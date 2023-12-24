@@ -53,7 +53,7 @@ class IpcRuntimeInterface
     /// @return true if communication was successful, false if not
     bool sendRequestToRouDi(const IpcMessage& msg, IpcMessage& answer) noexcept;
 
-    /// @brief get the adress offset of the segment manager
+    /// @brief get the address offset of the segment manager
     /// @return address offset as rp::BaseRelativePointer::offset_t
     rp::BaseRelativePointer::offset_t getSegmentManagerAddressOffset() const noexcept;
 

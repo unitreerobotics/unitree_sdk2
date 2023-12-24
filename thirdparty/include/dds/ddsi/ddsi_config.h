@@ -123,7 +123,7 @@ struct ddsi_config_channel_listelem {
 #endif
   int    diffserv_field;
   struct thread_state *channel_reader_thrst;  /* keeping an handle to the running thread for this channel */
-  struct nn_dqueue *dqueue; /* The handle of teh delivery queue servicing incoming data for this channel*/
+  struct nn_dqueue *dqueue; /* The handle of the delivery queue servicing incoming data for this channel*/
   struct xeventq *evq; /* The handle of the event queue servicing this channel*/
   uint32_t queueId; /* the index of the networkqueue serviced by this channel*/
   struct ddsi_tran_conn * transmit_conn; /* the connection used for sending data out via this channel */
@@ -407,7 +407,7 @@ struct ddsi_config
   int generate_keyhash;
   uint32_t max_sample_size;
 
-  /* compability options */
+  /* compatibility options */
   enum ddsi_standards_conformance standards_conformance;
   int explicitly_publish_qos_set_to_default;
   enum ddsi_many_sockets_mode many_sockets_mode;

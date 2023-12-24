@@ -135,7 +135,7 @@ public:
     void Rename(const std::string& oldName, const std::string& newName);
 
     /*
-     * Path proccess Function
+     * Path process Function
      */
     std::string& NormalizePath(std::string& s, bool withEndDelim = true);
     std::string GetFatherDirectory(const std::string& s, bool withEndDelim = true);

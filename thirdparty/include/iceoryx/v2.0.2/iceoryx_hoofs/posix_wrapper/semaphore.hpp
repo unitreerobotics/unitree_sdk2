@@ -217,7 +217,7 @@ class Semaphore : public DesignPattern::Creation<Semaphore, SemaphoreError>
     ///                 on mode_t
     /// @param[in] value the initial value of the semaphore
     /// @return Semaphore object which can be initialized, if a semaphore
-    ///         named name exists it is definitly an uninitialized semaphore.
+    ///         named name exists it is definitely an uninitialized semaphore.
     Semaphore(CreateNamedSemaphore_t, const char* name, const mode_t mode, const unsigned int value) noexcept;
 
     /// @brief calls sem_close which closes a named semaphore

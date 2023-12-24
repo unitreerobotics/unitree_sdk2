@@ -24,7 +24,7 @@ public:
     bool Put(const T& t, bool replace = false, bool putfront = false)
     {
         /*
-         * if queue is full or full-replaced occured return false
+         * if queue is full or full-replaced occurred return false
          */
         bool noneReplaced = true;
 

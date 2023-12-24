@@ -30,7 +30,7 @@ namespace popo
 /// @brief The ChunkQueuePusher is the low layer building block to push SharedChunks in a chunk queue.
 /// Together with the ChunkDistributor and ChunkQueuePopper the ChunkQueuePusher builds the infrastructure
 /// to exchange memory chunks between different data producers and consumers that could be located in different
-/// processes. A ChunkQueuePusher is the part of the chunk queue that is knwon by the ChunkDistributor
+/// processes. A ChunkQueuePusher is the part of the chunk queue that is known by the ChunkDistributor
 template <typename ChunkQueueDataType>
 class ChunkQueuePusher
 {

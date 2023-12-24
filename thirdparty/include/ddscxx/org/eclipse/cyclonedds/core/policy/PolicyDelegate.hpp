@@ -34,8 +34,8 @@
 //==============================================================================
 /*
  * Unfortunately, there isn't an ddsc or builtin SubscriptionKey policy that
- * is alligned the same as the idl representation. To be able to translate it
- * as well, we have to seperately mention it...
+ * is aligned the same as the idl representation. To be able to translate it
+ * as well, we have to separately mention it...
  */
 struct _DDS_SubscriptionKeyQosPolicy;
 

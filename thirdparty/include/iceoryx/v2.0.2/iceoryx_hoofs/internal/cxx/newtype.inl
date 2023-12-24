@@ -104,8 +104,8 @@ inline NewType<T, Policies...>& NewType<T, Policies...>::operator=(T&& rhs) noex
 template <typename T, template <typename> class... Policies>
 inline NewType<T, Policies...>::operator T() const noexcept
 {
-    static_assert(algorithm::doesContainType<newtype::Convertable<T>, Policies<T>...>(),
-                  "This type is not convertable, please add the newtype::Convertable policy.");
+    static_assert(algorithm::doesContainType<newtype::Convertible<T>, Policies<T>...>(),
+                  "This type is not convertible, please add the newtype::Convertible policy.");
     return m_value;
 }
 

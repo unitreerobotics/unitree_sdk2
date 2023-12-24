@@ -35,7 +35,7 @@
  *
  * @par Attributes
  * @anchor anchor_dds_sub_datareader_qos_defaults
- * QosPolicy                                      | Desciption                                                                          | Default Value
+ * QosPolicy                                      | Description                                                                          | Default Value
  * ---------------------------------------------- | ----------------------------------------------------------------------------------- | --------------------
  * dds::core::policy::Durability                  | Data storage settings for late joiners (@ref DCPS_QoS_Durability "info")            | Durability::Volatile()
  * dds::core::policy::Deadline                    | Period in which new sample is written (@ref DCPS_QoS_Deadline "info")               | Deadline::Deadline(infinite)

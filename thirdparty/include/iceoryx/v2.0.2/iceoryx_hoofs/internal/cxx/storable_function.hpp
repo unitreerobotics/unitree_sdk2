@@ -171,7 +171,7 @@ class storable_function<StorageType, signature<ReturnType, Args...>>
 
     /// @note For static_storage as the StorageType we detect at compile time if the functor can be stored.
     ///       If this is not the case, compilation will fail.
-    ///       For other StorageTypes where storing might fail due to insufficent memory this may not be detectable
+    ///       For other StorageTypes where storing might fail due to insufficient memory this may not be detectable
     ///       at compile time and we call terminate at runtime if the functor could not be stored.
 
     template <typename Functor,

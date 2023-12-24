@@ -63,7 +63,7 @@ DDS_EXPORT void ddsi_tl_add_types (struct ddsi_domaingv *gv, const DDS_Builtin_T
 
 /**
  * Handle an incoming type lookup reply message. The sertypes from this
- * reply are registered in the local type administation and referenced
+ * reply are registered in the local type administration and referenced
  * from the corresponding proxy endpoints.
  */
 DDS_EXPORT void ddsi_tl_handle_reply (struct ddsi_domaingv *gv, struct ddsi_serdata *sample_common);

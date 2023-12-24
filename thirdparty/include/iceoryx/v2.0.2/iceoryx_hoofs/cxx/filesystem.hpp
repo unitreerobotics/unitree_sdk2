@@ -64,10 +64,10 @@ enum class perms : uint64_t
     all = 0777,
 
     /// @brief set uid bit
-    /// @note introduction into setgit/setuid: https://en.wikipedia.org/wiki/Setuid
+    /// @note introduction into setgid/setuid: https://en.wikipedia.org/wiki/Setuid
     set_uid = 04000,
     /// @brief set gid bit
-    /// @note introduction into setgit/setuid: https://en.wikipedia.org/wiki/Setuid
+    /// @note introduction into setgid/setuid: https://en.wikipedia.org/wiki/Setuid
     set_gid = 02000,
     /// @brief set sticky bit
     /// @note sticky bit introduction: https://en.wikipedia.org/wiki/Sticky_bit

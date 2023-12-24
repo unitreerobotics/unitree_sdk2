@@ -48,7 +48,7 @@ public:
    * @param[in, out] prop Properties of the member to start.
    * @param[in] is_set Whether the entity represented by prop is present, if it is an optional entity.
    *
-   * @return Whether the operation was completed succesfully.
+   * @return Whether the operation was completed successfully.
    */
   bool start_member(entity_properties_t &prop, bool is_set = true);
 
@@ -61,7 +61,7 @@ public:
    * @param[in, out] prop Properties of the member to finish.
    * @param[in] is_set Whether the entity represented by prop is present, if it is an optional entity.
    *
-   * @return Whether the operation was completed succesfully.
+   * @return Whether the operation was completed successfully.
    */
   bool finish_member(entity_properties_t &prop, bool is_set = true);
 
@@ -148,7 +148,7 @@ private:
    * @param[out] out The header to read into.
    * @param[out] is_final Whether the final field has been read.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool read_header(entity_properties_t &out, bool &is_final);
 
@@ -161,7 +161,7 @@ private:
    *
    * @param[in, out] props The properties of the entity.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool write_header(entity_properties_t &props);
 
@@ -173,7 +173,7 @@ private:
    *
    * @param[in, out] props The properties of the entity.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool finish_write_header(entity_properties_t &props);
 
@@ -181,7 +181,7 @@ private:
    * @brief
    * Writes the terminating entry in a parameter list.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool write_final_list_entry();
 
@@ -189,7 +189,7 @@ private:
    * @brief
    * Moves the cursor as if writing the terminating entry in a parameter list.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool move_final_list_entry();
 
@@ -202,7 +202,7 @@ private:
    *
    * @param[in] props The entity to move the cursor by.
    *
-   * @return Whether the header was read succesfully.
+   * @return Whether the header was read successfully.
    */
   bool move_header(const entity_properties_t &props);
 
@@ -239,7 +239,7 @@ private:
  * @param[out] toread The variable to read into.
  * @param[in] N The number of entities to read.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool read(xcdr_v1_stream& str, T& toread, size_t N = 1)
@@ -269,7 +269,7 @@ bool read(xcdr_v1_stream& str, T& toread, size_t N = 1)
  * @param[in] towrite The variable to write.
  * @param[in] N The number of entities to write.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool write(xcdr_v1_stream& str, const T& towrite, size_t N = 1)
@@ -298,7 +298,7 @@ bool write(xcdr_v1_stream& str, const T& towrite, size_t N = 1)
  * @param[in, out] str The stream whose cursor is moved.
  * @param[in] N The number of entities to move.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool move(xcdr_v1_stream& str, const T&, size_t N = 1)
@@ -328,7 +328,7 @@ bool move(xcdr_v1_stream& str, const T&, size_t N = 1)
  * @param[in] max_sz The variable to move the cursor by, no contents of this variable are used, it is just used to determine the template.
  * @param[in] N The number of entities at most to move.
  *
- * @return Whether the operation was completed succesfully.
+ * @return Whether the operation was completed successfully.
  */
 template<typename T, std::enable_if_t<std::is_enum<T>::value && !std::is_arithmetic<T>::value, bool> = true >
 bool max(xcdr_v1_stream& str, const T& max_sz, size_t N = 1)

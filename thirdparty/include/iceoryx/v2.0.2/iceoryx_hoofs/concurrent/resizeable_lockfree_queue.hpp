@@ -41,7 +41,7 @@ namespace concurrent
 // the call to the base class.
 //
 // Since supporting the resize (setCapacity) functionality has an impact on the runtime even
-// if the feature is not used, we provide a queue wihout resize functionality in an additional
+// if the feature is not used, we provide a queue without resize functionality in an additional
 // base class that can be used separately.
 template <typename ElementType, uint64_t MaxCapacity>
 class ResizeableLockFreeQueue : protected LockFreeQueue<ElementType, MaxCapacity>
@@ -82,14 +82,14 @@ class ResizeableLockFreeQueue : protected LockFreeQueue<ElementType, MaxCapacity
     /// @brief inserts value in FIFO order, always succeeds by removing the oldest value
     /// when the queue is detected to be full (overflow)
     /// @param[in] value to be inserted is copied into the queue
-    /// @return removed value if an overflow occured, empty optional otherwise
+    /// @return removed value if an overflow occurred, empty optional otherwise
     /// @note threadsafe, lockfree
     iox::cxx::optional<ElementType> push(const ElementType& value) noexcept;
 
     /// @brief inserts value in FIFO order, always succeeds by removing the oldest value
     /// when the queue is detected to be full (overflow)
     /// @param[in] value to be inserted is moved into the queue if possible
-    /// @return removed value if an overflow occured, empty optional otherwise
+    /// @return removed value if an overflow occurred, empty optional otherwise
     /// @note threadsafe, lockfree
     iox::cxx::optional<ElementType> push(ElementType&& value) noexcept;
 
