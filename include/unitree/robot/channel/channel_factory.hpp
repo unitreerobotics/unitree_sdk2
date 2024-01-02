@@ -22,7 +22,7 @@ public:
         return &inst;
     }
 
-    void Init(int32_t domainId, const std::string& networkInterface = "", bool enableSharedMemory = false);
+    void Init(int32_t domainId, const std::string& networkInterface = "");
     void Init(const std::string& configFileName = "");
     void Init(const common::JsonMap& jsonMap);
 
