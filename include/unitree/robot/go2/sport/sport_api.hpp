@@ -52,6 +52,11 @@ const int32_t ROBOT_SPORT_API_ID_WIGGLEHIPS         = 1033;
 const int32_t ROBOT_SPORT_API_ID_GETSTATE           = 1034;
 const int32_t ROBOT_SPORT_API_ID_ECONOMICGAIT       = 1035;
 const int32_t ROBOT_SPORT_API_ID_HEART              = 1036;
+const int32_t ROBOT_SPORT_API_ID_DANCE3             = 1037;
+const int32_t ROBOT_SPORT_API_ID_DANCE4             = 1038;
+const int32_t ROBOT_SPORT_API_ID_HOPSPINLEFT        = 1039;
+const int32_t ROBOT_SPORT_API_ID_HOPSPINRIGHT       = 1040;
+
 
 }
 }

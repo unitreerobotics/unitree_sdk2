@@ -19,7 +19,7 @@ public:
 
 using DdsTopicChannelAbstractPtr = std::shared_ptr<DdsTopicChannelAbstract>;
 
-#define UT_DDS_WAIT_MATCHED_TIME_MICRO_SEC 1000000
+#define UT_DDS_WAIT_MATCHED_TIME_MICRO_SEC 100000
 
 /*
  * @brief: DdsTopicChannel
@@ -42,6 +42,7 @@ public:
     void SetWriter(const DdsPublisherPtr& publisher, const DdsWriterQos& qos)
     {
         mWriter = DdsWriterPtr<MSG>(new DdsWriter<MSG>(publisher, mTopic, qos));
+        MicroSleep(UT_DDS_WAIT_MATCHED_TIME_MICRO_SEC);
     }
 
     void SetReader(const DdsSubscriberPtr& subscriber, const DdsReaderQos& qos, const DdsReaderCallback& cb, int32_t queuelen)
@@ -60,12 +61,12 @@ public:
         return mReader;
     }
 
-    bool Write(const void* message, int64_t waitMicrosec = UT_DDS_WAIT_MATCHED_TIME_MICRO_SEC)
+    bool Write(const void* message, int64_t waitMicrosec)
     {
         return Write(*(const MSG*)message, waitMicrosec);
     }
 
-    bool Write(const MSG& message, int64_t waitMicrosec = UT_DDS_WAIT_MATCHED_TIME_MICRO_SEC)
+    bool Write(const MSG& message, int64_t waitMicrosec)
     {
         return mWriter->Write(message, waitMicrosec);
     }

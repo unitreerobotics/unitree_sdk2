@@ -17,8 +17,8 @@ class ObstaclesAvoidClient : public Client
 
      void Init();
 
-     int32_t Set(bool enable);
-     int32_t Get(bool& enable);
+     int32_t SwitchSet(bool enable);
+     int32_t SwitchGet(bool& enable);
 };
 }
 }

@@ -17,8 +17,8 @@ public:
 
     void Init(const std::string& name);
 
-    bool Send(const Request& req);
-    RequestFuturePtr SendRequest(const Request& req);
+    bool Send(const Request& req, int64_t waitTimeout);
+    RequestFuturePtr SendRequest(const Request& req, int64_t waitTimeout);
 
 private:
     void ResponseFunc(const void* message);

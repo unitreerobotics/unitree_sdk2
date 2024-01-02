@@ -235,6 +235,30 @@ public:
     int32_t Dance2();
 
     /*
+     * @brief Dance3
+     * @api: 1037
+     */
+    int32_t Dance3();
+
+    /*
+     * @brief Dance4
+     * @api: 1038
+     */
+    int32_t Dance4();
+
+    /*
+     * @brief HopSpinLeft
+     * @api: 1039
+     */
+    int32_t HopSpinLeft();
+  
+    /*
+     * @brief HopSpinRight
+     * @api: 1040
+     */
+    int32_t HopSpinRight();
+
+    /*
      * @brief WiggleHips
      * @api: 1033
      */

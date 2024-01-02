@@ -32,9 +32,9 @@ public:
         mRecvChannlPtr = ChannelFactory::Instance()->CreateRecvChannel<RECV_MSG>(recvChannelName, recvMesageCallback, queuelen);
     }
 
-    bool Send(const SEND_MSG& msg)
+    bool Send(const SEND_MSG& msg, int64_t waitTimeout)
     {
-        return mSendChannlPtr->Write(msg);
+        return mSendChannlPtr->Write(msg, waitTimeout);
     }
 
     int64_t GetLastDataAvailableTime() const

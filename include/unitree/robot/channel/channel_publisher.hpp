@@ -20,7 +20,7 @@ public:
         mChannelPtr = ChannelFactory::Instance()->CreateSendChannel<MSG>(mChannelName);
     }
 
-    bool Write(const MSG& msg, int64_t waitMicrosec = 1000000)
+    bool Write(const MSG& msg, int64_t waitMicrosec = 0)
     {
         if (mChannelPtr)
         {

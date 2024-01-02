@@ -49,7 +49,7 @@ public:
     const std::string& GetProcessFileName();
 
     std::string GetProcessName();
-    std::string GetProcessDirectory();
+    std::string GetProcessDirectory(bool withEndDelim = true);
 
     uint64_t GetThreadId();
     int32_t GetTid();

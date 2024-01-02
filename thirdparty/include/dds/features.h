@@ -13,7 +13,7 @@
 #define _DDS_PUBLIC_FEATURES_H_
 
 /* Whether or not support for DDS Security is included */
-#define DDS_HAS_SECURITY 1
+/* #undef DDS_HAS_SECURITY */
 
 /* Whether or not support for the lifespan QoS is included */
 #define DDS_HAS_LIFESPAN 1
@@ -28,7 +28,7 @@
 #define DDS_HAS_SSM 1
 
 /* Whether or not features dependent on OpenSSL are included */
-#define DDS_HAS_SSL 1
+/* #undef DDS_HAS_SSL */
 
 /* Whether or not support for type discovery is included */
 #define DDS_HAS_TYPE_DISCOVERY 1
@@ -37,6 +37,6 @@
 #define DDS_HAS_TOPIC_DISCOVERY 1
 
 /* Whether or not support for Iceoryx support is included */
-#define DDS_HAS_SHM 1
+/* #undef DDS_HAS_SHM */
 
 #endif

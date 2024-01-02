@@ -21,6 +21,30 @@ public:
     void Init();
 
     /*
+     * @brief SetSwitch
+     * @api: 1001
+     */
+    int32_t SetSwitch(int enable);
+
+    /*
+     * @brief GetSwitch
+     * @api: 1002
+     */
+    int32_t GetSwitch(int&);
+
+    /*
+     * @brief SetVolume
+     * @api: 1003
+     */
+    int32_t SetVolume(int level);
+
+    /*
+     * @brief GetVolume
+     * @api: 1004
+     */
+    int32_t GetVolume(int&);
+
+    /*
      * @brief SetBrightness
      * @api: 1005
      */
