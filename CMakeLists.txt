@@ -11,6 +11,8 @@ add_executable(test_subscriber example/helloworld/subscriber.cpp example/hellowo
 add_executable(high_follow_sin example/high_level/follow_sin.cpp)
 add_executable(sportmode_test example/high_level/sportmode_test.cpp)
 add_executable(low_level example/low_level/low_level.cpp)
+add_executable(stand_example_go2 example/low_level/stand_example_go2.cpp)
+add_executable(stand_example_b2  example/low_level/stand_example_b2.cpp)
 add_executable(wireless example/wireless/wireless.cpp)
 add_executable(advanced_gamepad example/advanced_gamepad/main.cpp)
 add_executable(state_machine_example example/state_machine/main.cpp)
