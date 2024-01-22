@@ -21,3 +21,6 @@ add_executable(robot_state_client_example example/client/robot_state_client_exam
 add_executable(sport_client_example example/client/sport_client_example.cpp)
 add_executable(video_client_example example/client/video_client_example.cpp)
 add_executable(vui_client_example example/client/vui_client_example.cpp)
+add_executable(h1_arm_sdk_dds_example example/humanoid/high_level/h1_arm_sdk_dds_example.cpp)
+add_executable(h1_loco_example_client example/humanoid/high_level/h1_loco_example_client.cpp)
+add_executable(h1_low_level_example example/humanoid/low_level/humanoid.cpp)
