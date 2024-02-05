@@ -195,7 +195,25 @@ void Custom::LowCmdWrite()
 
 int main(int argc, const char** argv)
 {
-    printf("lowcmd length: %d\n", sizeof(unitree_go::msg::dds_::LowCmd_));
+    unitree_go::msg::dds_::LowCmd_ lowcmd;
+    lowcmd.head() = {20, 30};
+    for(int k = 0; k < 20; ++k){
+        lowcmd.motor_cmd()[k].mode() = 1;
+    }
+
+    lowcmd.led() = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
+    uint32_t crc = crc32_core((uint32_t *)&lowcmd, (sizeof(unitree_go::msg::dds_::LowCmd_)>>2)-1);
+
+    for (int i = 0; i < (sizeof(unitree_go::msg::dds_::LowCmd_)>>2)-1; i++){
+        printf("%x\n", ((uint32_t *)&lowcmd)[i]);
+    }
+    printf("head: %x %x\n", lowcmd.head()[0], lowcmd.head()[1]);
+    printf("crc: %d, size: %d\n", crc, (sizeof(unitree_go::msg::dds_::LowCmd_)>>2)-1);
+
+
+    // lowcmd.led = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    // printf("lowcmd length: %d\n", sizeof(unitree_go::msg::dds_::LowCmd_));
     // if (argc < 2)
     // {
     //     std::cout << "Usage: " << argv[0] << " networkInterface" << std::endl;
