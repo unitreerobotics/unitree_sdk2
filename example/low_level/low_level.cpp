@@ -195,21 +195,22 @@ void Custom::LowCmdWrite()
 
 int main(int argc, const char** argv)
 {
-    if (argc < 2)
-    {
-        std::cout << "Usage: " << argv[0] << " networkInterface" << std::endl;
-        exit(-1); 
-    }
+    printf("lowcmd length: %d\n", sizeof(unitree_go::msg::dds_::LowCmd_));
+    // if (argc < 2)
+    // {
+    //     std::cout << "Usage: " << argv[0] << " networkInterface" << std::endl;
+    //     exit(-1); 
+    // }
 
-    ChannelFactory::Instance()->Init(0, argv[1]);
+    // ChannelFactory::Instance()->Init(0, argv[1]);
 
-    Custom custom;
-    custom.Init();
+    // Custom custom;
+    // custom.Init();
 
-    while (1)
-    {
-        sleep(10);
-    }
+    // while (1)
+    // {
+    //     sleep(10);
+    // }
 
     return 0;
 }

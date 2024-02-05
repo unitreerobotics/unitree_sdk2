@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "*.ino": "cpp",
+        "*.m": "matlab",
+        "*.cls": "latex",
+        "*.dtx": "latex",
+        "*.lsf": "matlab",
+        "tuple": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "bitset": "cpp",
+        "initializer_list": "cpp",
+        "regex": "cpp",
+        "utility": "cpp"
+    }
+}
