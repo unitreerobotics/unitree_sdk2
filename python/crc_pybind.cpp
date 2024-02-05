@@ -1,8 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <unitree/idl/go2/LowCmd_.hpp>
-// #include <pybind11/numpy.h>
-#include <pybind11/stl.h>
+
 namespace py = pybind11;
 
 uint32_t crc32_core(uint32_t* ptr, uint32_t len)
