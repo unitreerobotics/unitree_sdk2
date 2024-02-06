@@ -129,29 +129,8 @@ uint32_t get_crc(py::object msg)
     raw.gpio = py::cast<uint8_t>(msg.attr("gpio"));
     raw.reserve = py::cast<uint32_t>(msg.attr("reserve"));
 
-    // printf("head: %x %x\n", raw.head[0], raw.head[1]);
-    // printf("levelFlag: %x\n", raw.levelFlag);
-    // printf("frameReserve: %x\n", raw.frameReserve);
-    // printf("SN: %x %x\n", raw.SN[0], raw.SN[1]);
-    // printf("version: %x %x\n", raw.version[0], raw.version[1]);
-    // printf("bandWidth: %x\n", raw.bandWidth);
-    // printf("motorCmd[0]: %x %f %f %f %f %f\n", raw.motorCmd[0].mode, raw.motorCmd[0].q, raw.motorCmd[0].dq, raw.motorCmd[0].tau, raw.motorCmd[0].Kp, raw.motorCmd[0].Kd);
-    // printf("motorCmd[1]: %x %f %f %f %f %f\n", raw.motorCmd[1].mode, raw.motorCmd[1].q, raw.motorCmd[1].dq, raw.motorCmd[1].tau, raw.motorCmd[1].Kp, raw.motorCmd[1].Kd);
-    // printf("motorCmd[2]: %x %f %f %f %f %f\n", raw.motorCmd[2].mode, raw.motorCmd[2].q, raw.motorCmd[2].dq, raw.motorCmd[2].tau, raw.motorCmd[2].Kp, raw.motorCmd[2].Kd);
-    // printf("bms: %x %x %x %x\n", raw.bms.off, raw.bms.reserve[0], raw.bms.reserve[1], raw.bms.reserve[2]);
-    // printf("wirelessRemote: %x %x %x %x\n", raw.wirelessRemote[0], raw.wirelessRemote[1], raw.wirelessRemote[2], raw.wirelessRemote[3]);
-    // printf("led: %x %x %x %x\n", raw.led[0], raw.led[1], raw.led[2], raw.led[3]);
-    // printf("fan: %x %x\n", raw.fan[0], raw.fan[1]);
-    // printf("gpio: %x\n", raw.gpio);
-    // printf("reserve: %x\n", raw.reserve);
-    // printf("crc: %x\n", raw.crc);
-
-    // for (int i = 0; i < (sizeof(LowCmd)>>2)-1; i++){
-    //     printf("%x\n", ((uint32_t *)&raw)[i]);
-    // }
 
     uint32_t crc = crc32_core((uint32_t *)&raw, (sizeof(LowCmd)>>2)-1);
-    // printf("crc: %d, size: %d\n", crc, (sizeof(LowCmd)>>2)-1);
     return crc;
 }
 
