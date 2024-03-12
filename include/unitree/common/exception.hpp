@@ -157,7 +157,7 @@ protected:
     __UT_EXCEPTION_CATCH(std::exception, l, t)
 
 #define UT_DECL_EXCEPTION(ExceptionType, code, desc)    \
-class ExceptionType : public Exception      \
+class ExceptionType : public unitree::common::Exception \
 {                                           \
 public:                                     \
     ExceptionType() throw()                 \

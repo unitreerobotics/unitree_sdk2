@@ -41,7 +41,7 @@ public:
     }
 
 public:
-    void Parse(const std::string& configFileName)
+    virtual void Parse(const std::string& configFileName)
     {
         ServiceBase::Parse(configFileName);
         LOG_INFO(mLogger, "parse config success. filename:", configFileName);

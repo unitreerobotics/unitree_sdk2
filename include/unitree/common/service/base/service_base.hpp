@@ -27,10 +27,18 @@ public:
 
 protected:
     /*
+     * Parse config content
+     */
+    virtual void ParseConfigContent(const std::string& content);
+
+    /*
      * Get field: ServiceName
      */
     const std::string& GetServiceName() const;
 
+    /*
+     * Get field: CpuIds
+     */
     const std::string& GetCpuIds() const;
 
     /*

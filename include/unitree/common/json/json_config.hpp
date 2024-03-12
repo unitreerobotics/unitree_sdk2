@@ -18,6 +18,7 @@ public:
     JsonConfig(const std::string& configFileName);
 
     virtual void Parse(const std::string& configFileName);
+    virtual void ParseContent(const std::string& content);
 
     //top-level field
     bool Has(const std::string& name) const;

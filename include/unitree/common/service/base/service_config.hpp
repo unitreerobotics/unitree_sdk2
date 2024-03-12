@@ -16,6 +16,7 @@ public:
     ServiceConfig(const std::string& configFileName);
 
     virtual void Parse(const std::string& configFileName);
+    virtual void ParseContent(const std::string& content);
 
     //top-level field: ServiceName
     const std::string& GetServiceName() const;
