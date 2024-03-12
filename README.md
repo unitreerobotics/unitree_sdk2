@@ -6,11 +6,6 @@ Unitree robot sdk version 2.
 * CPU  (aarch64 and x86_64)   
 * Compiler  (gcc version 9.4.0) 
 
-### Installation
-```bash
-sudo ./install.sh
-
-```
 
 ### Build examples
 ```bash
