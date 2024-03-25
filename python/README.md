@@ -7,11 +7,11 @@ To use it in your Python script (both sdk and ros), please put this file to a di
 # Compiling
 
 Activate the correct python environment and use `pip install pybind11` to install pybind.
-Find the pybind cmake path and replace `/home/unitree/.local/lib/python3.8/site-packages/pybind11/share/cmake/pybind11` in CMakeLists.txt
+Find the pybind cmake path using `pip show pybind11 | grep Location | cut -d' ' -f2` and pass it to CMakeLists.txt
 
 ```bash
 cd python
 mkdir build && cd build
-cmake ..
+cmake .. -DPYBIND_PATH=$(pip show pybind11 | grep Location | cut -d' ' -f2)
 make
 ```
