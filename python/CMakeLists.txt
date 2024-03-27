@@ -5,8 +5,10 @@ find_package(pybind11 REQUIRED PATHS ${PYBIND_PATH}/pybind11/share/cmake/pybind1
 
 add_library(crc_module MODULE crc_pybind.cpp)
 include_directories(/usr/local/include/ddscxx /usr/local/include/iceoryx/v2.0.2)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/include/ddscxx)
 link_libraries(unitree_sdk2 ddsc ddscxx rt pthread)
-
 
 # Link pybind11 to your module
 target_link_libraries(crc_module PRIVATE pybind11::module)
