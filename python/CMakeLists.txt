@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 
 find_package(pybind11 REQUIRED PATHS ${PYBIND_PATH}/pybind11/share/cmake/pybind11 NO_DEFAULT_PATH)
 
-add_library(crc_module MODULE crc_pybind.cpp)
+pybind11_add_module(crc_module crc_pybind.cpp)
 include_directories(/usr/local/include/ddscxx /usr/local/include/iceoryx/v2.0.2)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/include)
