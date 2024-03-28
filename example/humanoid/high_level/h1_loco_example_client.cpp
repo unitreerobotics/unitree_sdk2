@@ -3,9 +3,43 @@
 #include <thread>
 #include <vector>
 
+#include "unitree/robot/channel/channel_subscriber.hpp"
+#include <unitree/idl/go2/LowState_.hpp>
 #include <unitree/robot/h1/loco/h1_loco_client.hpp>
 
 constexpr float kPi_2 = 1.57079632;
+unitree_go::msg::dds_::LowState_ state;
+
+enum JointIndex {
+  // Right arm
+  kRightShoulderPitch = 12,
+  kRightShoulderRoll = 13,
+  kRightShoulderYaw = 14,
+  kRightElbow = 15,
+  // Left arm
+  kLeftShoulderPitch = 16,
+  kLeftShoulderRoll = 17,
+  kLeftShoulderYaw = 18,
+  kLeftElbow = 19,
+};
+
+const static std::vector<int> arm_joints = {
+    JointIndex::kLeftShoulderPitch,  JointIndex::kLeftShoulderRoll,
+    JointIndex::kLeftShoulderYaw,    JointIndex::kLeftElbow,
+    JointIndex::kRightShoulderPitch, JointIndex::kRightShoulderRoll,
+    JointIndex::kRightShoulderYaw,   JointIndex::kRightElbow};
+
+void LowStateHandler(const void *message) {
+  state = *(unitree_go::msg::dds_::LowState_ *)message;
+}
+
+std::vector<float> GetArmPosFromDds(unitree_go::msg::dds_::LowState_ state) {
+  std::vector<float> vec = std::vector<float>(8, 0.f);
+  for (int i = 0; i < 8; ++i) {
+    vec.at(i) = state.motor_state().at(arm_joints.at(i)).q();
+  }
+  return vec;
+}
 
 int main(int argc, char const *argv[]) {
   if (argc < 2) {
@@ -19,6 +53,15 @@ int main(int argc, char const *argv[]) {
 
   client.Init();
   client.SetTimeout(10.0f);
+
+  // set up feedback
+  unitree::robot::ChannelSubscriberPtr<unitree_go::msg::dds_::LowState_>
+      lowstate_subscriber;
+  lowstate_subscriber.reset(
+      new unitree::robot::ChannelSubscriber<unitree_go::msg::dds_::LowState_>(
+          "rt/lowstate"));
+  lowstate_subscriber->InitChannel(
+      std::bind(&LowStateHandler, std::placeholders::_1), 1);
 
   // arm ctrl related variables
   std::vector<float> init_pos = std::vector<float>(8, 0.f);
@@ -86,6 +129,7 @@ int main(int argc, char const *argv[]) {
       }
       if (key == 'u') {
         // enable arm ctrl
+        weight = 0.f;
         for (int i = 0; i < init_stop_num_steps; ++i) {
           weight += delta_weight;
           weight = std::clamp(weight, 0.f, 1.f);
@@ -97,6 +141,8 @@ int main(int argc, char const *argv[]) {
       }
       if (key == 'i') {
         // diable arm ctrl
+        weight = 1.f;
+        jpos = GetArmPosFromDds(state);
         for (int i = 0; i < init_stop_num_steps; ++i) {
           weight -= delta_weight;
           weight = std::clamp(weight, 0.f, 1.f);
@@ -108,6 +154,7 @@ int main(int argc, char const *argv[]) {
       }
       if (key == 'm') {
         // move arm to pos 0
+        jpos = GetArmPosFromDds(state);
         for (int i = 0; i < arm_move_num_steps; ++i) {
           for (int j = 0; j < init_pos.size(); ++j) {
             jpos.at(j) += std::clamp(init_pos.at(j) - jpos.at(j),
@@ -121,6 +168,7 @@ int main(int argc, char const *argv[]) {
       }
       if (key == 'n') {
         // move arm to pos 1
+        jpos = GetArmPosFromDds(state);
         for (int i = 0; i < arm_move_num_steps; ++i) {
           for (int j = 0; j < init_pos.size(); ++j) {
             jpos.at(j) += std::clamp(target_pos.at(j) - jpos.at(j),

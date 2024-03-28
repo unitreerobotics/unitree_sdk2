@@ -52,30 +52,30 @@ public:
   ~HumanoidExample() = default;
 
   void LowCommandWriter() {
-    unitree_go::msg::dds_::LowCmd_ low_cmd;
-    PackOneLowCommand pack_one_low_command;
+    unitree_go::msg::dds_::LowCmd_ dds_low_command{};
+    dds_low_command.head()[0] = 0xFE;
+    dds_low_command.head()[1] = 0xEF;
+    dds_low_command.level_flag() = 0xFF;
+    dds_low_command.gpio() = 0;
+
     const std::shared_ptr<const MotorCommand> mc_tmp_ptr =
         motor_command_buffer_.GetData();
     if (mc_tmp_ptr) {
       for (int i = 0; i < kNumMotors; ++i) {
         if (IsWeakMotor(i)) {
-          pack_one_low_command.motor_command[i].mode = 0x01;
+          dds_low_command.motor_cmd().at(i).mode() = (0x01);
         } else {
-          pack_one_low_command.motor_command[i].mode = 0x0A;
+          dds_low_command.motor_cmd().at(i).mode() = (0x0A);
         }
-        pack_one_low_command.motor_command[i].tau = mc_tmp_ptr->tau_ff.at(i);
-        pack_one_low_command.motor_command[i].q = mc_tmp_ptr->q_ref.at(i);
-        pack_one_low_command.motor_command[i].dq = mc_tmp_ptr->dq_ref.at(i);
-        pack_one_low_command.motor_command[i].kp = mc_tmp_ptr->kp.at(i);
-        pack_one_low_command.motor_command[i].kd = mc_tmp_ptr->kd.at(i);
+        dds_low_command.motor_cmd().at(i).tau() = mc_tmp_ptr->tau_ff.at(i);
+        dds_low_command.motor_cmd().at(i).q() = mc_tmp_ptr->q_ref.at(i);
+        dds_low_command.motor_cmd().at(i).dq() = mc_tmp_ptr->dq_ref.at(i);
+        dds_low_command.motor_cmd().at(i).kp() = mc_tmp_ptr->kp.at(i);
+        dds_low_command.motor_cmd().at(i).kd() = mc_tmp_ptr->kd.at(i);
       }
-      pack_one_low_command.crc =
-          Crc32Core((uint32_t *)&pack_one_low_command,
-                    (sizeof(PackOneLowCommand) >> 2) - 1);
-      LowCmd2DDS(pack_one_low_command, low_cmd);
-      // easy_dds_.WriteMessage<unitree_go::msg::dds_::LowCmd_>(kTopicLowCommand,
-      //                                                        low_cmd);
-      lowcmd_publisher_->Write(low_cmd);
+      dds_low_command.crc() = Crc32Core((uint32_t *)&dds_low_command,
+                                        (sizeof(dds_low_command) >> 2) - 1);
+      lowcmd_publisher_->Write(dds_low_command);
     }
   }
 
