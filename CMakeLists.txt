@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 3.5)
 
 SET(CMAKE_CXX_STANDARD 17)
 
-include_directories(/usr/local/include/ddscxx /usr/local/include/iceoryx/v2.0.2)
+include_directories(include thirdparty/include thirdparty/include/ddscxx thirdparty/include/iceoryx/v2.0.2)
+link_directories(lib/${CMAKE_HOST_SYSTEM_PROCESSOR} thirdparty/lib/${CMAKE_HOST_SYSTEM_PROCESSOR})
+
 link_libraries(unitree_sdk2 ddsc ddscxx rt pthread)
 
 add_executable(test_publisher example/helloworld/publisher.cpp example/helloworld/HelloWorldData.cpp)
@@ -12,6 +14,7 @@ add_executable(high_follow_sin example/high_level/follow_sin.cpp)
 add_executable(sportmode_test example/high_level/sportmode_test.cpp)
 add_executable(low_level example/low_level/low_level.cpp)
 add_executable(stand_example_go2 example/low_level/stand_example_go2.cpp)
+add_executable(disable_sports_mode_go2 example/low_level/disable_sports_mode_go2.cpp)
 add_executable(stand_example_b2  example/low_level/stand_example_b2.cpp)
 add_executable(wireless example/wireless/wireless.cpp)
 add_executable(advanced_gamepad example/advanced_gamepad/main.cpp)
