@@ -77,6 +77,8 @@ public:
     
     int32_t SwitchMoveMode(bool flag);
 
+    int32_t PreciseYaw(float desiredYaw, float measuredYaw);
+
 };
 }
 }
