@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>unitree_sdk2</name>
+  <version>0.0.0</version>
+  <description>The unitree_sdk2 package</description>
+
+  <maintainer email="andrzej@fieldai.com">Andrzej Reinke</maintainer>
+
+  <license>FieldAI Inc.</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>
