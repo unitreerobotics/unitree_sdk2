@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 
 SET(CMAKE_CXX_STANDARD 17)
 
-ind_package(catkin REQUIRED)
+find_package(catkin REQUIRED)
 
 catkin_package(
     INCLUDE_DIRS include
