@@ -23,6 +23,10 @@ endif ()
 ## Use GNUInstallDirs to install libraries into correct locations on all platforms.
 include(GNUInstallDirs)
 
+if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+    set(CMAKE_INSTALL_PREFIX "/opt/unitree" CACHE PATH "Installation Directory")
+endif()
+
 ## Put all binary files into /bin and libraries into /lib
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -46,10 +50,12 @@ endif ()
 
 message(STATUS "Importing: ${UNITREE_SDK_LIB}")
 
+find_package(Threads REQUIRED)
+
 add_library(unitree_sdk2 STATIC IMPORTED GLOBAL)
 set_target_properties(unitree_sdk2 PROPERTIES
         IMPORTED_LOCATION ${UNITREE_SDK_LIB})
-target_link_libraries(unitree_sdk2 INTERFACE ddsc ddscxx)
+target_link_libraries(unitree_sdk2 INTERFACE ddsc ddscxx Threads::Threads)
 target_include_directories(unitree_sdk2 INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>)
