@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(unitree_sdk2)
+project(unitree_sdk2 VERSION 2.0.0)
 
 ## Project Options
 option(BUILD_EXAMPLES "Build examples" ON)
@@ -22,10 +22,6 @@ endif ()
 
 ## Use GNUInstallDirs to install libraries into correct locations on all platforms.
 include(GNUInstallDirs)
-
-if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-    set(CMAKE_INSTALL_PREFIX "/opt/unitree" CACHE PATH "Installation Directory")
-endif()
 
 ## Put all binary files into /bin and libraries into /lib
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -63,3 +59,24 @@ target_include_directories(unitree_sdk2 INTERFACE
 if (BUILD_EXAMPLES)
     add_subdirectory(example)
 endif ()
+
+## Install the library
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(FILES ${UNITREE_SDK_LIB}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+install(FILES cmake/unitree_sdk2Targets.cmake
+    DESTINATION lib/cmake/unitree_sdk2)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    unitree_sdk2ConfigVersion.cmake
+    VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}"
+    COMPATIBILITY ExactVersion)
+
+configure_file(cmake/unitree_sdk2Config.cmake.in unitree_sdk2Config.cmake @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/unitree_sdk2Config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/unitree_sdk2ConfigVersion.cmake"
+    DESTINATION lib/cmake/unitree_sdk2)
