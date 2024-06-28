@@ -1,0 +1,11 @@
+add_executable(robot_state_client_example robot_state_client_example.cpp)
+target_link_libraries(robot_state_client_example unitree_sdk2)
+
+add_executable(sport_client_example sport_client_example.cpp)
+target_link_libraries(sport_client_example unitree_sdk2)
+
+add_executable(video_client_example video_client_example.cpp)
+target_link_libraries(video_client_example unitree_sdk2)
+
+add_executable(vui_client_example vui_client_example.cpp)
+target_link_libraries(vui_client_example unitree_sdk2)
