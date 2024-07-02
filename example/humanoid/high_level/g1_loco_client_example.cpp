@@ -37,7 +37,11 @@ int main(int argc, char const *argv[]) {
         key = arg.substr(2);
         value = "";
       }
-      args.insert({{key, value}});
+      if (args.find(key) != args.end()) {
+        args[key] = value;
+      } else {
+        args.insert({{key, value}});
+      }
     }
   }
 
@@ -50,6 +54,8 @@ int main(int argc, char const *argv[]) {
   client.SetTimeout(10.f);
 
   for (const auto &arg_pair : args) {
+    std::cout << "Processing command: [" << arg_pair.first << "] with param: ["
+              << arg_pair.second << "] ..." << std::endl;
     if (arg_pair.first == "network_interface") {
       continue;
     }
@@ -223,6 +229,8 @@ int main(int argc, char const *argv[]) {
       }
       client.Move(vx, vy, omega);
     }
+
+    std::cout << "Done!" << std::endl;
   }
 
   return 0;
