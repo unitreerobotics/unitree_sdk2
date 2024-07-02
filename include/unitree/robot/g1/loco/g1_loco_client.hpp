@@ -1,14 +1,14 @@
-#ifndef __UT_ROBOT_H1_LOCO_CLIENT_HPP__
-#define __UT_ROBOT_H1_LOCO_CLIENT_HPP__
+#ifndef __UT_ROBOT_G1_LOCO_CLIENT_HPP__
+#define __UT_ROBOT_G1_LOCO_CLIENT_HPP__
 
-#include "h1_loco_api.hpp"
+#include "g1_loco_api.hpp"
 #include <limits>
 #include <unitree/robot/client/client.hpp>
 #include <unitree/robot/go2/public/jsonize_type.hpp>
 
 namespace unitree {
 namespace robot {
-namespace h1 {
+namespace g1 {
 class LocoClient : public Client {
 public:
   LocoClient() : Client(LOCO_SERVICE_NAME, false) {}
@@ -159,9 +159,13 @@ public:
   /*High Level API Call*/
   int32_t Damp() { return SetFsmId(1); }
 
-  int32_t Start() { return SetFsmId(204); }
+  int32_t Start() { return SetFsmId(200); }
 
-  int32_t StandUp() { return SetFsmId(2); }
+  int32_t Squat() { return SetFsmId(2); }
+
+  int32_t Sit() { return SetFsmId(3); }
+
+  int32_t StandUp() { return SetFsmId(4); }
 
   int32_t ZeroTorque() { return SetFsmId(0); }
 
@@ -195,8 +199,8 @@ public:
 private:
   bool continous_move_ = false;
 };
-} // namespace h1
+} // namespace g1
 
 } // namespace robot
 } // namespace unitree
-#endif // __UT_ROBOT_H1_LOCO_CLIENT_HPP__
+#endif // __UT_ROBOT_G1_LOCO_CLIENT_HPP__
