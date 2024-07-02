@@ -1,5 +1,11 @@
 # unitree_sdk2
-Unitree robot sdk version 2.
+Unitree robot sdk version 2 modified by @yihuai-gao
+
+## Additional features
+- python/crc_module.cpython-310-aarch64-linux-gnu.so to calculate crc for each message pack when running python ros2
+- build/disable_sports_mode_go2 to disable sports mode before running self-built controller
+usage: [README](python/README.md)
+
 
 ### Prebuild environment
 * OS  (Ubuntu 20.04 LTS)  
