@@ -58,11 +58,11 @@ int main(int argc, char const *argv[]) {
           kTopicArmSDK));
   arm_sdk_publisher->InitChannel();
 
-  std::array<JointIndex, 8> arm_joints = {
+  std::array<JointIndex, 9> arm_joints = {
       JointIndex::kLeftShoulderPitch,  JointIndex::kLeftShoulderRoll,
       JointIndex::kLeftShoulderYaw,    JointIndex::kLeftElbow,
       JointIndex::kRightShoulderPitch, JointIndex::kRightShoulderRoll,
-      JointIndex::kRightShoulderYaw,   JointIndex::kRightElbow};
+      JointIndex::kRightShoulderYaw,   JointIndex::kRightElbow, JointIndex::kWaistYaw};
 
   float weight = 0.f;
   float weight_rate = 0.2f;
@@ -80,10 +80,11 @@ int main(int argc, char const *argv[]) {
   auto sleep_time =
       std::chrono::milliseconds(static_cast<int>(control_dt / 0.001f));
 
-  std::array<float, 8> init_pos{};
+  std::array<float, 9> init_pos{};
 
-  std::array<float, 8> target_pos = {0.f, kPi_2,  0.f, kPi_2,
-                                     0.f, -kPi_2, 0.f, kPi_2};
+  std::array<float, 9> target_pos = {0.f, kPi_2,  0.f, kPi_2,
+                                     0.f, -kPi_2, 0.f, kPi_2,
+                                     0.f};
 
   // wait for init
   std::cout << "Press ENTER to init arms ...";
