@@ -148,6 +148,19 @@ int main(int argc, char const *argv[]) {
       std::cout << "set velocity to " << arg_pair.second << std::endl;
     }
 
+    if (arg_pair.first == "set_phase") {
+      std::vector<float> param = stringToFloatVector(arg_pair.second);
+      auto param_size = param.size();
+      if (param_size == 2) {
+        client.SetPhase(param);
+        std::cout << "set phase to " << arg_pair.second << std::endl;
+      } else {
+        std::cerr << "Invalid param size for method SetPhase: " << param_size
+                  << std::endl;
+        return 1;
+      }
+    }
+
     if (arg_pair.first == "damp") {
       client.Damp();
     }
@@ -221,7 +234,20 @@ int main(int argc, char const *argv[]) {
       }
       client.Move(vx, vy, omega);
     }
-    std::cout << "Done!" << std::endl;
+
+    if (arg_pair.first == "set_next_foot") {
+      bool flag;
+      if (arg_pair.second == "0") {
+        flag = true;
+      } else if (arg_pair.second == "1") {
+        flag = false;
+      } else {
+        std::cerr << "invalid argument: " << arg_pair.second << std::endl;
+        return 1;
+      }
+      client.SetNextFoot(flag);
+      std::cout << "Done!" << std::endl;
+    }
   }
 
   return 0;

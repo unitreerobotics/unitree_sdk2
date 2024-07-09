@@ -26,6 +26,7 @@ const int32_t ROBOT_API_ID_LOCO_SET_BALANCE_MODE = 8102;
 const int32_t ROBOT_API_ID_LOCO_SET_SWING_HEIGHT = 8103;
 const int32_t ROBOT_API_ID_LOCO_SET_STAND_HEIGHT = 8104;
 const int32_t ROBOT_API_ID_LOCO_SET_VELOCITY = 8105;
+const int32_t ROBOT_API_ID_LOCO_SET_PHASE = 8106;
 
 using LocoCmd =
     std::map<std::string, std::variant<int, float, std::vector<float>>>;

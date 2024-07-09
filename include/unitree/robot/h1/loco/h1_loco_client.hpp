@@ -29,6 +29,7 @@ public:
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_SWING_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_STAND_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_VELOCITY);
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_PHASE);
   };
 
   /*Low Level API Call*/
@@ -156,6 +157,16 @@ public:
     return Call(ROBOT_API_ID_LOCO_SET_VELOCITY, parameter, data);
   }
 
+  int32_t SetPhase(std::vector<float> phase) {
+    std::string parameter, data;
+
+    JsonizeDataVecFloat json;
+    json.data = phase;
+    parameter = common::ToJsonString(json);
+
+    return Call(ROBOT_API_ID_LOCO_SET_PHASE, parameter, data);
+  }
+
   /*High Level API Call*/
   int32_t Damp() { return SetFsmId(1); }
 
@@ -190,6 +201,11 @@ public:
   int32_t SwitchMoveMode(bool flag) {
     continous_move_ = flag;
     return 0;
+  }
+
+  int32_t SetNextFoot(bool foot) {
+    return SetPhase(foot ? std::vector<float>({0.f, 1.f})
+                         : std::vector<float>({1.f, 0.f}));
   }
 
 private:
