@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.5)
 
 SET(CMAKE_CXX_STANDARD 17)
 
-include_directories(/usr/local/include/ddscxx /usr/local/include/iceoryx/v2.0.2)
+include_directories(include thirdparty/include thirdparty/include/ddscxx thirdparty/include/iceoryx/v2.0.2)
+link_directories(lib/${CMAKE_HOST_SYSTEM_PROCESSOR} thirdparty/lib/${CMAKE_HOST_SYSTEM_PROCESSOR})
 link_libraries(unitree_sdk2 ddsc ddscxx rt pthread)
 
 add_executable(test_publisher example/helloworld/publisher.cpp example/helloworld/HelloWorldData.cpp)
