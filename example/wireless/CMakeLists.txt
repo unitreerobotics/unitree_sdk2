@@ -1,0 +1,2 @@
+add_executable(wireless wireless.cpp)
+target_link_libraries(wireless unitree_sdk2)

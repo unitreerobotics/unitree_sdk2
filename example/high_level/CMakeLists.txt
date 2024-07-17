@@ -1,0 +1,5 @@
+add_executable(high_follow_sin follow_sin.cpp)
+target_link_libraries(high_follow_sin unitree_sdk2)
+
+add_executable(sportmode_test sportmode_test.cpp)
+target_link_libraries(sportmode_test unitree_sdk2)
