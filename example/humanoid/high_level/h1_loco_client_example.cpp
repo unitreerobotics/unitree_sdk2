@@ -53,7 +53,7 @@ int main(int argc, char const *argv[]) {
   client.Init();
   client.SetTimeout(10.f);
 
-  
+  for (const auto &arg_pair : args) {
     std::cout << "Processing command: [" << arg_pair.first << "] with param: [" << arg_pair.second << "] ..."
               << std::endl;
     if (arg_pair.first == "network_interface") {

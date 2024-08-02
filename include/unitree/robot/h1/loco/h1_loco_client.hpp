@@ -11,8 +11,6 @@ namespace robot {
 namespace h1 {
 class LocoClient : public Client {
 public:
-class LocoClient : public Client {
- public:
   LocoClient() : Client(LOCO_SERVICE_NAME, false) {}
   ~LocoClient() {}
 
