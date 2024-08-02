@@ -53,9 +53,9 @@ int main(int argc, char const *argv[]) {
   client.Init();
   client.SetTimeout(10.f);
 
-  for (const auto &arg_pair : args) {
-    std::cout << "Processing command: [" << arg_pair.first << "] with param: ["
-              << arg_pair.second << "] ..." << std::endl;
+  
+    std::cout << "Processing command: [" << arg_pair.first << "] with param: [" << arg_pair.second << "] ..."
+              << std::endl;
     if (arg_pair.first == "network_interface") {
       continue;
     }
@@ -100,6 +100,24 @@ int main(int argc, char const *argv[]) {
       std::cout << ")" << std::endl;
     }
 
+    if (arg_pair.first == "enable_odom") {
+      float x, y, yaw;
+      client.EnableOdom();
+      std::cout << "Send enable odom signal" << std::endl;
+    }
+
+    if (arg_pair.first == "disable_odom") {
+      float x, y, yaw;
+      client.DisableOdom();
+      std::cout << "Send disable odom signal" << std::endl;
+    }
+
+    if (arg_pair.first == "get_odom") {
+      float x, y, yaw;
+      client.GetOdom(x, y, yaw);
+      std::cout << "Get Odom: (" << x << ", " << y << ", " << yaw << ")" << std::endl;
+    }
+
     if (arg_pair.first == "set_fsm_id") {
       int fsm_id = std::stoi(arg_pair.second);
       client.SetFsmId(fsm_id);
@@ -139,8 +157,7 @@ int main(int argc, char const *argv[]) {
         omega = param.at(2);
         duration = param.at(3);
       } else {
-        std::cerr << "Invalid param size for method SetVelocity: " << param_size
-                  << std::endl;
+        std::cerr << "Invalid param size for method SetVelocity: " << param_size << std::endl;
         return 1;
       }
 
@@ -155,10 +172,15 @@ int main(int argc, char const *argv[]) {
         client.SetPhase(param);
         std::cout << "set phase to " << arg_pair.second << std::endl;
       } else {
-        std::cerr << "Invalid param size for method SetPhase: " << param_size
-                  << std::endl;
+        std::cerr << "Invalid param size for method SetPhase: " << param_size << std::endl;
         return 1;
       }
+    }
+
+    if (arg_pair.first == "set_target_pos") {
+      std::vector<float> param = stringToFloatVector(arg_pair.second);
+      client.SetTargetPos(param.at(0), param.at(1), param.at(2));
+      std::cout << "set_target_pos: " << arg_pair.second << std::endl;
     }
 
     if (arg_pair.first == "damp") {
@@ -228,8 +250,7 @@ int main(int argc, char const *argv[]) {
         vy = param.at(1);
         omega = param.at(2);
       } else {
-        std::cerr << "Invalid param size for method SetVelocity: " << param_size
-                  << std::endl;
+        std::cerr << "Invalid param size for method SetVelocity: " << param_size << std::endl;
         return 1;
       }
       client.Move(vx, vy, omega);
@@ -246,8 +267,8 @@ int main(int argc, char const *argv[]) {
         return 1;
       }
       client.SetNextFoot(flag);
-      std::cout << "Done!" << std::endl;
     }
+    std::cout << "Done!" << std::endl;
   }
 
   return 0;

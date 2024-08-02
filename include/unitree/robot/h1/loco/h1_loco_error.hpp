@@ -9,6 +9,8 @@ namespace h1 {
 UT_DECL_ERR(UT_ROBOT_LOCO_ERR_LOCOSTATE_NOT_AVAILABLE, 8301,
             "LocoState not available.")
 UT_DECL_ERR(UT_ROBOT_LOCO_ERR_INVALID_FSM_ID, 8302, "Invalid fsm id.")
+UT_DECL_ERR(UT_ROBOT_LOCO_ERR_ODOMSTATE_NOT_AVAILABLE, 8303,
+            "OdomState not available.")
 } // namespace h1
 } // namespace robot
 } // namespace unitree
