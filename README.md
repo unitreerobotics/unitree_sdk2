@@ -24,6 +24,15 @@ To build your own application with the SDK, you can install the unitree_sdk2 to 
 ```bash
 mkdir build
 cd build
+cmake ..
+sudo make install
+```
+
+Or install unitree_sdk2 to a specified directory:
+
+```bash
+mkdir build
+cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=/opt/unitree_robotics
 sudo make install
 ```
