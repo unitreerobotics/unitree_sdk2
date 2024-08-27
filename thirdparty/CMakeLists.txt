@@ -27,7 +27,7 @@ target_include_directories(ddscxx INTERFACE
         $<INSTALL_INTERFACE:include/ddscxx>)
 
 ## Install targets
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_SYSTEM_PROCESSOR}
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_SYSTEM_PROCESSOR}/
     DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
