@@ -19,6 +19,9 @@ class ObstaclesAvoidClient : public Client
 
      int32_t SwitchSet(bool enable);
      int32_t SwitchGet(bool& enable);
+
+     int32_t Move(float x, float y, float yaw);
+     int32_t UseRemoteCommandFromApi(bool isRemoteCommandsFromApi);
 };
 }
 }
