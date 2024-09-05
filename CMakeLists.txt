@@ -36,7 +36,7 @@ add_subdirectory(thirdparty)
 
 ## Import Unitree SDK2 library
 set(UNITREE_SDK_PATH ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_SYSTEM_PROCESSOR})
-find_library(UNITREE_SDK_LIB unitree_sdk2 PATHS ${UNITREE_SDK_PATH})
+find_library(UNITREE_SDK_LIB unitree_sdk2 PATHS ${UNITREE_SDK_PATH} NO_DEFAULT_PATH)
 
 if (NOT UNITREE_SDK_LIB)
     message(FATAL_ERROR "Unitree SDK library for the architecture is not found")
