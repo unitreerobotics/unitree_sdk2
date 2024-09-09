@@ -1,8 +1,10 @@
+#include <yaml-cpp/yaml.h>
+
 #include <cmath>
+#include <cstddef>
 #include <memory>
 #include <mutex>
 #include <shared_mutex>
-
 // DDS
 #include <unitree/robot/channel/channel_publisher.hpp>
 #include <unitree/robot/channel/channel_subscriber.hpp>
@@ -155,7 +157,7 @@ float GetMotorKp(MotorType type) {
 float GetMotorKd(MotorType type) {
   switch (type) {
     case GearboxS:
-      return 1;
+      return 2;
     case GearboxM:
       return 1;
     case GearboxL:
@@ -171,6 +173,7 @@ class G1Example {
   double control_dt_;  // [2ms]
   double duration_;    // [3 s]
   PRorAB mode_;
+  std::vector<std::vector<double>> frames_data_;
 
   DataBuffer<MotorState> motor_state_buffer_;
   DataBuffer<MotorCommand> motor_command_buffer_;
@@ -184,6 +187,8 @@ class G1Example {
   G1Example(std::string networkInterface)
       : time_(0.0), control_dt_(0.002), duration_(3.0), mode_(PR) {
     ChannelFactory::Instance()->Init(0, networkInterface);
+
+    loadBehaviorLibrary("motion");
 
     // create publisher
     lowcmd_publisher_.reset(
@@ -203,6 +208,29 @@ class G1Example {
                                 &G1Example::LowCommandWriter, this);
     control_thread_ptr_ = CreateRecurrentThreadEx(
         "control", UT_CPU_ID_NONE, 2000, &G1Example::Control, this);
+  }
+
+  void loadBehaviorLibrary(std::string behavior_name) {
+    std::string resource_dir = BLIB_DIR;
+    YAML::Node motion = YAML::LoadFile(resource_dir + behavior_name + ".seq");
+
+    std::string content = motion["components"][1]["content"].as<std::string>();
+    int num_parts = motion["components"][1]["num_parts"].as<int>();
+    std::cout << "BehaviorName: " << behavior_name + ".seq\n";
+    std::cout << content << " with " << num_parts << "\n";
+
+    auto frames = motion["components"][1]["frames"];
+
+    for (const auto &frame : frames) {
+      std::vector<double> frame_data;
+      for (const auto &element : frame) {
+        frame_data.push_back(element.as<double>());
+      }
+      frames_data_.push_back(frame_data);
+    }
+
+    std::cout << frames_data_.size() << " knots with " << frames_data_[0].size()
+              << " DOF\n";
   }
 
   void ReportRPY() {
@@ -248,7 +276,7 @@ class G1Example {
   void LowCommandWriter() {
     unitree_hg::msg::dds_::LowCmd_ dds_low_command;
     dds_low_command.mode_pr() = mode_;   // {0:PR, 1:AB}
-    dds_low_command.mode_machine() = 2;  // {1:23dof, 2:29dof, 3:27dof, 9:14dof}
+    dds_low_command.mode_machine() = 9;  // {1:23dof, 2:29dof, 3:27dof, 9:14dof}
 
     const std::shared_ptr<const MotorCommand> mc =
         motor_command_buffer_.GetData();
@@ -269,17 +297,15 @@ class G1Example {
   }
 
   void Control() {
-    ReportRPY();
-
     MotorCommand motor_command_tmp;
     const std::shared_ptr<const MotorState> ms = motor_state_buffer_.GetData();
 
     if (ms) {
       time_ += control_dt_;
-      if (time_ < duration_ * 1) {
+      if (time_ < duration_) {
         // [Stage 1]: set robot to zero posture
         for (int i = 0; i < G1_NUM_MOTOR; ++i) {
-          double ratio = std::clamp(time_ / duration_, 0.0, 1.0);
+          double ratio = time_ / duration_;
 
           double q_des = 0;
           motor_command_tmp.tau_ff.at(i) = 0.0;
@@ -289,52 +315,28 @@ class G1Example {
           motor_command_tmp.kp.at(i) = GetMotorKp(G1MotorType[i]);
           motor_command_tmp.kd.at(i) = GetMotorKd(G1MotorType[i]);
         }
-      } else if (time_ < duration_ * 2) {
-        // [Stage 2]: swing ankle's PR
-        mode_ = PR;
-        double max_P = M_PI * 30.0 / 180.0;
-        double max_R = M_PI * 10.0 / 180.0;
-        double t = time_ - duration_ * 1;
-        double L_P_des = +max_P * std::sin(2.0 * M_PI * t);
-        double L_R_des = +max_R * std::sin(2.0 * M_PI * t);
-        double R_P_des = +max_P * std::sin(2.0 * M_PI * t);
-        double R_R_des = -max_R * std::sin(2.0 * M_PI * t);
-
-        for (int i = 0; i < G1_NUM_MOTOR; ++i) {
-          motor_command_tmp.tau_ff.at(i) = 0.0;
-          motor_command_tmp.q_target.at(i) = 0.0;
-          motor_command_tmp.dq_target.at(i) = 0.0;
-          motor_command_tmp.kp.at(i) = GetMotorKp(G1MotorType[i]);
-          motor_command_tmp.kd.at(i) = GetMotorKd(G1MotorType[i]);
-        }
-
-        motor_command_tmp.q_target.at(LeftAnklePitch) = L_P_des;
-        motor_command_tmp.q_target.at(LeftAnkleRoll) = L_R_des;
-        motor_command_tmp.q_target.at(RightAnklePitch) = R_P_des;
-        motor_command_tmp.q_target.at(RightAnkleRoll) = R_R_des;
       } else {
-        // [Stage 3]: swing ankle's AB
-        mode_ = AB;
-        double max_A = M_PI * 30.0 / 180.0;
-        double max_B = M_PI * 10.0 / 180.0;
-        double t = time_ - duration_ * 2;
-        double L_A_des = +max_A * std::sin(M_PI * t);
-        double L_B_des = +max_B * std::sin(M_PI * t + M_PI);
-        double R_A_des = -max_A * std::sin(M_PI * t);
-        double R_B_des = -max_B * std::sin(M_PI * t + M_PI);
+        // [Stage 2]: tracking the offline trajectory
+        size_t frame_index = (size_t)((time_ - duration_) / control_dt_);
+        if (frame_index >= frames_data_.size()) {
+          frame_index = frames_data_.size() - 1;
+          time_ = 0.0;  // RESET
+        }
+
+        if (frame_index % 100 == 0)
+          std::cout << "Frame Index: " << frame_index << std::endl;
 
         for (int i = 0; i < G1_NUM_MOTOR; ++i) {
-          motor_command_tmp.tau_ff.at(i) = 0.0;
-          motor_command_tmp.q_target.at(i) = 0.0;
+          size_t index_in_frame = i - LeftShoulderPitch;
+          motor_command_tmp.q_target.at(i) =
+              (i >= LeftShoulderPitch)
+                  ? frames_data_[frame_index][index_in_frame]
+                  : 0.0;
           motor_command_tmp.dq_target.at(i) = 0.0;
+          motor_command_tmp.tau_ff.at(i) = 0.0;
           motor_command_tmp.kp.at(i) = GetMotorKp(G1MotorType[i]);
           motor_command_tmp.kd.at(i) = GetMotorKd(G1MotorType[i]);
         }
-
-        motor_command_tmp.q_target.at(LeftAnkleA) = L_A_des;
-        motor_command_tmp.q_target.at(LeftAnkleB) = L_B_des;
-        motor_command_tmp.q_target.at(RightAnkleA) = R_A_des;
-        motor_command_tmp.q_target.at(RightAnkleB) = R_B_des;
       }
 
       motor_command_buffer_.SetData(motor_command_tmp);
@@ -344,7 +346,8 @@ class G1Example {
 
 int main(int argc, char const *argv[]) {
   if (argc < 2) {
-    std::cout << "Usage: g1_XXdof_example network_interface_name" << std::endl;
+    std::cout << "Usage: g1_dual_arm_example network_interface_name"
+              << std::endl;
     exit(0);
   }
   std::string networkInterface = argv[1];

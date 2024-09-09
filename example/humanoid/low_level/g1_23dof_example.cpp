@@ -17,7 +17,7 @@ static const std::string HG_STATE_TOPIC = "rt/lowstate";
 using namespace unitree::common;
 using namespace unitree::robot;
 
-const int G1_NUM_MOTOR = 29;
+const int G1_NUM_MOTOR = 23;
 
 template <typename T>
 class DataBuffer {
@@ -68,10 +68,10 @@ std::array<MotorType, G1_NUM_MOTOR> G1MotorType{
     GearboxM, GearboxM, GearboxM, GearboxL, GearboxS, GearboxS,
     GearboxM, GearboxM, GearboxM, GearboxL, GearboxS, GearboxS,
     // waist
-    GearboxM, GearboxS, GearboxS,
+    GearboxM,
     // arms
-    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS,
-    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS
+    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS,
+    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS
     // clang-format on
 };
 
@@ -96,25 +96,17 @@ enum G1JointIndex {
   RightAnkleA = 11,
 
   WaistYaw = 12,
-  WaistRoll = 13,
-  WaistA = 13,
-  WaistPitch = 14,
-  WaistB = 14,
 
-  LeftShoulderPitch = 15,
-  LeftShoulderRoll = 16,
-  LeftShoulderYaw = 17,
-  LeftElbow = 18,
-  LeftWristRoll = 19,
-  LeftWristPitch = 20,
-  LeftWristYaw = 21,
-  RightShoulderPitch = 22,
-  RightShoulderRoll = 23,
-  RightShoulderYaw = 24,
-  RightElbow = 25,
-  RightWristRoll = 26,
-  RightWristPitch = 27,
-  RightWristYaw = 28,
+  LeftShoulderPitch = 13,
+  LeftShoulderRoll = 14,
+  LeftShoulderYaw = 15,
+  LeftElbow = 16,
+  LeftWristRoll = 17,
+  RightShoulderPitch = 18,
+  RightShoulderRoll = 19,
+  RightShoulderYaw = 20,
+  RightElbow = 21,
+  RightWristRoll = 22
 };
 
 inline uint32_t Crc32Core(uint32_t *ptr, uint32_t len) {
@@ -248,7 +240,7 @@ class G1Example {
   void LowCommandWriter() {
     unitree_hg::msg::dds_::LowCmd_ dds_low_command;
     dds_low_command.mode_pr() = mode_;   // {0:PR, 1:AB}
-    dds_low_command.mode_machine() = 2;  // {1:23dof, 2:29dof, 3:27dof, 9:14dof}
+    dds_low_command.mode_machine() = 1;  // {1:23dof, 2:29dof, 3:27dof, 9:14dof}
 
     const std::shared_ptr<const MotorCommand> mc =
         motor_command_buffer_.GetData();
