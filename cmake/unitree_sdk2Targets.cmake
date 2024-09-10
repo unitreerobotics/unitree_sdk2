@@ -48,14 +48,14 @@ endif()
 # Create imported target ddsc and ddscxx
 add_library(ddsc SHARED IMPORTED GLOBAL)
 set_target_properties(ddsc PROPERTIES
-    IMPORTED_LOCATION ${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libddsc.so
+    IMPORTED_LOCATION ${_IMPORT_PREFIX}/lib/libddsc.so
     INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include;${_IMPORT_PREFIX}/include"
     INTERFACE_LINK_LIBRARIES "Threads::Threads"
     IMPORTED_NO_SONAME TRUE)
 
 add_library(ddscxx SHARED IMPORTED GLOBAL)
 set_target_properties(ddscxx PROPERTIES
-    IMPORTED_LOCATION ${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libddscxx.so
+    IMPORTED_LOCATION ${_IMPORT_PREFIX}/lib/libddscxx.so
     INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include;${_IMPORT_PREFIX}/include/ddscxx"
     INTERFACE_LINK_LIBRARIES "Threads::Threads"
     IMPORTED_NO_SONAME TRUE)
