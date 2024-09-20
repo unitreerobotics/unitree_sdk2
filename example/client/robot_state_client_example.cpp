@@ -44,19 +44,20 @@ int main(int32_t argc, const char** argv)
 
     Timer timer;
 
+    int32_t status;
     int32_t ret = rsc.SetReportFreq(3, 30);
     std::cout << "Call SetReportFreq[3,30] ret:" << ret << ", cost:" << timer.Stop() << " (us)" << std::endl;
 
     sleep(5);
     timer.Restart();
 
-    ret = rsc.ServiceSwitch(serviceName, 0);
+    ret = rsc.ServiceSwitch(serviceName, 0, status);
     std::cout << "Call ServiceSwitch[" << serviceName << ",0] ret:" << ret << ", cost:" << timer.Stop() << " (us)" << std::endl;
 
     sleep(5);
     timer.Restart();
 
-    ret = rsc.ServiceSwitch(serviceName, 1);
+    ret = rsc.ServiceSwitch(serviceName, 1, status);
     std::cout << "Call ServiceSwitch[" << serviceName << ",1] ret:" << ret << ", cost:" << timer.Stop() << " (us)" << std::endl;
 
     sleep(5);
