@@ -27,14 +27,15 @@ public:
     ~Custom(){}
 
     void Init();
-    void InitMotionSwitcherClient();
-    int queryMotionStatus();
-    void ReleaseMode();
+    void Start();
+
 private:
     void InitLowCmd();
     void LowStateMessageHandler(const void* messages);
     void LowCmdWrite();
- 
+    int queryMotionStatus();
+    std::string queryServiceName(std::string form,std::string name);
+
 private:
     float Kp = 1000.0;
     float Kd = 10.0;
@@ -151,34 +152,50 @@ void Custom::InitLowCmd()
     }
 }
 
-void Custom::InitMotionSwitcherClient()
-{
-    msc.SetTimeout(10.0f); 
-    msc.Init();
-}
-
 int Custom::queryMotionStatus()
 {
     std::string robotForm,motionName;
     int motionStatus;
-    msc.CheckMode(robotForm,motionName);
-    std::cout << "Current robotform: " << (robotForm == "0" ? "B2" : "B2-W") << std::endl;
+    int32_t ret = msc.CheckMode(robotForm,motionName);
+    if (ret == 0) {
+        std::cout << "CheckMode succeeded." << std::endl;
+    } else {
+        std::cout << "CheckMode failed. Error code: " << ret << std::endl;
+    }
     if(motionName.empty())
     {
-        std::cout<<"sport_mode or ai_sport is deactivate "<<std::endl;
+        std::cout<<"all control-related services is deactivate. "<<std::endl;
         motionStatus = 0;
     }
     else
     {
-        std::cout << (motionName == "normal" ? "sport_mode is activate" : "ai_sport is activate") << std::endl;
+        std::string serviceName = queryServiceName(robotForm,motionName);
+        std::cout << "service: "<< serviceName<< " is activate" << std::endl;
         motionStatus = 1;
     }
     return motionStatus;
 }
 
-void Custom::ReleaseMode()
+std::string Custom::queryServiceName(std::string form,std::string name)
 {
-    msc.ReleaseMode(); 
+    if(form == "0")
+    {
+        if(name == "nomal" ) return "sport_mode"; 
+        if(name == "ai" ) return "ai_sport"; 
+        if(name == "advanced" ) return "advanced_sport"; 
+    }
+    else
+    {
+        if(name == "ai-w" ) return "wheeled_sport(go2W)"; 
+        if(name == "normal-w" ) return "wheeled_sport(b2W)";
+    }
+    return 0;
+}
+
+void Custom::Start()
+{
+    /*loop publishing thread*/
+    lowCmdWriteThreadPtr = CreateRecurrentThreadEx("writebasiccmd", UT_CPU_ID_NONE, 2000, &Custom::LowCmdWrite, this);
 }
 
 void Custom::LowStateMessageHandler(const void* message)
@@ -307,16 +324,9 @@ int main(int argc, const char** argv)
     ChannelFactory::Instance()->Init(0, argv[1]);
 
     Custom custom;
-    custom.InitMotionSwitcherClient();
-    while(custom.queryMotionStatus())
-    {
-        std::cout<<"Try to deactivate the service: sport_mode or ai_sport"<<std::endl;
-        custom.ReleaseMode();
-        sleep(1);
-    }
     custom.Init();
+    custom.Start();
   
-    
     while (1)
     {
         sleep(10);

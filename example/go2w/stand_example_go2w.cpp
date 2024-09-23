@@ -8,11 +8,11 @@
 #include <unitree/idl/go2/LowCmd_.hpp>
 #include <unitree/common/time/time_tool.hpp>
 #include <unitree/common/thread/thread.hpp>
-#include <unitree/robot/go2/robot_state/robot_state_client.hpp>
+#include <unitree/robot/b2/motion_switcher/motion_switcher_client.hpp>
 
 using namespace unitree::common;
 using namespace unitree::robot;
-using namespace unitree::robot::go2;
+using namespace unitree::robot::b2;
 
 #define TOPIC_LOWCMD "rt/lowcmd"
 #define TOPIC_LOWSTATE "rt/lowstate"
@@ -27,13 +27,14 @@ public:
     ~Custom(){}
 
     void Init();
-    void InitRobotStateClient();
-    int queryServiceStatus(const std::string& serviceName);
-    void activateService(const std::string& serviceName,int activate);
+    void Start();
+
 private:
     void InitLowCmd();
     void LowStateMessageHandler(const void* messages);
     void LowCmdWrite();
+    int queryMotionStatus();
+    std::string queryServiceName(std::string form,std::string name);
  
 private:
     float Kp = 70.0;
@@ -44,7 +45,7 @@ private:
     int motiontime = 0;
     float dt = 0.002; // 0.001~0.01
 
-    RobotStateClient rsc;
+    MotionSwitcherClient msc;
 
     unitree_go::msg::dds_::LowCmd_ low_cmd{};      // default init
     unitree_go::msg::dds_::LowState_ low_state{};  // default init
@@ -124,8 +125,22 @@ void Custom::Init()
     lowstate_subscriber.reset(new ChannelSubscriber<unitree_go::msg::dds_::LowState_>(TOPIC_LOWSTATE));
     lowstate_subscriber->InitChannel(std::bind(&Custom::LowStateMessageHandler, this, std::placeholders::_1), 1);
 
-    /*loop publishing thread*/
-    lowCmdWriteThreadPtr = CreateRecurrentThreadEx("writebasiccmd", UT_CPU_ID_NONE, 2000, &Custom::LowCmdWrite, this);
+    /*init MotionSwitcherClient*/
+    msc.SetTimeout(10.0f); 
+    msc.Init();
+
+    /*Shut down motion control-related services*/
+    while(queryMotionStatus())
+    {
+        std::cout<<"Try to deactivate the service: sport_mode or ai_sport"<<std::endl;
+        int32_t ret = msc.ReleaseMode(); 
+        if (ret == 0) {
+            std::cout << "ReleaseMode succeeded." << std::endl;
+        } else {
+            std::cout << "ReleaseMode failed. Error code: " << ret << std::endl;
+        }
+        sleep(5);
+    }
 }
 
 void Custom::InitLowCmd()
@@ -146,43 +161,50 @@ void Custom::InitLowCmd()
     }
 }
 
-void Custom::InitRobotStateClient()
+int Custom::queryMotionStatus()
 {
-    rsc.SetTimeout(10.0f); 
-    rsc.Init();
-}
-
-int Custom::queryServiceStatus(const std::string& serviceName)
-{
-    std::vector<ServiceState> serviceStateList;
-    int ret,serviceStatus;
-    ret = rsc.ServiceList(serviceStateList);
-    size_t i, count=serviceStateList.size();
-    for (i=0; i<count; i++)
-    {
-        const ServiceState& serviceState = serviceStateList[i];
-        if(serviceState.name == serviceName)
-        {
-            if(serviceState.status == 0)
-            {
-                std::cout << "name: " << serviceState.name <<" is activate"<<std::endl;
-                serviceStatus = 1;
-            }
-            else
-            {
-                std::cout << "name:" << serviceState.name <<" is deactivate"<<std::endl;
-                serviceStatus = 0;
-            } 
-        }    
+    std::string robotForm,motionName;
+    int motionStatus;
+    int32_t ret = msc.CheckMode(robotForm,motionName);
+    if (ret == 0) {
+        std::cout << "CheckMode succeeded." << std::endl;
+    } else {
+        std::cout << "CheckMode failed. Error code: " << ret << std::endl;
     }
-    return serviceStatus;
-    
+    if(motionName.empty())
+    {
+        std::cout<<"all control-related services is deactivate. "<<std::endl;
+        motionStatus = 0;
+    }
+    else
+    {
+        std::string serviceName = queryServiceName(robotForm,motionName);
+        std::cout << "service: "<< serviceName<< " is activate" << std::endl;
+        motionStatus = 1;
+    }
+    return motionStatus;
 }
 
-void Custom::activateService(const std::string& serviceName,int activate)
+std::string Custom::queryServiceName(std::string form,std::string name)
 {
-    float ret = rsc.ServiceSwitch(serviceName, activate);  
-    std::cout<<"debug ret: "<<ret<<std::endl;
+    if(form == "0")
+    {
+        if(name == "nomal" ) return "sport_mode"; 
+        if(name == "ai" ) return "ai_sport"; 
+        if(name == "advanced" ) return "advanced_sport"; 
+    }
+    else
+    {
+        if(name == "ai-w" ) return "wheeled_sport(go2W)"; 
+        if(name == "normal-w" ) return "wheeled_sport(b2W)";
+    }
+    return 0;
+}
+
+void Custom::Start()
+{
+    /*loop publishing thread*/
+    lowCmdWriteThreadPtr = CreateRecurrentThreadEx("writebasiccmd", UT_CPU_ID_NONE, 2000, &Custom::LowCmdWrite, this);
 }
 
 void Custom::LowStateMessageHandler(const void* message)
@@ -336,16 +358,9 @@ int main(int argc, const char** argv)
     ChannelFactory::Instance()->Init(0, argv[1]);
 
     Custom custom;
-    custom.InitRobotStateClient();
-    while(custom.queryServiceStatus("wheeled_sport"))
-    {
-        std::cout<<"Try to deactivate the service: "<<"wheeled_sport"<<std::endl;
-        custom.activateService("wheeled_sport",0);
-        sleep(1);
-    }
     custom.Init();
+    custom.Start();
   
-    
     while (1)
     {
         sleep(10);
