@@ -1,0 +1,11 @@
+add_executable(h1_loco_client high_level/h1_loco_client_example.cpp)
+target_link_libraries(h1_loco_client unitree_sdk2)
+
+add_executable(h1_low_level_example low_level/humanoid.cpp)
+target_link_libraries(h1_low_level_example unitree_sdk2)
+
+add_executable(h1_27dof_example low_level/h1_27dof_example.cpp)
+target_link_libraries(h1_27dof_example unitree_sdk2)
+
+
+

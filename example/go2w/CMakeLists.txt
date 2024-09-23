@@ -1,5 +1,5 @@
-add_executable(go2w_sport_test go2w_sport_test.cpp)
-target_link_libraries(go2w_sport_test unitree_sdk2)
+add_executable(go2w_sport_client go2w_sport_client.cpp)
+target_link_libraries(go2w_sport_client unitree_sdk2)
 
-add_executable(stand_example_go2w stand_example_go2w.cpp)
-target_link_libraries(stand_example_go2w unitree_sdk2)
+add_executable(go2w_stand_example go2w_stand_example.cpp)
+target_link_libraries(go2w_stand_example unitree_sdk2)
