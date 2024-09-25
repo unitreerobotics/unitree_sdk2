@@ -130,8 +130,22 @@ void Custom::Init()
     lowstate_subscriber.reset(new ChannelSubscriber<unitree_go::msg::dds_::LowState_>(TOPIC_LOWSTATE));
     lowstate_subscriber->InitChannel(std::bind(&Custom::LowStateMessageHandler, this, std::placeholders::_1), 1);
 
-    /*loop publishing thread*/
-    lowCmdWriteThreadPtr = CreateRecurrentThreadEx("writebasiccmd", UT_CPU_ID_NONE, 2000, &Custom::LowCmdWrite, this);
+    /*init MotionSwitcherClient*/
+    msc.SetTimeout(10.0f); 
+    msc.Init();
+
+    /*Shut down  motion control-related service*/
+    while(queryMotionStatus())
+    {
+        std::cout << "Try to deactivate the motion control-related service." << std::endl;
+        int32_t ret = msc.ReleaseMode(); 
+        if (ret == 0) {
+            std::cout << "ReleaseMode succeeded." << std::endl;
+        } else {
+            std::cout << "ReleaseMode failed. Error code: " << ret << std::endl;
+        }
+        sleep(5);
+    }
 }
 
 void Custom::InitLowCmd()
@@ -164,13 +178,13 @@ int Custom::queryMotionStatus()
     }
     if(motionName.empty())
     {
-        std::cout<<"all control-related services is deactivate. "<<std::endl;
+        std::cout << "The motion control-related service is deactivated." << std::endl;
         motionStatus = 0;
     }
     else
     {
         std::string serviceName = queryServiceName(robotForm,motionName);
-        std::cout << "service: "<< serviceName<< " is activate" << std::endl;
+        std::cout << "Service: "<< serviceName<< " is activate" << std::endl;
         motionStatus = 1;
     }
     return motionStatus;
@@ -180,7 +194,7 @@ std::string Custom::queryServiceName(std::string form,std::string name)
 {
     if(form == "0")
     {
-        if(name == "nomal" ) return "sport_mode"; 
+        if(name == "normal" ) return "sport_mode"; 
         if(name == "ai" ) return "ai_sport"; 
         if(name == "advanced" ) return "advanced_sport"; 
     }
@@ -189,7 +203,7 @@ std::string Custom::queryServiceName(std::string form,std::string name)
         if(name == "ai-w" ) return "wheeled_sport(go2W)"; 
         if(name == "normal-w" ) return "wheeled_sport(b2W)";
     }
-    return 0;
+    return "";
 }
 
 void Custom::Start()
