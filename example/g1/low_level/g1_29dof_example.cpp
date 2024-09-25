@@ -77,7 +77,7 @@ std::array<MotorType, G1_NUM_MOTOR> G1MotorType{
 
 enum PRorAB { PR = 0, AB = 1 };
 
-enum G1JointIndex {
+enum G1JointValidIndex {
   LeftHipPitch = 0,
   LeftHipRoll = 1,
   LeftHipYaw = 2,
@@ -94,13 +94,11 @@ enum G1JointIndex {
   RightAnkleB = 10,
   RightAnkleRoll = 11,
   RightAnkleA = 11,
-
   WaistYaw = 12,
   WaistRoll = 13,
   WaistA = 13,
   WaistPitch = 14,
   WaistB = 14,
-
   LeftShoulderPitch = 15,
   LeftShoulderRoll = 16,
   LeftShoulderYaw = 17,
@@ -114,7 +112,7 @@ enum G1JointIndex {
   RightElbow = 25,
   RightWristRoll = 26,
   RightWristPitch = 27,
-  RightWristYaw = 28,
+  RightWristYaw = 28
 };
 
 inline uint32_t Crc32Core(uint32_t *ptr, uint32_t len) {
@@ -243,6 +241,12 @@ class G1Example {
     imu_tmp.omega = low_state.imu_state().gyroscope();
     imu_tmp.rpy = low_state.imu_state().rpy();
     imu_state_buffer_.SetData(imu_tmp);
+
+    // check mode machine
+    const uint8_t desired_mode_machine = 2;
+    if (low_state.mode_machine() != desired_mode_machine)
+      std::cout << "[ERROR] mode_machine: "
+                << unsigned(low_state.mode_machine()) << "\n";
   }
 
   void LowCommandWriter() {
@@ -276,7 +280,7 @@ class G1Example {
 
     if (ms) {
       time_ += control_dt_;
-      if (time_ < duration_ * 1) {
+      if (time_ < duration_) {
         // [Stage 1]: set robot to zero posture
         for (int i = 0; i < G1_NUM_MOTOR; ++i) {
           double ratio = std::clamp(time_ / duration_, 0.0, 1.0);

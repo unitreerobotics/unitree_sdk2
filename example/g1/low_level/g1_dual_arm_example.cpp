@@ -1,10 +1,10 @@
 #include <yaml-cpp/yaml.h>
 
 #include <cmath>
-#include <cstddef>
 #include <memory>
 #include <mutex>
 #include <shared_mutex>
+
 // DDS
 #include <unitree/robot/channel/channel_publisher.hpp>
 #include <unitree/robot/channel/channel_subscriber.hpp>
@@ -79,30 +79,7 @@ std::array<MotorType, G1_NUM_MOTOR> G1MotorType{
 
 enum PRorAB { PR = 0, AB = 1 };
 
-enum G1JointIndex {
-  LeftHipPitch = 0,
-  LeftHipRoll = 1,
-  LeftHipYaw = 2,
-  LeftKnee = 3,
-  LeftAnklePitch = 4,
-  LeftAnkleB = 4,
-  LeftAnkleRoll = 5,
-  LeftAnkleA = 5,
-  RightHipPitch = 6,
-  RightHipRoll = 7,
-  RightHipYaw = 8,
-  RightKnee = 9,
-  RightAnklePitch = 10,
-  RightAnkleB = 10,
-  RightAnkleRoll = 11,
-  RightAnkleA = 11,
-
-  WaistYaw = 12,
-  WaistRoll = 13,
-  WaistA = 13,
-  WaistPitch = 14,
-  WaistB = 14,
-
+enum G1JointValidIndex {
   LeftShoulderPitch = 15,
   LeftShoulderRoll = 16,
   LeftShoulderYaw = 17,
@@ -116,7 +93,7 @@ enum G1JointIndex {
   RightElbow = 25,
   RightWristRoll = 26,
   RightWristPitch = 27,
-  RightWristYaw = 28,
+  RightWristYaw = 28
 };
 
 inline uint32_t Crc32Core(uint32_t *ptr, uint32_t len) {
@@ -157,7 +134,7 @@ float GetMotorKp(MotorType type) {
 float GetMotorKd(MotorType type) {
   switch (type) {
     case GearboxS:
-      return 2;
+      return 1;
     case GearboxM:
       return 1;
     case GearboxL:
@@ -259,10 +236,6 @@ class G1Example {
     for (int i = 0; i < G1_NUM_MOTOR; ++i) {
       ms_tmp.q.at(i) = low_state.motor_state()[i].q();
       ms_tmp.dq.at(i) = low_state.motor_state()[i].dq();
-
-      if (low_state.motor_state()[i].motorstate() && i <= RightAnkleRoll)
-        std::cout << "[ERROR] motor " << i << " with code "
-                  << low_state.motor_state()[i].motorstate() << "\n";
     }
     motor_state_buffer_.SetData(ms_tmp);
 
@@ -271,6 +244,12 @@ class G1Example {
     imu_tmp.omega = low_state.imu_state().gyroscope();
     imu_tmp.rpy = low_state.imu_state().rpy();
     imu_state_buffer_.SetData(imu_tmp);
+
+    // check mode machine
+    const uint8_t desired_mode_machine = 9;
+    if (low_state.mode_machine() != desired_mode_machine)
+      std::cout << "[ERROR] mode_machine: "
+                << unsigned(low_state.mode_machine()) << "\n";
   }
 
   void LowCommandWriter() {
@@ -305,7 +284,7 @@ class G1Example {
       if (time_ < duration_) {
         // [Stage 1]: set robot to zero posture
         for (int i = 0; i < G1_NUM_MOTOR; ++i) {
-          double ratio = time_ / duration_;
+          double ratio = std::clamp(time_ / duration_, 0.0, 1.0);
 
           double q_des = 0;
           motor_command_tmp.tau_ff.at(i) = 0.0;

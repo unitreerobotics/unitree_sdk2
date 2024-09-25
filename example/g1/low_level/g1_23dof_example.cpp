@@ -17,7 +17,7 @@ static const std::string HG_STATE_TOPIC = "rt/lowstate";
 using namespace unitree::common;
 using namespace unitree::robot;
 
-const int G1_NUM_MOTOR = 23;
+const int G1_NUM_MOTOR = 29;
 
 template <typename T>
 class DataBuffer {
@@ -68,16 +68,16 @@ std::array<MotorType, G1_NUM_MOTOR> G1MotorType{
     GearboxM, GearboxM, GearboxM, GearboxL, GearboxS, GearboxS,
     GearboxM, GearboxM, GearboxM, GearboxL, GearboxS, GearboxS,
     // waist
-    GearboxM,
+    GearboxM, GearboxS, GearboxS,
     // arms
-    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS,
-    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS
+    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS,
+    GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS, GearboxS
     // clang-format on
 };
 
 enum PRorAB { PR = 0, AB = 1 };
 
-enum G1JointIndex {
+enum G1JointValidIndex {
   LeftHipPitch = 0,
   LeftHipRoll = 1,
   LeftHipYaw = 2,
@@ -94,19 +94,17 @@ enum G1JointIndex {
   RightAnkleB = 10,
   RightAnkleRoll = 11,
   RightAnkleA = 11,
-
   WaistYaw = 12,
-
-  LeftShoulderPitch = 13,
-  LeftShoulderRoll = 14,
-  LeftShoulderYaw = 15,
-  LeftElbow = 16,
-  LeftWristRoll = 17,
-  RightShoulderPitch = 18,
-  RightShoulderRoll = 19,
-  RightShoulderYaw = 20,
-  RightElbow = 21,
-  RightWristRoll = 22
+  LeftShoulderPitch = 15,
+  LeftShoulderRoll = 16,
+  LeftShoulderYaw = 17,
+  LeftElbow = 18,
+  LeftWristRoll = 19,
+  RightShoulderPitch = 22,
+  RightShoulderRoll = 23,
+  RightShoulderYaw = 24,
+  RightElbow = 25,
+  RightWristRoll = 26
 };
 
 inline uint32_t Crc32Core(uint32_t *ptr, uint32_t len) {
@@ -235,6 +233,12 @@ class G1Example {
     imu_tmp.omega = low_state.imu_state().gyroscope();
     imu_tmp.rpy = low_state.imu_state().rpy();
     imu_state_buffer_.SetData(imu_tmp);
+
+    // check mode machine
+    const uint8_t desired_mode_machine = 1;
+    if (low_state.mode_machine() != desired_mode_machine)
+      std::cout << "[ERROR] mode_machine: "
+                << unsigned(low_state.mode_machine()) << "\n";
   }
 
   void LowCommandWriter() {
@@ -268,7 +272,7 @@ class G1Example {
 
     if (ms) {
       time_ += control_dt_;
-      if (time_ < duration_ * 1) {
+      if (time_ < duration_) {
         // [Stage 1]: set robot to zero posture
         for (int i = 0; i < G1_NUM_MOTOR; ++i) {
           double ratio = std::clamp(time_ / duration_, 0.0, 1.0);
