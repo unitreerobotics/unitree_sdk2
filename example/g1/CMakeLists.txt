@@ -11,6 +11,9 @@ target_link_libraries(g1_arm7_sdk_dds_example unitree_sdk2)
 add_executable(g1_23dof_example low_level/g1_23dof_example.cpp)
 target_link_libraries(g1_23dof_example unitree_sdk2)
 
+add_executable(g1_23dof_ankle_track low_level/g1_23dof_ankle_track.cpp)
+target_link_libraries(g1_23dof_ankle_track unitree_sdk2)
+
 add_executable(g1_29dof_example low_level/g1_29dof_example.cpp)
 target_link_libraries(g1_29dof_example unitree_sdk2)
 
