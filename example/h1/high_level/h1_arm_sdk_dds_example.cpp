@@ -131,7 +131,7 @@ int main(int argc, char const *argv[]) {
   float period = 5.f;
   int num_time_steps = static_cast<int>(period / control_dt);
 
-  std::array<float, 8> current_jpos_des{};
+  std::array<float, 9> current_jpos_des{};
 
   // lift arms up
   for (int i = 0; i < num_time_steps; ++i) {
