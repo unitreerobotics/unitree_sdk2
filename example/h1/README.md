@@ -25,7 +25,7 @@ Unitree H1_2 机器人并联机构涉及机器人的左右腿的脚踝。因左�
 
 ## 串联关节跟踪实验
 
-为测试 H1_2 脚踝 `PR 模式` 控制效果，我们让脚踝 P、R 关节跟踪正弦曲线，参考[测试例程](TODO)。核心代码段如下：
+为测试 H1_2 脚踝 `PR 模式` 控制效果，我们让脚踝 P、R 关节跟踪正弦曲线，参考[测试例程](https://github.com/unitreerobotics/unitree_sdk2/blob/main/example/h1/low_level/h1_2_ankle_track.cpp)。核心代码段如下：
 
 **启用 PR 模式并生成正弦曲线**
 
