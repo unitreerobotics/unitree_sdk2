@@ -121,10 +121,30 @@ class H1Example {
       double R_R_des = -max_R * std::sin(2.0 * M_PI * t);
 
       // update ankle joint position targets
-      dds_low_command.motor_cmd().at(4).q() = L_P_des;   // 4: LeftAnklePitch
-      dds_low_command.motor_cmd().at(5).q() = L_R_des;   // 5: LeftAnkleRoll
+      float Kp_Pitch = 80;
+      float Kd_Pitch = 1;
+      float Kp_Roll = 80;
+      float Kd_Roll = 1;
+      dds_low_command.motor_cmd().at(4).q() = L_P_des;  // 4: LeftAnklePitch
+      dds_low_command.motor_cmd().at(4).dq() = 0;
+      dds_low_command.motor_cmd().at(4).kp() = Kp_Pitch;
+      dds_low_command.motor_cmd().at(4).kd() = Kd_Pitch;
+      dds_low_command.motor_cmd().at(4).tau() = 0;
+      dds_low_command.motor_cmd().at(5).q() = L_R_des;  // 5: LeftAnkleRoll
+      dds_low_command.motor_cmd().at(5).dq() = 0;
+      dds_low_command.motor_cmd().at(5).kp() = Kp_Roll;
+      dds_low_command.motor_cmd().at(5).kd() = Kd_Roll;
+      dds_low_command.motor_cmd().at(5).tau() = 0;
       dds_low_command.motor_cmd().at(10).q() = R_P_des;  // 10: RightAnklePitch
+      dds_low_command.motor_cmd().at(10).dq() = 0;
+      dds_low_command.motor_cmd().at(10).kp() = Kp_Pitch;
+      dds_low_command.motor_cmd().at(10).kd() = Kd_Pitch;
+      dds_low_command.motor_cmd().at(10).tau() = 0;
       dds_low_command.motor_cmd().at(11).q() = R_R_des;  // 11: RightAnkleRoll
+      dds_low_command.motor_cmd().at(11).dq() = 0;
+      dds_low_command.motor_cmd().at(11).kp() = Kp_Roll;
+      dds_low_command.motor_cmd().at(11).kd() = Kd_Roll;
+      dds_low_command.motor_cmd().at(11).tau() = 0;
 
       float L_P_m = low_state_.motor_state().at(4).q();
       float L_R_m = low_state_.motor_state().at(5).q();
