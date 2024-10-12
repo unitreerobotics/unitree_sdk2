@@ -1,33 +1,33 @@
-# Unitree H1_2 并联机构控制
+# Unitree H1_2 Parallel Mechanism Control
 
-## 并联机构控制接口
+## Parallel Mechanism Control Interface
 
-Unitree H1_2 机器人并联机构涉及机器人的左右腿的脚踝。因左右脚踝对称，故下面以 H1_2 左脚踝关节为例：
+The Unitree H1_2 robot's parallel mechanism involves the ankle joints of its left and right legs. Since the left and right ankle joints are symmetrical, the following explanation will use the H1_2 left ankle joint as an example:
 
 <p align="center"><img src="doc/images/ankle.png" width="30%"/></p>
 
-硬件上，H1_2 左脚踝关节采用并联机构，包括四个关节：
+On the hardware side, the H1_2 left ankle joint uses a parallel mechanism consisting of four joints:
 
-* 并联关节：A 关节、B 关节
-* 串联关节：Pitch 关节 (简称 P 关节)、Roll 关节 (简称 R 关)
+* Parallel joints: Joint A, Joint B
+* Serial joints: Pitch joint (P joint), Roll joint (R joint)
 
-其中只有 A、B 关节是可被电机直接驱动的关节，P、R 关节不能被直接控制。而机器人 URDF 模型和运动控制算法通常只考虑 P、R 串联关节。为了实现对 P、R 关节的控制，我们通过控制 A、B 关节从而间接实现对 P、R 关节的控制。具体到软件上，我们为用户提供了等价的串联关节控制接口，即 `PR 模式`，让用户能直接控制 P、R 关节。与普通关节控制方法一样，`PR 模式` 下每个串联关节接收以下指令：
+Only the A and B joints can be directly driven by motors, while the P and R joints cannot be directly controlled. The robot's URDF model and motion control algorithms typically only consider the serial P and R joints. To control these joints, we control the A and B joints indirectly, which allows us to achieve control over the P and R joints. On the software side, we provide an equivalent serial joint control interface, called `PR Mode`, enabling users to directly control the P and R joints. Similar to the typical joint control method, in `PR Mode`, each serial joint receives the following commands:
 
-| 指令名称   | 变量  |
-| ---------- | ----- |
-| 前馈力矩   | `tau` |
-| 目标角度   | `q`   |
-| 目标角速度 | `dq`  |
-| 关节刚度   | `kp`  |
-| 关节阻尼   | `kd`  |
+| Command Name            | Variable |
+| ----------------------- | -------- |
+| Feedforward Torque      | `tau`    |
+| Target Angle            | `q`      |
+| Target Angular Velocity | `dq`     |
+| Joint Stiffness         | `kp`     |
+| Joint Damping           | `kd`     |
 
-最终串联关节执行总的力矩为 `T = kp * (q - q_m) + kd * (dq - dq_m) + tau`。为了提高串联关节控制精度，H1_2 机器人内部根据运动学和动力学关系，把 P、R 关节的前馈力矩、目标角度、目标角速度、关节刚度和关节阻尼指令转换为 A、B 实际关节执行单元。
+The total torque applied to the serial joint is calculated as `T = kp * (q - q_m) + kd * (dq - dq_m) + tau`. To improve the control precision of the serial joints, the H1_2 robot internally converts the feedforward torque, target angle, target angular velocity, joint stiffness, and joint damping commands for the P and R joints into actual commands for the A and B joints based on kinematic and dynamic relationships.
 
-## 串联关节跟踪实验
+## Serial Joint Tracking Experiment
 
-为测试 H1_2 脚踝 `PR 模式` 控制效果，我们让脚踝 P、R 关节跟踪正弦曲线，参考[测试例程](https://github.com/unitreerobotics/unitree_sdk2/blob/main/example/h1/low_level/h1_2_ankle_track.cpp)。核心代码段如下：
+To test the performance of the H1_2 ankle in `PR Mode`, we have the P and R joints track a sinusoidal curve. You can refer to the [test example](https://github.com/unitreerobotics/unitree_sdk2/blob/main/example/h1/low_level/h1_2_ankle_track.cpp). The core code is as follows:
 
-**启用 PR 模式并生成正弦曲线**
+**Enabling PR Mode and Generating Sinusoidal Curve**
 
 ```c++
 // [Stage 2]: swing ankle's PR
@@ -42,7 +42,7 @@ double R_P_des = max_P * std::cos(2.0 * M_PI * t);
 double R_R_des = -max_R * std::sin(2.0 * M_PI * t);
 ```
 
-**设置踝关节指令**
+**Setting Ankle Joint Commands**
 
 ```c++
 // update ankle joint position targets
@@ -72,7 +72,7 @@ dds_low_command.motor_cmd().at(11).kd() = Kd_Roll;
 dds_low_command.motor_cmd().at(11).tau() = 0;
 ```
 
-**打印期望值和测量值到终端**
+**Printing Desired and Measured Values to Terminal**
 
 ```c++
 float L_P_m = low_state_.motor_state().at(4).q();
@@ -82,28 +82,28 @@ float R_R_m = low_state_.motor_state().at(11).q();
 printf("%f,%f,%f,%f,%f,%f,%f,%f\n", L_P_des, L_P_m, L_R_des, L_R_m, R_P_des, R_P_m, R_R_des, R_R_m);
 ```
 
-| L_P_des           | L_P_m             | L_R_des          | L_R_m            | R_P_des           | R_P_m             | R_R_des          | R_R_m            |
-| ----------------- | ----------------- | ---------------- | ---------------- | ----------------- | ----------------- | ---------------- | ---------------- |
-| 左脚 Pitch 期望值 | 左脚 Pitch 测量值 | 左脚 Roll 期望值 | 左脚 Roll 测量值 | 右脚 Pitch 期望值 | 右脚 Pitch 测量值 | 右脚 Roll 期望值 | 右脚 Roll 测量值 |
+| L_P_des            | L_P_m               | L_R_des           | L_R_m              | R_P_des             | R_P_m                | R_R_des            | R_R_m               |
+| ------------------ | ------------------- | ----------------- | ------------------ | ------------------- | -------------------- | ------------------ | ------------------- |
+| Left Pitch Desired | Left Pitch Measured | Left Roll Desired | Left Roll Measured | Right Pitch Desired | Right Pitch Measured | Right Roll Desired | Right Roll Measured |
 
-安装并编译 [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2)，务必先把机器人悬挂起来，然后终端运行测试例程：
+To install and compile [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2), ensure that the robot is suspended first, then run the test routine in the terminal:
 
 ```bash
 h1_2_ankle_track network_interface
 ```
 
-启动后，机器人会先恢复到零位，然后周期性摆动脚踝，并打印左右踝关节期望值和测量值，其位置跟踪效果如图：
+Once started, the robot will first reset to the zero position, then periodically swing its ankles while printing the desired and measured values for both ankle joints. The position tracking results are shown below:
 
 <p float="middle">
   <img src="doc/images/tracking.png" width="49%"/>
   <img src="doc/images/tracking_circle.png" width="49%"/>
 </p>
 
-图中符号定义：
+Definitions of the symbols in the figures:
 
-* `L_Pitch_d`：左脚踝 P 关节期望值
-* `L_Pitch_m`：左脚踝 P 关节测量值
-* `L_Roll_d`：左脚踝 R 关节期望值
-* `L_Roll_m`：左脚踝 R 关节测量值
+* `L_Pitch_d`: Desired value of the left ankle's P joint
+* `L_Pitch_m`: Measured value of the left ankle's P joint
+* `L_Roll_d`: Desired value of the left ankle's R joint
+* `L_Roll_m`: Measured value of the left ankle's R joint
 
-左图表示串联 Pitch、Roll 关节能较准确地跟踪正弦曲线目标位置指令；右图表示串联关节在相空间中的跟踪效果。
+The left graph shows that the serial Pitch and Roll joints can accurately track the sinusoidal target position commands, while the right graph illustrates the tracking performance of the serial joints in phase space.
