@@ -1,5 +1,7 @@
 # Unitree H1_2 Parallel Mechanism Control
 
+English | [简体中文](README_zh.md)
+
 ## Parallel Mechanism Control Interface
 
 The Unitree H1_2 robot's parallel mechanism involves the ankle joints of its left and right legs. Since the left and right ankle joints are symmetrical, the following explanation will use the H1_2 left ankle joint as an example:
@@ -25,7 +27,7 @@ The total torque applied to the serial joint is calculated as `T = kp * (q - q_m
 
 ## Serial Joint Tracking Experiment
 
-To test the performance of the H1_2 ankle in `PR Mode`, we have the P and R joints track a sinusoidal curve. You can refer to the [test example](https://github.com/unitreerobotics/unitree_sdk2/blob/main/example/h1/low_level/h1_2_ankle_track.cpp). The core code is as follows:
+To test the performance of the H1_2 ankle in `PR Mode`, we have the P and R joints track a sinusoidal curve. You can refer to the [example](https://github.com/unitreerobotics/unitree_sdk2/blob/main/example/h1/low_level/h1_2_ankle_track.cpp). The core code is as follows:
 
 **Enabling PR Mode and Generating Sinusoidal Curve**
 
@@ -86,7 +88,7 @@ printf("%f,%f,%f,%f,%f,%f,%f,%f\n", L_P_des, L_P_m, L_R_des, L_R_m, R_P_des, R_P
 | ------------------ | ------------------- | ----------------- | ------------------ | ------------------- | -------------------- | ------------------ | ------------------- |
 | Left Pitch Desired | Left Pitch Measured | Left Roll Desired | Left Roll Measured | Right Pitch Desired | Right Pitch Measured | Right Roll Desired | Right Roll Measured |
 
-To install and compile [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2), ensure that the robot is suspended first, then run the test routine in the terminal:
+To install and compile [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2), ensure that the robot is **suspended first**, then run the test routine in the terminal:
 
 ```bash
 h1_2_ankle_track network_interface

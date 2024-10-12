@@ -1,5 +1,7 @@
 # Unitree H1_2 并联机构控制
 
+[English](README.md) | 简体中文
+
 ## 并联机构控制接口
 
 Unitree H1_2 机器人并联机构涉及机器人的左右腿的脚踝。因左右脚踝对称，故下面以 H1_2 左脚踝关节为例：
@@ -86,7 +88,7 @@ printf("%f,%f,%f,%f,%f,%f,%f,%f\n", L_P_des, L_P_m, L_R_des, L_R_m, R_P_des, R_P
 | ----------------- | ----------------- | ---------------- | ---------------- | ----------------- | ----------------- | ---------------- | ---------------- |
 | 左脚 Pitch 期望值 | 左脚 Pitch 测量值 | 左脚 Roll 期望值 | 左脚 Roll 测量值 | 右脚 Pitch 期望值 | 右脚 Pitch 测量值 | 右脚 Roll 期望值 | 右脚 Roll 测量值 |
 
-安装并编译 [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2)，务必先把机器人悬挂起来，然后终端运行测试例程：
+安装并编译 [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2)，务必先把机器人**悬挂起来**，然后终端运行测试例程：
 
 ```bash
 h1_2_ankle_track network_interface
