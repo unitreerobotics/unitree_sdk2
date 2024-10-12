@@ -84,8 +84,13 @@ int main(int argc, char const *argv[]) {
   float weight = 0.f;
   float weight_rate = 0.2f;
 
-  float kp = 120.f;
-  float kd = 2.0f;
+  // TODO: 用数组来精细的设置每个关节的kp和kd
+  std::array<float, 15> kp_array = { 120, 120, 80, 50, 50, 50, 50, 
+                                    120, 120, 80, 50, 50, 50, 50, 
+                                    200 };
+  std::array<float, 15> kd_array = { 2.0, 2.0, 1.5, 1.0, 1.0, 1.0, 1.0, 
+                                    2.0, 2.0, 1.5, 1.0, 1.0, 1.0, 1.0, 
+                                    2.0 };
   float dq = 0.f;
   float tau_ff = 0.f;
 
@@ -97,7 +102,10 @@ int main(int argc, char const *argv[]) {
   auto sleep_time =
       std::chrono::milliseconds(static_cast<int>(control_dt / 0.001f));
 
-  std::array<float, 15> init_pos{};
+  // 修改初始位置，避免碰撞
+  std::array<float, 15> init_pos{0.f, 0.3,  0.f, 0, 0, 0, 0,
+                                     0.f, -0.3, 0.f, 0, 0, 0, 0,
+                                     0.f};
 
   std::array<float, 15> target_pos = {0.f, kPi_2,  0.f, kPi_2, 0, 0, 0,
                                      0.f, -kPi_2, 0.f, kPi_2, 0, 0, 0,
@@ -125,8 +133,8 @@ int main(int argc, char const *argv[]) {
     for (int j = 0; j < init_pos.size(); ++j) {
       msg.motor_cmd().at(arm_joints.at(j)).q(init_pos.at(j));
       msg.motor_cmd().at(arm_joints.at(j)).dq(dq);
-      msg.motor_cmd().at(arm_joints.at(j)).kp(kp);
-      msg.motor_cmd().at(arm_joints.at(j)).kd(kd);
+      msg.motor_cmd().at(arm_joints.at(j)).kp(kp_array.at(j));
+      msg.motor_cmd().at(arm_joints.at(j)).kd(kd_array.at(j));
       msg.motor_cmd().at(arm_joints.at(j)).tau(tau_ff);
     }
 
@@ -148,7 +156,9 @@ int main(int argc, char const *argv[]) {
   float period = 5.f;
   int num_time_steps = static_cast<int>(period / control_dt);
 
-  std::array<float, 15> current_jpos_des{};
+  std::array<float, 15> current_jpos_des{0.f, 0.3,  0.f, 0, 0, 0, 0,
+                                        0.f, -0.3, 0.f, 0, 0, 0, 0,
+                                        0.f};
 
   // lift arms up
   for (int i = 0; i < num_time_steps; ++i) {
@@ -163,8 +173,8 @@ int main(int argc, char const *argv[]) {
     for (int j = 0; j < init_pos.size(); ++j) {
       msg.motor_cmd().at(arm_joints.at(j)).q(current_jpos_des.at(j));
       msg.motor_cmd().at(arm_joints.at(j)).dq(dq);
-      msg.motor_cmd().at(arm_joints.at(j)).kp(kp);
-      msg.motor_cmd().at(arm_joints.at(j)).kd(kd);
+      msg.motor_cmd().at(arm_joints.at(j)).kp(kp_array.at(j));
+      msg.motor_cmd().at(arm_joints.at(j)).kd(kd_array.at(j));
       msg.motor_cmd().at(arm_joints.at(j)).tau(tau_ff);
     }
 
@@ -188,8 +198,8 @@ int main(int argc, char const *argv[]) {
     for (int j = 0; j < init_pos.size(); ++j) {
       msg.motor_cmd().at(arm_joints.at(j)).q(current_jpos_des.at(j));
       msg.motor_cmd().at(arm_joints.at(j)).dq(dq);
-      msg.motor_cmd().at(arm_joints.at(j)).kp(kp);
-      msg.motor_cmd().at(arm_joints.at(j)).kd(kd);
+      msg.motor_cmd().at(arm_joints.at(j)).kp(kp_array.at(j));
+      msg.motor_cmd().at(arm_joints.at(j)).kd(kd_array.at(j));
       msg.motor_cmd().at(arm_joints.at(j)).tau(tau_ff);
     }
 
