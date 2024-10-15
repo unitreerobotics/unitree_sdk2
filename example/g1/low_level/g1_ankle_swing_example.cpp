@@ -207,7 +207,10 @@ class G1Example {
     imu_state_buffer_.SetData(imu_tmp);
 
     // update mode machine
-    if (mode_machine_ != low_state.mode_machine()) mode_machine_ = low_state.mode_machine();
+    if (mode_machine_ != low_state.mode_machine()) {
+      if (mode_machine_ == 0) std::cout << "G1 type: " << unsigned(low_state.mode_machine()) << std::endl;
+      mode_machine_ = low_state.mode_machine();
+    }
   }
 
   void LowCommandWriter() {
