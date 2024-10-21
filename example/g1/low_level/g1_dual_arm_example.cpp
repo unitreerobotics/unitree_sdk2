@@ -150,6 +150,7 @@ class G1Example {
   double control_dt_;  // [2ms]
   double duration_;    // [3 s]
   PRorAB mode_;
+  uint8_t mode_machine_;
   std::vector<std::vector<double>> frames_data_;
 
   DataBuffer<MotorState> motor_state_buffer_;
@@ -162,7 +163,11 @@ class G1Example {
 
  public:
   G1Example(std::string networkInterface)
-      : time_(0.0), control_dt_(0.002), duration_(3.0), mode_(PR) {
+      : time_(0.0),
+        control_dt_(0.002),
+        duration_(3.0),
+        mode_(PR),
+        mode_machine_(0) {
     ChannelFactory::Instance()->Init(0, networkInterface);
 
     loadBehaviorLibrary("motion");
@@ -245,17 +250,19 @@ class G1Example {
     imu_tmp.rpy = low_state.imu_state().rpy();
     imu_state_buffer_.SetData(imu_tmp);
 
-    // check mode machine
-    const uint8_t desired_mode_machine = 9;
-    if (low_state.mode_machine() != desired_mode_machine)
-      std::cout << "[ERROR] mode_machine: "
-                << unsigned(low_state.mode_machine()) << "\n";
+    // update mode machine
+    if (mode_machine_ != low_state.mode_machine()) {
+      if (mode_machine_ == 0)
+        std::cout << "G1 type: " << unsigned(low_state.mode_machine())
+                  << std::endl;
+      mode_machine_ = low_state.mode_machine();
+    }
   }
 
   void LowCommandWriter() {
     unitree_hg::msg::dds_::LowCmd_ dds_low_command;
-    dds_low_command.mode_pr() = mode_;   // {0:PR, 1:AB}
-    dds_low_command.mode_machine() = 9;  // {1:23dof, 2:29dof, 3:27dof, 9:14dof}
+    dds_low_command.mode_pr() = mode_;
+    dds_low_command.mode_machine() = mode_machine_;
 
     const std::shared_ptr<const MotorCommand> mc =
         motor_command_buffer_.GetData();

@@ -169,6 +169,7 @@ class H1Example {
   double control_dt_;  // [2ms]
   double duration_;    // [3 s]
   PRorAB mode_;
+  uint8_t mode_machine_;
 
   DataBuffer<MotorState> motor_state_buffer_;
   DataBuffer<MotorCommand> motor_command_buffer_;
@@ -180,7 +181,11 @@ class H1Example {
 
  public:
   H1Example(std::string networkInterface)
-      : time_(0.0), control_dt_(0.002), duration_(3.0), mode_(PR) {
+      : time_(0.0),
+        control_dt_(0.002),
+        duration_(3.0),
+        mode_(PR),
+        mode_machine_(0) {
     ChannelFactory::Instance()->Init(0, networkInterface);
 
     // create publisher
@@ -241,12 +246,20 @@ class H1Example {
     imu_tmp.omega = low_state.imu_state().gyroscope();
     imu_tmp.rpy = low_state.imu_state().rpy();
     imu_state_buffer_.SetData(imu_tmp);
+
+    // update mode machine
+    if (mode_machine_ != low_state.mode_machine()) {
+      if (mode_machine_ == 0)
+        std::cout << "G1 type: " << unsigned(low_state.mode_machine())
+                  << std::endl;
+      mode_machine_ = low_state.mode_machine();
+    }
   }
 
   void LowCommandWriter() {
     unitree_hg::msg::dds_::LowCmd_ dds_low_command;
-    dds_low_command.mode_pr() = mode_;   // {0:PR, 1:AB}
-    dds_low_command.mode_machine() = 4;  // {1-5}
+    dds_low_command.mode_pr() = mode_;
+    dds_low_command.mode_machine() = mode_machine_;
 
     const std::shared_ptr<const MotorCommand> mc =
         motor_command_buffer_.GetData();

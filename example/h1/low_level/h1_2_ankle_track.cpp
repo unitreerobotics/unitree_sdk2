@@ -88,8 +88,8 @@ class H1Example {
 
   void Control() {
     unitree_hg::msg::dds_::LowCmd_ dds_low_command;
-    dds_low_command.mode_pr() = mode_;                           // {0:PR, 1:AB}
-    dds_low_command.mode_machine() = low_state_.mode_machine();  // {1-5}
+    dds_low_command.mode_pr() = mode_;
+    dds_low_command.mode_machine() = low_state_.mode_machine();
     for (int i = 0; i < H1_NUM_MOTOR; ++i) {
       dds_low_command.motor_cmd().at(i).mode() = 1;  // 1:Enable, 0:Disable
       dds_low_command.motor_cmd().at(i).tau() = 0.0;
