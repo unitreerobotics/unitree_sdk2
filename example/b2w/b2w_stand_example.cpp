@@ -353,7 +353,7 @@ int main(int argc, const char** argv)
         exit(-1); 
     }
 
-    std::cout << "WARNING: Make sure the robot is hung up or lying on the ground." << std::endl
+    std::cout << "WARNING: Make sure the robot is lying on the ground." << std::endl
             << "Press Enter to continue..." << std::endl;
     std::cin.ignore();
 

@@ -6,10 +6,6 @@
 #include <pthread.h>
 #include <stdexcept>
 #include <unitree/robot/b2/sport/sport_client.hpp>
-#include <unitree/idl/go2/SportModeState_.hpp>
-#include <unitree/robot/channel/channel_subscriber.hpp>
-
-#define TOPIC_HIGHSTATE "rt/lf/sportmodestate"
 
 using namespace std;
 
@@ -23,12 +19,13 @@ const vector<TestOption> option_list =
     {{"damp", 0},        
      {"stand_up", 1},    
      {"stand_down", 2},  
-     {"move", 3},        
-     {"stop_move", 4},   
-     {"switch_gait", 5}, 
-     {"switch_gait", 6},
-     {"get_state", 6},  
-     {"recovery", 7},   
+     {"move forward", 3},
+     {"move lateral", 4},         
+     {"move rotate", 5},        
+     {"stop_move", 6},   
+     {"switch_gait", 7}, 
+     {"switch_gait", 8},
+     {"recovery", 9},   
     }; 
 
 int ConvertToInt(const std::string &str)
@@ -94,7 +91,7 @@ int main(int argc, char **argv)
     test_option.id = 1;
 
     unitree::robot::b2::SportClient sport_client;
-    sport_client.SetTimeout(10.0f);
+    sport_client.SetTimeout(25.0f);
     sport_client.Init();
 
     UserInterface user_interface;
@@ -124,23 +121,35 @@ int main(int argc, char **argv)
         }
         else if (test_option.id == 3)
         {
-            res = sport_client.Move(0.2, 0, 0);// the robot will move for 0.5 seconds before stopping.
+            res = sport_client.Move(0.3, 0, 0);// the robot will move for 0.5 seconds before stopping.
                                                // If the Move command is called in a loop, the robot will continue moving. 
                                                // If no Move request is received within 0.5 seconds, the robot will automatically stop.
         }
         else if (test_option.id == 4)
         {
-            res = sport_client.StopMove();
+            res = sport_client.Move(0, 0.3, 0);// the robot will move for 0.5 seconds before stopping.
+                                               // If the Move command is called in a loop, the robot will continue moving. 
+                                               // If no Move request is received within 0.5 seconds, the robot will automatically stop.
         }
         else if (test_option.id == 5)
         {
-            res = sport_client.SwitchGait(0);
+            res = sport_client.Move(0, 0, 0.5);// the robot will move for 0.5 seconds before stopping.
+                                               // If the Move command is called in a loop, the robot will continue moving. 
+                                               // If no Move request is received within 0.5 seconds, the robot will automatically stop.
         }
         else if (test_option.id == 6)
         {
-            res = sport_client.SwitchGait(1);
+            res = sport_client.StopMove();
         }
         else if (test_option.id == 7)
+        {
+            res = sport_client.SwitchGait(0);
+        }
+        else if (test_option.id == 8)
+        {
+            res = sport_client.SwitchGait(1);
+        }
+        else if (test_option.id == 9)
         {
             res = sport_client.RecoveryStand();
         }
