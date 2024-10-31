@@ -10,9 +10,7 @@
 // IDL
 #include <unitree/idl/hg/LowCmd_.hpp>
 #include <unitree/idl/hg/LowState_.hpp>
-
 #include <unitree/robot/b2/motion_switcher/motion_switcher_client.hpp>
-using namespace unitree::robot::b2;
 
 static const std::string HG_CMD_TOPIC = "rt/lowcmd";
 static const std::string HG_STATE_TOPIC = "rt/lowstate";
@@ -160,7 +158,7 @@ class G1Example {
   ChannelSubscriberPtr<LowState_> lowstate_subscriber_;
   ThreadPtr command_writer_ptr_, control_thread_ptr_;
 
-  std::shared_ptr<MotionSwitcherClient> msc;
+  std::shared_ptr<unitree::robot::b2::MotionSwitcherClient> msc_;
 
  public:
   G1Example(std::string networkInterface)
@@ -171,21 +169,15 @@ class G1Example {
         mode_machine_(0) {
     ChannelFactory::Instance()->Init(0, networkInterface);
 
-    msc.reset(new MotionSwitcherClient());
-    msc->SetTimeout(5.0F);
-    msc->Init();
-
-    /*Shut down  motion control-related service*/
-    while(queryMotionStatus())
-    {
-        std::cout << "Try to deactivate the motion control-related service." << std::endl;
-        int32_t ret = msc->ReleaseMode(); 
-        if (ret == 0) {
-            std::cout << "ReleaseMode succeeded." << std::endl;
-        } else {
-            std::cout << "ReleaseMode failed. Error code: " << ret << std::endl;
-        }
-        sleep(5);
+    // try to shutdown motion control-related service
+    msc_ = std::make_shared<unitree::robot::b2::MotionSwitcherClient>();
+    msc_->SetTimeout(5.0f);
+    msc_->Init();
+    std::string form, name;
+    while (msc_->CheckMode(form, name), !name.empty()) {
+      if (msc_->ReleaseMode())
+        std::cout << "Failed to switch to Release Mode\n";
+      sleep(5);
     }
 
     // create publisher
@@ -313,48 +305,6 @@ class G1Example {
       motor_command_buffer_.SetData(motor_command_tmp);
     }
   }
-
-
-  std::string queryServiceName(std::string form,std::string name)
-  {
-      if(form == "0")
-      {
-          if(name == "normal" ) return "sport_mode"; 
-          if(name == "ai" ) return "ai_sport"; 
-          if(name == "advanced" ) return "advanced_sport"; 
-      }
-      else
-      {
-          if(name == "ai-w" ) return "wheeled_sport(go2W)"; 
-          if(name == "normal-w" ) return "wheeled_sport(b2W)";
-      }
-      return "";
-  }
-
-  int queryMotionStatus()
-  {
-      std::string robotForm,motionName;
-      int motionStatus;
-      int32_t ret = msc->CheckMode(robotForm,motionName);
-      if (ret == 0) {
-          std::cout << "CheckMode succeeded." << std::endl;
-      } else {
-          std::cout << "CheckMode failed. Error code: " << ret << std::endl;
-      }
-      if(motionName.empty())
-      {
-          std::cout << "The motion control-related service is deactivated." << std::endl;
-          motionStatus = 0;
-      }
-      else
-      {
-          std::string serviceName = queryServiceName(robotForm,motionName);
-          std::cout << "Service: "<< serviceName<< " is activate" << std::endl;
-          motionStatus = 1;
-      }
-      return motionStatus;
-  }
-
 };
 
 int main(int argc, char const *argv[]) {
