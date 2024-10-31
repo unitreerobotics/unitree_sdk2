@@ -3,6 +3,8 @@
 #include <mutex>
 #include <shared_mutex>
 
+#include "gamepad.hpp"
+
 // DDS
 #include <unitree/robot/channel/channel_publisher.hpp>
 #include <unitree/robot/channel/channel_subscriber.hpp>
@@ -147,8 +149,12 @@ class G1Example {
   double time_;
   double control_dt_;  // [2ms]
   double duration_;    // [3 s]
+  int counter_;
   Mode mode_pr_;
   uint8_t mode_machine_;
+
+  Gamepad gamepad_;
+  REMOTE_DATA_RX rx_;
 
   DataBuffer<MotorState> motor_state_buffer_;
   DataBuffer<MotorCommand> motor_command_buffer_;
@@ -165,6 +171,7 @@ class G1Example {
       : time_(0.0),
         control_dt_(0.002),
         duration_(3.0),
+        counter_(0),
         mode_pr_(Mode::PR),
         mode_machine_(0) {
     ChannelFactory::Instance()->Init(0, networkInterface);
@@ -191,14 +198,8 @@ class G1Example {
     control_thread_ptr_ = CreateRecurrentThreadEx("control", UT_CPU_ID_NONE, 2000, &G1Example::Control, this);
   }
 
-  void ReportRPY() {
-    const std::shared_ptr<const ImuState> imu = imu_state_buffer_.GetData();
-    if (imu) std::cout << "rpy: [" << imu->rpy.at(0) << ", " << imu->rpy.at(1) << ", " << imu->rpy.at(2) << "]" << std::endl;
-  }
-
   void LowStateHandler(const void *message) {
     LowState_ low_state = *(const LowState_ *)message;
-
     if (low_state.crc() != Crc32Core((uint32_t *)&low_state, (sizeof(LowState_) >> 2) - 1)) {
       std::cout << "[ERROR] CRC Error" << std::endl;
       return;
@@ -209,7 +210,6 @@ class G1Example {
     for (int i = 0; i < G1_NUM_MOTOR; ++i) {
       ms_tmp.q.at(i) = low_state.motor_state()[i].q();
       ms_tmp.dq.at(i) = low_state.motor_state()[i].dq();
-
       if (low_state.motor_state()[i].motorstate() && i <= RightAnkleRoll)
         std::cout << "[ERROR] motor " << i << " with code " << low_state.motor_state()[i].motorstate() << "\n";
     }
@@ -221,10 +221,51 @@ class G1Example {
     imu_tmp.rpy = low_state.imu_state().rpy();
     imu_state_buffer_.SetData(imu_tmp);
 
+    // update gamepad
+    memcpy(rx_.buff, &low_state.wireless_remote()[0], 40);
+    gamepad_.update(rx_.RF_RX);
+
     // update mode machine
     if (mode_machine_ != low_state.mode_machine()) {
       if (mode_machine_ == 0) std::cout << "G1 type: " << unsigned(low_state.mode_machine()) << std::endl;
       mode_machine_ = low_state.mode_machine();
+    }
+
+    // report robot status every second
+    if (++counter_ % 500 == 0) {
+      counter_ = 0;
+      // IMU
+      auto &rpy = low_state.imu_state().rpy();
+      printf("IMU.rpy: %.2f %.2f %.2f\n", rpy[0], rpy[1], rpy[2]);
+
+      // RC
+      printf("gamepad_.A.pressed: %d\n", static_cast<int>(gamepad_.A.pressed));
+      printf("gamepad_.B.pressed: %d\n", static_cast<int>(gamepad_.B.pressed));
+      printf("gamepad_.X.pressed: %d\n", static_cast<int>(gamepad_.X.pressed));
+      printf("gamepad_.Y.pressed: %d\n", static_cast<int>(gamepad_.Y.pressed));
+
+      // Motor
+      auto &ms = low_state.motor_state();
+      printf("All %d Motors:", G1_NUM_MOTOR);
+      printf("\nmode: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%u,", ms[i].mode());
+      printf("\npos: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%.2f,", ms[i].q());
+      printf("\nvel: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%.2f,", ms[i].dq());
+      printf("\ntau_est: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%.2f,", ms[i].tau_est());
+      printf("\ntemperature: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%d,%d;", ms[i].temperature()[0], ms[i].temperature()[1]);
+      printf("\nvol: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%.2f,", ms[i].vol());
+      printf("\nsensor: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%u,%u;", ms[i].sensor()[0], ms[i].sensor()[1]);
+      printf("\nmotorstate: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%u,", ms[i].motorstate());
+      printf("\nreserve: ");
+      for (int i = 0; i < G1_NUM_MOTOR; ++i) printf("%u,%u,%u,%u;", ms[i].reserve()[0], ms[i].reserve()[1], ms[i].reserve()[2], ms[i].reserve()[3]);
+      printf("\n");
     }
   }
 
@@ -250,7 +291,6 @@ class G1Example {
   }
 
   void Control() {
-    ReportRPY();
     MotorCommand motor_command_tmp;
     const std::shared_ptr<const MotorState> ms = motor_state_buffer_.GetData();
 
