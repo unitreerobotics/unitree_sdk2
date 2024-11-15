@@ -4,9 +4,12 @@
 #include <thread>
 
 #include <unitree/idl/hg/LowCmd_.hpp>
+#include <unitree/idl/hg/LowState_.hpp>
 #include <unitree/robot/channel/channel_publisher.hpp>
+#include <unitree/robot/channel/channel_subscriber.hpp>
 
 static const std::string kTopicArmSDK = "rt/arm_sdk";
+static const std::string kTopicState = "rt/lowstate";
 constexpr float kPi = 3.141592654;
 constexpr float kPi_2 = 1.57079632;
 
@@ -73,6 +76,19 @@ int main(int argc, char const *argv[]) {
           kTopicArmSDK));
   arm_sdk_publisher->InitChannel();
 
+  unitree::robot::ChannelSubscriberPtr<unitree_hg::msg::dds_::LowState_>
+      low_state_subscriber;
+
+  // create subscriber
+  unitree_hg::msg::dds_::LowState_ state_msg;
+  low_state_subscriber.reset(
+      new unitree::robot::ChannelSubscriber<unitree_hg::msg::dds_::LowState_>(
+          kTopicState));
+  low_state_subscriber->InitChannel([&](const void *msg) {
+        auto s = ( const unitree_hg::msg::dds_::LowState_* )msg;
+        memcpy( &state_msg, s, sizeof( unitree_hg::msg::dds_::LowState_ ) );
+  }, 1);
+
   std::array<JointIndex, 17> arm_joints = {
       JointIndex::kLeftShoulderPitch,  JointIndex::kLeftShoulderRoll,
       JointIndex::kLeftShoulderYaw,    JointIndex::kLeftElbow,
@@ -112,23 +128,30 @@ int main(int argc, char const *argv[]) {
   std::cout << "Press ENTER to init arms ...";
   std::cin.get();
 
+  // get current joint position
+  std::array<float, 17> current_jpos{};
+  std::cout<<"Current joint position: ";
+  for (int i = 0; i < arm_joints.size(); ++i) {
+	current_jpos.at(i) = state_msg.motor_state().at(arm_joints.at(i)).q();
+	std::cout << current_jpos.at(i) << " ";
+  }
+  std::cout << std::endl;
+
   // set init pos
   std::cout << "Initailizing arms ...";
-  float init_time = 5.0f;
+  float init_time = 2.0f;
   int init_time_steps = static_cast<int>(init_time / control_dt);
 
   for (int i = 0; i < init_time_steps; ++i) {
     // increase weight
-    weight += delta_weight;
-    weight = std::clamp(weight, 0.f, 1.f);
-    std::cout << weight << std::endl;
-
-    // set weight
-    msg.motor_cmd().at(JointIndex::kNotUsedJoint).q(weight * weight);
+    weight = 1.0;
+    msg.motor_cmd().at(JointIndex::kNotUsedJoint).q(weight);
+    float phase = 1.0 * i / init_time_steps;
+    std::cout << "Phase: " << phase << std::endl;
 
     // set control joints
     for (int j = 0; j < init_pos.size(); ++j) {
-      msg.motor_cmd().at(arm_joints.at(j)).q(init_pos.at(j));
+      msg.motor_cmd().at(arm_joints.at(j)).q(init_pos.at(j) * phase + current_jpos.at(j) * (1 - phase));
       msg.motor_cmd().at(arm_joints.at(j)).dq(dq);
       msg.motor_cmd().at(arm_joints.at(j)).kp(kp);
       msg.motor_cmd().at(arm_joints.at(j)).kd(kd);
