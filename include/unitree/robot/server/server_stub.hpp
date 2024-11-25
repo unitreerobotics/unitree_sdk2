@@ -16,6 +16,7 @@ class ServerStub
 {
 public:
     explicit ServerStub();
+    ~ServerStub();
 
     void Init(const std::string& name, const ServerRequestHandler& handler, bool enableProiQueue);
     bool Send(const Response& response);
@@ -28,6 +29,7 @@ private:
 
 private:
     bool mEnableProiQueue;
+    bool mRunning;
     ServerRequestHandler mRequestHandler;
     ChannelLaborPtr<Response,Request> mChannelLaborPtr;
     common::BlockQueuePtr<RequestPtr> mQueuePtr;

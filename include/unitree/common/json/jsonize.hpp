@@ -2,13 +2,13 @@
 #define __UT_JSONIZE_HPP__
 
 #define JN_FROM_WEAK(m, name, value) \
-    if (m.find(name) != m.end()) { value = m[name]; }
+    if (m.find(name) != m.end()){ JN_FROM(m, name, value); }
 
 #define JN_FROM(m, name, value) \
-    value = m[name]
+    unitree::common::FromJson(m[name], value)
 
 #define JN_TO(m, name, value) \
-    m[name] = value
+    unitree::common::ToJson(value, m[name])
 
 #include <unitree/common/json/json.hpp>
 

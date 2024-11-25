@@ -180,11 +180,11 @@ public:
      */
     int32_t Wallow();
 
-    // /*
-    //  * @brief Content
-    //  * @api: 1020
-    //  */
-    // int32_t Content();
+    /*
+     * @brief Content
+     * @api: 1020
+     */
+    int32_t Content();
 
     /*
      * @brief Heart

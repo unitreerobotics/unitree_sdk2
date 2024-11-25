@@ -79,6 +79,9 @@ public:
 
     int32_t PreciseYaw(float desiredYaw, float measuredYaw);
 
+    int32_t FrontJump();
+
+    int32_t EnableVisionWalk();
 };
 }
 }
