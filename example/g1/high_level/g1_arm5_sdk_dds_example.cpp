@@ -113,7 +113,9 @@ int main(int argc, char const *argv[]) {
   auto sleep_time =
       std::chrono::milliseconds(static_cast<int>(control_dt / 0.001f));
 
-  std::array<float, 13> init_pos{};
+  std::array<float, 13> init_pos{0, 0, 0, 0, 0,
+                                 0, 0, 0, 0, 0,
+                                 0, 0, 0};
 
   std::array<float, 13> target_pos = {0.f, kPi_2,  0.f, kPi_2, 0.f,
                                      0.f, -kPi_2, 0.f, kPi_2, 0.f, 
