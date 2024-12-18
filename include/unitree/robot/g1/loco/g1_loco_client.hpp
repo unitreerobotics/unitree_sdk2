@@ -10,7 +10,7 @@ namespace unitree {
 namespace robot {
 namespace g1 {
 class LocoClient : public Client {
-public:
+ public:
   LocoClient() : Client(LOCO_SERVICE_NAME, false) {}
   ~LocoClient() {}
 
@@ -22,7 +22,7 @@ public:
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_BALANCE_MODE);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_SWING_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_STAND_HEIGHT);
-    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_PHASE); // deprecated
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_PHASE);  // deprecated
 
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_FSM_ID);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_BALANCE_MODE);
@@ -32,74 +32,86 @@ public:
   };
 
   /*Low Level API Call*/
-  int32_t GetFsmId(int &fsm_id) {
+  int32_t GetFsmId(int& fsm_id) {
     std::string parameter, data;
 
     int32_t ret = Call(ROBOT_API_ID_LOCO_GET_FSM_ID, parameter, data);
 
-    go2::JsonizeDataInt json;
-    common::FromJsonString(data, json);
-    fsm_id = json.data;
+    if (ret == 0) {
+      go2::JsonizeDataInt json;
+      common::FromJsonString(data, json);
+      fsm_id = json.data;
+    }
 
     return ret;
   }
 
-  int32_t GetFsmMode(int &fsm_mode) {
+  int32_t GetFsmMode(int& fsm_mode) {
     std::string parameter, data;
 
     int32_t ret = Call(ROBOT_API_ID_LOCO_GET_FSM_MODE, parameter, data);
 
-    go2::JsonizeDataInt json;
-    common::FromJsonString(data, json);
-    fsm_mode = json.data;
+    if (ret == 0) {
+      go2::JsonizeDataInt json;
+      common::FromJsonString(data, json);
+      fsm_mode = json.data;
+    }
 
     return ret;
   }
 
-  int32_t GetBalanceMode(int &balance_mode) {
+  int32_t GetBalanceMode(int& balance_mode) {
     std::string parameter, data;
 
     int32_t ret = Call(ROBOT_API_ID_LOCO_GET_BALANCE_MODE, parameter, data);
 
-    go2::JsonizeDataInt json;
-    common::FromJsonString(data, json);
-    balance_mode = json.data;
+    if (ret == 0) {
+      go2::JsonizeDataInt json;
+      common::FromJsonString(data, json);
+      balance_mode = json.data;
+    }
 
     return ret;
   }
 
-  int32_t GetSwingHeight(float &swing_height) {
+  int32_t GetSwingHeight(float& swing_height) {
     std::string parameter, data;
 
     int32_t ret = Call(ROBOT_API_ID_LOCO_GET_SWING_HEIGHT, parameter, data);
 
-    go2::JsonizeDataFloat json;
-    common::FromJsonString(data, json);
-    swing_height = json.data;
+    if (ret == 0) {
+      go2::JsonizeDataFloat json;
+      common::FromJsonString(data, json);
+      swing_height = json.data;
+    }
 
     return ret;
   }
 
-  int32_t GetStandHeight(float &stand_height) {
+  int32_t GetStandHeight(float& stand_height) {
     std::string parameter, data;
 
     int32_t ret = Call(ROBOT_API_ID_LOCO_GET_STAND_HEIGHT, parameter, data);
 
-    go2::JsonizeDataFloat json;
-    common::FromJsonString(data, json);
-    stand_height = json.data;
+    if (ret == 0) {
+      go2::JsonizeDataFloat json;
+      common::FromJsonString(data, json);
+      stand_height = json.data;
+    }
 
     return ret;
   }
 
-  int32_t GetPhase(std::vector<float> &phase) {
+  int32_t GetPhase(std::vector<float>& phase) {
     std::string parameter, data;
 
     int32_t ret = Call(ROBOT_API_ID_LOCO_GET_PHASE, parameter, data);
 
-    JsonizeDataVecFloat json;
-    common::FromJsonString(data, json);
-    phase = json.data;
+    if (ret == 0) {
+      JsonizeDataVecFloat json;
+      common::FromJsonString(data, json);
+      phase = json.data;
+    }
 
     return ret;
   }
@@ -171,21 +183,15 @@ public:
 
   int32_t StopMove() { return SetVelocity(0.f, 0.f, 0.f); }
 
-  int32_t HighStand() {
-    return SetStandHeight(std::numeric_limits<uint32_t>::max());
-  }
+  int32_t HighStand() { return SetStandHeight(std::numeric_limits<uint32_t>::max()); }
 
-  int32_t LowStand() {
-    return SetStandHeight(std::numeric_limits<uint32_t>::min());
-  }
+  int32_t LowStand() { return SetStandHeight(std::numeric_limits<uint32_t>::min()); }
 
   int32_t Move(float vx, float vy, float vyaw, bool continous_move) {
     return SetVelocity(vx, vy, vyaw, continous_move ? 864000.f : 1.f);
   }
 
-  int32_t Move(float vx, float vy, float vyaw) {
-    return Move(vx, vy, vyaw, continous_move_);
-  }
+  int32_t Move(float vx, float vy, float vyaw) { return Move(vx, vy, vyaw, continous_move_); }
 
   int32_t BalanceStand() { return SetBalanceMode(0); }
 
@@ -196,7 +202,7 @@ public:
     return 0;
   }
 
-private:
+ private:
   bool continous_move_ = false;
 };
 } // namespace g1
