@@ -19,7 +19,7 @@ public:
     ~ServerStub();
 
     void Init(const std::string& name, const ServerRequestHandler& handler, bool enableProiQueue);
-    bool Send(const Response& response);
+    bool Send(const Response& response, int64_t timeout = 0);
 
 private:
     void Enqueue(const void* message);

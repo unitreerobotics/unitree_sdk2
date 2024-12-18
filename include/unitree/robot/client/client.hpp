@@ -33,6 +33,8 @@ public:
 protected:
     void SetApiVersion(const std::string& apiVersion);
 
+    int32_t Noop();
+
     int32_t Call(int32_t apiId, const std::string& parameter, std::string& data);
     int32_t Call(int32_t apiId, const std::string& parameter);
 

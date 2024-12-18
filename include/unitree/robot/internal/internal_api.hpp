@@ -28,6 +28,12 @@ const int32_t ROBOT_API_ID_NONE                     = -1;
 const int32_t ROBOT_API_ID_INTERNAL_API_VERSION     = 1;
 
 /*
+ * @brief  Noop.
+ * @value: 2
+ */
+const int32_t ROBOT_API_ID_INTERNAL_API_NOOP        = 2;
+
+/*
  * @brief  Apply lease from server.
  * @value: 101
  */
