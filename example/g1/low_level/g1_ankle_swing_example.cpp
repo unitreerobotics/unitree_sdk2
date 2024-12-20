@@ -12,14 +12,17 @@
 // IDL
 #include <unitree/idl/hg/LowCmd_.hpp>
 #include <unitree/idl/hg/LowState_.hpp>
+#include <unitree/idl/hg_doubleimu/doubleIMUState_.hpp>
 #include <unitree/robot/b2/motion_switcher/motion_switcher_client.hpp>
 
 static const std::string HG_CMD_TOPIC = "rt/lowcmd";
+static const std::string HG_IMU_TORSO = "rt/lowstate_doubleimu";
 static const std::string HG_STATE_TOPIC = "rt/lowstate";
 
 using namespace unitree::common;
 using namespace unitree::robot;
 using namespace unitree_hg::msg::dds_;
+using namespace unitree_hg_doubleimu::msg::dds_;
 
 template <typename T>
 class DataBuffer {
@@ -162,6 +165,7 @@ class G1Example {
 
   ChannelPublisherPtr<LowCmd_> lowcmd_publisher_;
   ChannelSubscriberPtr<LowState_> lowstate_subscriber_;
+  ChannelSubscriberPtr<doubleIMUState_> imutorso_subscriber_;
   ThreadPtr command_writer_ptr_, control_thread_ptr_;
 
   std::shared_ptr<unitree::robot::b2::MotionSwitcherClient> msc_;
@@ -193,9 +197,18 @@ class G1Example {
     // create subscriber
     lowstate_subscriber_.reset(new ChannelSubscriber<LowState_>(HG_STATE_TOPIC));
     lowstate_subscriber_->InitChannel(std::bind(&G1Example::LowStateHandler, this, std::placeholders::_1), 1);
+    imutorso_subscriber_.reset(new ChannelSubscriber<doubleIMUState_>(HG_IMU_TORSO));
+    imutorso_subscriber_->InitChannel(std::bind(&G1Example::imuTorsoHandler, this, std::placeholders::_1), 1);
     // create threads
     command_writer_ptr_ = CreateRecurrentThreadEx("command_writer", UT_CPU_ID_NONE, 2000, &G1Example::LowCommandWriter, this);
     control_thread_ptr_ = CreateRecurrentThreadEx("control", UT_CPU_ID_NONE, 2000, &G1Example::Control, this);
+  }
+
+  void imuTorsoHandler(const void *message) {
+    doubleIMUState_ imu_torso = *(const doubleIMUState_ *)message;
+    auto &rpy = imu_torso.rpy();
+    if (counter_ % 500 == 0)
+      printf("IMU.torso.rpy: %.2f %.2f %.2f\n", rpy[0], rpy[1], rpy[2]);
   }
 
   void LowStateHandler(const void *message) {
@@ -236,7 +249,7 @@ class G1Example {
       counter_ = 0;
       // IMU
       auto &rpy = low_state.imu_state().rpy();
-      printf("IMU.rpy: %.2f %.2f %.2f\n", rpy[0], rpy[1], rpy[2]);
+      printf("IMU.pelvis.rpy: %.2f %.2f %.2f\n", rpy[0], rpy[1], rpy[2]);
 
       // RC
       printf("gamepad_.A.pressed: %d\n", static_cast<int>(gamepad_.A.pressed));
