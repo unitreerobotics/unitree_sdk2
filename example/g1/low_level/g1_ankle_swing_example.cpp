@@ -10,19 +10,18 @@
 #include <unitree/robot/channel/channel_subscriber.hpp>
 
 // IDL
+#include <unitree/idl/hg/IMUState_.hpp>
 #include <unitree/idl/hg/LowCmd_.hpp>
 #include <unitree/idl/hg/LowState_.hpp>
-#include <unitree/idl/hg_doubleimu/doubleIMUState_.hpp>
 #include <unitree/robot/b2/motion_switcher/motion_switcher_client.hpp>
 
 static const std::string HG_CMD_TOPIC = "rt/lowcmd";
-static const std::string HG_IMU_TORSO = "rt/lowstate_doubleimu";
+static const std::string HG_IMU_TORSO = "rt/secondary_imu";
 static const std::string HG_STATE_TOPIC = "rt/lowstate";
 
 using namespace unitree::common;
 using namespace unitree::robot;
 using namespace unitree_hg::msg::dds_;
-using namespace unitree_hg_doubleimu::msg::dds_;
 
 template <typename T>
 class DataBuffer {
@@ -165,7 +164,7 @@ class G1Example {
 
   ChannelPublisherPtr<LowCmd_> lowcmd_publisher_;
   ChannelSubscriberPtr<LowState_> lowstate_subscriber_;
-  ChannelSubscriberPtr<doubleIMUState_> imutorso_subscriber_;
+  ChannelSubscriberPtr<IMUState_> imutorso_subscriber_;
   ThreadPtr command_writer_ptr_, control_thread_ptr_;
 
   std::shared_ptr<unitree::robot::b2::MotionSwitcherClient> msc_;
@@ -197,7 +196,7 @@ class G1Example {
     // create subscriber
     lowstate_subscriber_.reset(new ChannelSubscriber<LowState_>(HG_STATE_TOPIC));
     lowstate_subscriber_->InitChannel(std::bind(&G1Example::LowStateHandler, this, std::placeholders::_1), 1);
-    imutorso_subscriber_.reset(new ChannelSubscriber<doubleIMUState_>(HG_IMU_TORSO));
+    imutorso_subscriber_.reset(new ChannelSubscriber<IMUState_>(HG_IMU_TORSO));
     imutorso_subscriber_->InitChannel(std::bind(&G1Example::imuTorsoHandler, this, std::placeholders::_1), 1);
     // create threads
     command_writer_ptr_ = CreateRecurrentThreadEx("command_writer", UT_CPU_ID_NONE, 2000, &G1Example::LowCommandWriter, this);
@@ -205,7 +204,7 @@ class G1Example {
   }
 
   void imuTorsoHandler(const void *message) {
-    doubleIMUState_ imu_torso = *(const doubleIMUState_ *)message;
+    IMUState_ imu_torso = *(const IMUState_ *)message;
     auto &rpy = imu_torso.rpy();
     if (counter_ % 500 == 0)
       printf("IMU.torso.rpy: %.2f %.2f %.2f\n", rpy[0], rpy[1], rpy[2]);
