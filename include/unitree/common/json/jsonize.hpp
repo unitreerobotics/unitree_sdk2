@@ -44,6 +44,14 @@ public:
     virtual void fromJson(JsonMap& a) = 0;
 };
 
+void FromAny(const Any& a, int8_t& value);
+
+void FromAny(const Any& a, uint8_t& value);
+
+void FromAny(const Any& a, int16_t& value);
+
+void FromAny(const Any& a, uint16_t& value);
+
 void FromAny(const Any& a, int32_t& value);
 
 void FromAny(const Any& a, uint32_t& value);
@@ -152,6 +160,14 @@ void FromJson(const Any& a, T& t)
 {
     FromAny(a, t);
 }
+
+void ToAny(const int8_t& value, Any& a);
+
+void ToAny(const uint8_t& value, Any& a);
+
+void ToAny(const int16_t& value, Any& a);
+
+void ToAny(const uint16_t& value, Any& a);
 
 void ToAny(const int32_t& value, Any& a);
 
