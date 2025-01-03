@@ -11,6 +11,9 @@ target_link_libraries(g1_arm7_sdk_dds_example unitree_sdk2)
 add_executable(g1_ankle_swing_example low_level/g1_ankle_swing_example.cpp)
 target_link_libraries(g1_ankle_swing_example unitree_sdk2)
 
+add_executable(g1_audio_client_example audio/g1_audio_client_example.cpp)
+target_link_libraries(g1_audio_client_example unitree_sdk2)
+
 find_package(yaml-cpp QUIET)
 if(yaml-cpp_FOUND)
     if (${yaml-cpp_VERSION} VERSION_GREATER_EQUAL "0.6")
