@@ -276,6 +276,60 @@ public:
      */
     int32_t EconomicGait(bool flag);
 
+    /*
+     * @brief LeftFlip
+     * @api: 1042
+     */
+    int32_t LeftFlip();
+
+    /*
+     * @brief LeftFlip
+     * @api: 1044
+     */
+    int32_t BackFlip();
+
+    /*
+     * @brief FreeWalk
+     * @api: 1045
+     */
+    int32_t FreeWalk();
+
+    /*
+     * @brief FreeBound
+     * @api: 1046
+     */
+    int32_t FreeBound(bool flag);
+
+    /*
+     * @brief FreeJump
+     * @api: 1047
+     */
+    int32_t FreeJump(bool flag);
+
+    /*
+     * @brief FreeAvoid
+     * @api: 1048
+     */
+    int32_t FreeAvoid(bool flag);
+
+    /*
+     * @brief WalkStair
+     * @api: 1049
+     */
+    int32_t WalkStair(bool flag);
+
+    /*
+     * @brief WalkStair
+     * @api: 1050
+     */
+    int32_t WalkUpright(bool flag);
+
+    /*
+     * @brief CrossStep
+     * @api: 1051
+     */
+    int32_t CrossStep(bool flag);
+
 };
 }
 }
