@@ -230,6 +230,31 @@ int main(int argc, char const *argv[]) {
       client.Move(vx, vy, omega);
     }
 
+    if (arg_pair.first == "set_task_id") {
+      int task_id = std::stoi(arg_pair.second);
+      client.SetTaskId(task_id);
+      std::cout << "set task_id to " << task_id << std::endl;
+    }
+
+    if (arg_pair.first == "shake_hand") {
+      client.ShakeHand(0);
+      std::cout << "Shake hand starts! Waiting for 10 s for ending"
+                << std::endl;
+      std::this_thread::sleep_for(std::chrono::seconds(10));
+      std::cout << "Shake hand ends!" << std::endl;
+      client.ShakeHand(1);
+    }
+
+    if (arg_pair.first == "wave_hand") {
+      client.WaveHand();
+      std::cout << "wave hand" << std::endl;
+    }
+
+    if (arg_pair.first == "wave_hand_with_turn") {
+      client.WaveHand(true);
+      std::cout << "wave hand with turn" << std::endl;
+    }
+
     std::cout << "Done!" << std::endl;
   }
 

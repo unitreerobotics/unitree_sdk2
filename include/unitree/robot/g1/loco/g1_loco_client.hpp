@@ -29,6 +29,7 @@ class LocoClient : public Client {
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_SWING_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_STAND_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_VELOCITY);
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_ARM_TASK);
   };
 
   /*Low Level API Call*/
@@ -168,6 +169,16 @@ class LocoClient : public Client {
     return Call(ROBOT_API_ID_LOCO_SET_VELOCITY, parameter, data);
   }
 
+  int32_t SetTaskId(int task_id) {
+    std::string parameter, data;
+
+    go2::JsonizeDataInt json;
+    json.data = task_id;
+    parameter = common::ToJsonString(json);
+
+    return Call(ROBOT_API_ID_LOCO_SET_ARM_TASK, parameter, data);
+  }
+
   /*High Level API Call*/
   int32_t Damp() { return SetFsmId(1); }
 
@@ -202,8 +213,27 @@ class LocoClient : public Client {
     return 0;
   }
 
+  int32_t WaveHand(bool turn_flag = false) { return SetTaskId(turn_flag ? 1 : 0); }
+
+  int32_t ShakeHand(int stage = -1) {
+    switch (stage) {
+      case 0:
+        first_shake_hand_stage_ = false;
+        return SetTaskId(2);
+
+      case 1:
+        first_shake_hand_stage_ = true;
+        return SetTaskId(3);
+
+      default:
+        first_shake_hand_stage_ = !first_shake_hand_stage_;
+        return SetTaskId(first_shake_hand_stage_ ? 3 : 2);
+    }
+  }
+
  private:
   bool continous_move_ = false;
+  bool first_shake_hand_stage_ = true;
 };
 } // namespace g1
 
