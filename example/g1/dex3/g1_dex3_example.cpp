@@ -1,7 +1,7 @@
 #include <chrono>
 #include <thread>
-#include <unitree/hg_idl/HandState_.hpp> //replace your sdk path
-#include <unitree/hg_idl/HandCmd_.hpp> //replace your sdk path
+#include <unitree/idl/hg/HandState_.hpp> //replace your sdk path
+#include <unitree/idl/hg/HandCmd_.hpp> //replace your sdk path
 #include <unitree/robot/channel/channel_publisher.hpp>
 #include <unitree/robot/channel/channel_subscriber.hpp>
 #include <iostream>
@@ -22,15 +22,13 @@ enum State {
     PRINT
 };
 
-// �ο�urdf�����λ
-const float maxTorqueLimits_left[7]=  {  1.05 ,  1.05  , 1.75 ,   0   ,  0    , 0     , 0   }; // set max motor value
-const float minTorqueLimits_left[7]=  { -1.05 , -0.724 ,   0  , -1.57 , -1.75 , -1.57  ,-1.75}; 
-const float maxTorqueLimits_right[7]= {  1.05 , 0.742  ,   0  ,  1.57 , 1.75  , 1.57  , 1.75}; 
-const float minTorqueLimits_right[7]= { -1.05 , -1.05  , -1.75,    0  ,  0    ,   0   ,0    }; 
+// set URDF Limits
+const float maxLimits_left[7]=  {  1.05 ,  1.05  , 1.75 ,   0   ,  0    , 0     , 0   }; // set max motor value
+const float minLimits_left[7]=  { -1.05 , -0.724 ,   0  , -1.57 , -1.75 , -1.57  ,-1.75}; 
+const float maxLimits_right[7]= {  1.05 , 0.742  ,   0  ,  1.57 , 1.75  , 1.57  , 1.75}; 
+const float minLimits_right[7]= { -1.05 , -1.05  , -1.75,    0  ,  0    ,   0   ,0    }; 
 
-
-//State currentState = INIT;
-
+// Initing the dds configuration
 std::string dds_namespace = "rt/dex3/left";
 std::string sub_namespace = "rt/dex3/left/state";
 unitree::robot::ChannelPublisherPtr<unitree_hg::msg::dds_::HandCmd_> handcmd_publisher;
@@ -50,7 +48,7 @@ typedef struct {
     uint8_t timeout: 1;
 } RIS_Mode_t;
 
-// stateToString ��������
+// stateToString Method
 const char* stateToString(State state) {
     switch (state) {
         case INIT: return "INIT";
@@ -62,7 +60,7 @@ const char* stateToString(State state) {
     }
 }
 
-
+// Monitor user's input
 char getNonBlockingInput() {
     struct termios oldt, newt;
     char ch;
@@ -75,15 +73,13 @@ char getNonBlockingInput() {
     oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
     fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
 
-    ch = getchar(); // ��ȡ�����ַ�
+    ch = getchar(); 
 
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt); 
     fcntl(STDIN_FILENO, F_SETFL, oldf);
 
     return ch;
 }
-
-
 
 void userInputThread() {
     while (true) {
@@ -105,11 +101,12 @@ void userInputThread() {
     }
 }
 
+// this method can send kp and kd to motors
 void rotateMotors(bool isLeftHand) {
     static int _count = 1; 
     static int dir = 1;    
-    const float* maxTorqueLimits = isLeftHand ? maxTorqueLimits_left : maxTorqueLimits_right;
-    const float* minTorqueLimits = isLeftHand ? minTorqueLimits_left : minTorqueLimits_right;
+    const float* maxLimits = isLeftHand ? maxLimits_left : maxLimits_right;
+    const float* minLimits = isLeftHand ? minLimits_left : minLimits_right;
 
     for (int i = 0; i < MOTOR_MAX; i++) {
         RIS_Mode_t ris_mode;
@@ -127,8 +124,8 @@ void rotateMotors(bool isLeftHand) {
         msg.motor_cmd()[i].kd(0.1);    
 
 
-        float range = maxTorqueLimits[i] - minTorqueLimits[i];
-        float mid = (maxTorqueLimits[i] + minTorqueLimits[i]) / 2.0; 
+        float range = maxLimits[i] - minLimits[i];
+        float mid = (maxLimits[i] + minLimits[i]) / 2.0; 
         float amplitude = range / 2.0; 
         float q = mid + amplitude * sin(_count / 20000.0 * M_PI); 
 
@@ -149,15 +146,16 @@ void rotateMotors(bool isLeftHand) {
     usleep(100); 
 }
 
+// this method can send static position to motors
 void gripHand(bool isLeftHand) {
 
-    const float* maxTorqueLimits = isLeftHand ? maxTorqueLimits_left : maxTorqueLimits_right;
-    const float* minTorqueLimits = isLeftHand ? minTorqueLimits_left : minTorqueLimits_right;
+    const float* maxLimits = isLeftHand ? maxLimits_left : maxLimits_right;
+    const float* minLimits = isLeftHand ? minLimits_left : minLimits_right;
 
     for (int i = 0; i < MOTOR_MAX; i++) {
         RIS_Mode_t ris_mode;
         ris_mode.id = i;        
-        ris_mode.status = 0x01; /
+        ris_mode.status = 0x01; 
     
         
         uint8_t mode = 0;
@@ -168,7 +166,7 @@ void gripHand(bool isLeftHand) {
         msg.motor_cmd()[i].tau(0);
 
       
-        float mid = (maxTorqueLimits[i] + minTorqueLimits[i]) / 2.0;
+        float mid = (maxLimits[i] + minLimits[i]) / 2.0;
 
 
         msg.motor_cmd()[i].q(mid); 
@@ -182,6 +180,7 @@ void gripHand(bool isLeftHand) {
     usleep(1000000);
 }
 
+// this method can send dynamic position to motors
 void stopMotors() {
     for (int i = 0; i < MOTOR_MAX; i++) {
         RIS_Mode_t ris_mode;
@@ -205,17 +204,17 @@ void stopMotors() {
     usleep(1000000); 
 }
 
-
+// this method can subscribe dds and show the position for now
 void printState(bool isLeftHand){
     Eigen::Matrix<float, 7, 1> q;
 
-    const float* maxTorqueLimits = isLeftHand ? maxTorqueLimits_left : maxTorqueLimits_right;
-    const float* minTorqueLimits = isLeftHand ? minTorqueLimits_left : minTorqueLimits_right;
+    const float* maxLimits = isLeftHand ? maxLimits_left : maxLimits_right;
+    const float* minLimits = isLeftHand ? minLimits_left : minLimits_right;
     for(int i = 0; i < 7; i++) 
     {
         q(i) = state.motor_state()[i].q();
       
-        q(i) = (q(i) - minTorqueLimits[i] ) / (maxTorqueLimits[i] - minTorqueLimits[i]);
+        q(i) = (q(i) - minLimits[i] ) / (maxLimits[i] - minLimits[i]);
         q(i) = std::clamp(q(i), 0.0f, 1.0f);
     }
     std::cout << "\033[2J\033[H"; 
@@ -240,7 +239,8 @@ void StateHandler(const void *message) {
 
 
 
-int main() {
+int main(int argc, const char** argv)
+{
     std::cout << " --- Unitree Robotics --- \n";
     std::cout << "     Dex3 Hand Example      \n\n";
     std::string input;
@@ -260,7 +260,12 @@ int main() {
         return -1;
     }
 
-    unitree::robot::ChannelFactory::Instance()->Init(0);
+    if (argc < 2)
+    {
+        std::cout << "Usage: " << argv[0] << " networkInterface" << std::endl;
+        exit(-1); 
+    }
+    unitree::robot::ChannelFactory::Instance()->Init(0, argv[1]);
     handcmd_publisher.reset(new unitree::robot::ChannelPublisher<unitree_hg::msg::dds_::HandCmd_>(dds_namespace + "/cmd"));
     handstate_subscriber.reset(new unitree::robot::ChannelSubscriber<unitree_hg::msg::dds_::HandState_>(sub_namespace));
     handcmd_publisher->InitChannel();
