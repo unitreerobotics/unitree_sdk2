@@ -41,5 +41,21 @@ You can refer to `example/cmake_sample` on how to import the unitree_sdk2 into y
 
 Note that if you install the library to other places other than `/opt/unitree_robotics`, you need to make sure the path is added to "${CMAKE_PREFIX_PATH}" so that cmake can find it with "find_package()".
 
+### Execute the examples
+#### Interface
+
+Get the interface for your connection with the robot
+
+```bash
+ifconfig
+```
+
+#### Execute example on robot
+
+```bash
+sudo bin/example_name <interface>
+```
+
+
 ### Notice
 For more reference information, please go to [Unitree Document Center](https://support.unitree.com/home/zh/developer).
