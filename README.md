@@ -53,7 +53,7 @@ ifconfig
 #### Execute example on robot
 
 ```bash
-sudo bin/example_name <interface>
+sudo ./bin/example_name <interface>
 ```
 
 
