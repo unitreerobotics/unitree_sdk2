@@ -13,9 +13,9 @@ public:
     explicit LogBuffer();
     virtual ~LogBuffer();
 
-    bool Append(const std::string& s);
-    bool Get(std::string& s);
-    bool Empty();
+    virtual bool Append(const std::string& s);
+    virtual bool Get(std::string& s);
+    virtual bool Empty();
 
 protected:
     std::string mData;
