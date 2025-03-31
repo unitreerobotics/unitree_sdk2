@@ -36,17 +36,17 @@ enum JointIndex {
   kLeftShoulderRoll = 14,
   kLeftShoulderYaw = 15,
   kLeftElbow = 16,
-  kLeftWistRoll = 17,
-  kLeftWistPitch = 18,
-  kLeftWistYaw = 19,
+  kLeftWristRoll = 17,
+  kLeftWristPitch = 18,
+  kLeftWristYaw = 19,
   // Right arm
   kRightShoulderPitch = 20,
   kRightShoulderRoll = 21,
   kRightShoulderYaw = 22,
   kRightElbow = 23,
-  kRightWistRoll = 24,
-  kRightWistPitch = 25,
-  kRightWistYaw = 26,
+  kRightWristRoll = 24,
+  kRightWristPitch = 25,
+  kRightWristYaw = 26,
 
   kNotUsedJoint = 27,
   kNotUsedJoint1 = 28,
@@ -91,10 +91,10 @@ int main(int argc, char const *argv[]) {
   std::array<JointIndex, 15> arm_joints = {
       JointIndex::kLeftShoulderPitch,  JointIndex::kLeftShoulderRoll,
       JointIndex::kLeftShoulderYaw,    JointIndex::kLeftElbow,
-      JointIndex::kLeftWistRoll,       JointIndex::kLeftWistPitch,     JointIndex::kLeftWistYaw,       
+      JointIndex::kLeftWristRoll,       JointIndex::kLeftWristPitch,     JointIndex::kLeftWristYaw,       
       JointIndex::kRightShoulderPitch, JointIndex::kRightShoulderRoll,
       JointIndex::kRightShoulderYaw,   JointIndex::kRightElbow, 
-      JointIndex::kRightWistRoll,      JointIndex::kRightWistPitch,    JointIndex::kRightWistYaw,       
+      JointIndex::kRightWristRoll,      JointIndex::kRightWristPitch,    JointIndex::kRightWristYaw,       
       JointIndex::kWaistYaw};
 
   float weight = 0.f;
