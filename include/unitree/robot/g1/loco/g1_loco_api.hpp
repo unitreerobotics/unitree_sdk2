@@ -8,7 +8,7 @@ namespace unitree {
 namespace robot {
 namespace g1 {
 /*service name*/
-const std::string LOCO_SERVICE_NAME = "loco";
+const std::string LOCO_SERVICE_NAME = "sport";
 
 /*api version*/
 const std::string LOCO_API_VERSION = "1.0.0.0";
