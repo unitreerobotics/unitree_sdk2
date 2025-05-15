@@ -13,13 +13,32 @@
 #define GROUP_IP "239.168.123.161"
 #define PORT 5555
 
-#define WAV_SECOND 5
+#define WAV_SECOND 5 // record seconds
 #define WAV_LEN (16000 * 2 * WAV_SECOND)
 int sock;
 
 void asr_handler(const void *msg) {
   std_msgs::msg::dds_::String_ *resMsg = (std_msgs::msg::dds_::String_ *)msg;
   std::cout << "Topic:\"rt/audio_msg\" recv: " << resMsg->data() << std::endl;
+}
+
+std::string get_local_ip_for_multicast() {
+  struct ifaddrs *ifaddr, *ifa;
+  char host[NI_MAXHOST];
+  std::string result = "";
+
+  getifaddrs(&ifaddr);
+  for (ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
+      if (!ifa->ifa_addr || ifa->ifa_addr->sa_family != AF_INET) continue;
+      getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+      std::string ip(host);
+      if (ip.find("192.168.123.") == 0) {
+          result = ip;
+          break;
+      }
+  }
+  freeifaddrs(ifaddr);
+  return result;
 }
 
 void thread_mic(void) {
@@ -32,13 +51,14 @@ void thread_mic(void) {
 
   ip_mreq mreq{};
   inet_pton(AF_INET, GROUP_IP, &mreq.imr_multiaddr);
-  mreq.imr_interface.s_addr = INADDR_ANY;
+  std::string local_ip = get_local_ip_for_multicast();
+  std::cout << "local ip: "<<local_ip << std::endl;
+  mreq.imr_interface.s_addr = inet_addr(local_ip.c_str());
   setsockopt(sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq));
 
   int total_bytes = 0;
   std::vector<int16_t> pcm_data;
   pcm_data.reserve(WAV_LEN / 2);
-
   std::cout << "start record!" << std::endl;
   while (total_bytes < WAV_LEN) {
     char buffer[2048];
