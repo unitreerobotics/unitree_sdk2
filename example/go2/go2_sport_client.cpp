@@ -18,7 +18,6 @@ enum test_mode
   normal_stand,
   balance_stand,
   velocity_move,
-  trajectory_follow,
   stand_down,
   stand_up,
   damp,
@@ -26,18 +25,10 @@ enum test_mode
   /*---Special motion ---*/
   sit,
   rise_sit,
-  stretch,
-  wallow,
-  //content,
-  pose,
-  scrape,
-  front_flip,
-  front_jump,
-  front_pounce,
   stop_move = 99
 };
 
-const int TEST_MODE = trajectory_follow;
+const int TEST_MODE = stand_down;
 
 class Custom
 {
@@ -65,44 +56,18 @@ public:
     switch (TEST_MODE)
     {
     case normal_stand:            // 0. idle, default stand
-      sport_client.SwitchGait(0); // 0:idle; 1:tort; 2:tort running; 3:climb stair; 4:tort obstacle
+      // sport_client.SwitchGait(0); // 0:idle; 1:tort; 2:tort running; 3:climb stair; 4:tort obstacle
       sport_client.StandUp();
       break;
 
     case balance_stand:                  // 1. Balance stand (controlled by dBodyHeight + rpy)
-      sport_client.Euler(0.1, 0.2, 0.3); // roll, pitch, yaw
-      sport_client.BodyHeight(0.0);      // relative height [-0.18~0.03]
+      // sport_client.Euler(0.1, 0.2, 0.3); // roll, pitch, yaw
+      // sport_client.BodyHeight(0.0);      // relative height [-0.18~0.03]
       sport_client.BalanceStand();
       break;
 
     case velocity_move: // 2. target velocity walking (controlled by velocity + yawSpeed)
       sport_client.Move(0.3, 0, 0.3);
-      break;
-
-    case trajectory_follow: // 3. path mode walking
-      time_seg = 0.2;
-      time_temp = ct - time_seg;
-      for (int i = 0; i < 30; i++)
-      {
-        time_temp += time_seg;
-
-        px_local = 0.5 * sin(0.5 * time_temp);
-        py_local = 0;
-        yaw_local = 0;
-        vx_local = 0.5 * cos(0.5 * time_temp);
-        vy_local = 0;
-        vyaw_local = 0;
-
-        path_point_tmp.timeFromStart = i * time_seg;
-        path_point_tmp.x = px_local * cos(yaw0) - py_local * sin(yaw0) + px0;
-        path_point_tmp.y = px_local * sin(yaw0) + py_local * cos(yaw0) + py0;
-        path_point_tmp.yaw = yaw_local + yaw0;
-        path_point_tmp.vx = vx_local * cos(yaw0) - vy_local * sin(yaw0);
-        path_point_tmp.vy = vx_local * sin(yaw0) + vy_local * cos(yaw0);
-        path_point_tmp.vyaw = vyaw_local;
-        path.push_back(path_point_tmp);
-      }
-      sport_client.TrajectoryFollow(path);
       break;
 
     case stand_down: // 4. position stand down.
@@ -133,69 +98,6 @@ public:
       if (flag == 0)
       {
         sport_client.RiseSit();
-        flag = 1;
-      }
-      break;
-
-    case stretch:
-      if (flag == 0)
-      {
-        sport_client.Stretch();
-        flag = 1;
-      }
-      break;
-
-    case wallow:
-      if (flag == 0)
-      {
-        sport_client.Wallow();
-        flag = 1;
-      }
-      break;
-    /*
-    case content:
-      if (flag == 0)
-      {
-        sport_client.Content();
-        flag = 1;
-      }
-      break;
-    */
-    case pose:
-      if (flag == 0)
-      {
-        sport_client.Pose(true);
-        flag = 1;
-      }
-      break;
-
-    case scrape:
-      if (flag == 0)
-      {
-        sport_client.Scrape();
-        flag = 1;
-      }
-      break;
-
-    case front_flip:
-      if (flag == 0)
-      {
-        sport_client.FrontFlip();
-        flag = 1;
-      }
-      break;
-
-    case front_jump:
-      if (flag == 0)
-      {
-        sport_client.FrontJump();
-        flag = 1;
-      }
-      break;
-    case front_pounce:
-      if (flag == 0)
-      {
-        sport_client.FrontPounce();
         flag = 1;
       }
       break;

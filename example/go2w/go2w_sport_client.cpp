@@ -160,14 +160,14 @@ int main(int argc, char **argv)
         }
         else if (test_option.id == 6)
         {
-            res = sport_client.SwitchGait(1);
+            // res = sport_client.SwitchGait(1);
         }
         else if (test_option.id == 7)
         {
-            std::map<std::string, std::string> state_map;
-            std::vector<std::string> state_name = {"speedLevel", "gait "};
-            res = sport_client.GetState(state_name, state_map);
-            std::cout << "Speed level: " << state_map["speedLevel"] << ", Gait: " << state_map["gait"] << std::endl;
+            // std::map<std::string, std::string> state_map;
+            // std::vector<std::string> state_name = {"speedLevel", "gait "};
+            // res = sport_client.GetState(state_name, state_map);
+            // std::cout << "Speed level: " << state_map["speedLevel"] << ", Gait: " << state_map["gait"] << std::endl;
         }
         else if (test_option.id == 8)
         {
