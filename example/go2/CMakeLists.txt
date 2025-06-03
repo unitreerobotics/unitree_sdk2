@@ -1,5 +1,5 @@
-add_executable(go2_trajectory_follow go2_trajectory_follow.cpp)
-target_link_libraries(go2_trajectory_follow unitree_sdk2)
+# add_executable(go2_trajectory_follow go2_trajectory_follow.cpp)
+# target_link_libraries(go2_trajectory_follow unitree_sdk2)
 
 add_executable(go2_sport_client go2_sport_client.cpp)
 target_link_libraries(go2_sport_client unitree_sdk2)
