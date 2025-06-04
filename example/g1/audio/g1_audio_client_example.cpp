@@ -13,8 +13,9 @@
 #define GROUP_IP "239.168.123.161"
 #define PORT 5555
 
-#define WAV_SECOND 5 // record seconds
+#define WAV_SECOND 5  // record seconds
 #define WAV_LEN (16000 * 2 * WAV_SECOND)
+#define CHUNK_SIZE 96000  // 3 seconds
 int sock;
 
 void asr_handler(const void *msg) {
@@ -29,13 +30,14 @@ std::string get_local_ip_for_multicast() {
 
   getifaddrs(&ifaddr);
   for (ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
-      if (!ifa->ifa_addr || ifa->ifa_addr->sa_family != AF_INET) continue;
-      getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
-      std::string ip(host);
-      if (ip.find("192.168.123.") == 0) {
-          result = ip;
-          break;
-      }
+    if (!ifa->ifa_addr || ifa->ifa_addr->sa_family != AF_INET) continue;
+    getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), host, NI_MAXHOST,
+                NULL, 0, NI_NUMERICHOST);
+    std::string ip(host);
+    if (ip.find("192.168.123.") == 0) {
+      result = ip;
+      break;
+    }
   }
   freeifaddrs(ifaddr);
   return result;
@@ -52,7 +54,7 @@ void thread_mic(void) {
   ip_mreq mreq{};
   inet_pton(AF_INET, GROUP_IP, &mreq.imr_multiaddr);
   std::string local_ip = get_local_ip_for_multicast();
-  std::cout << "local ip: "<<local_ip << std::endl;
+  std::cout << "local ip: " << local_ip << std::endl;
   mreq.imr_interface.s_addr = inet_addr(local_ip.c_str());
   setsockopt(sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq));
 
@@ -125,16 +127,30 @@ int main(int argc, char const *argv[]) {
 
   std::cout << "wav file sample_rate = " << sample_rate
             << " num_channels =  " << std::to_string(num_channels)
-            << " filestate =" << filestate << std::endl;
+            << " filestate =" << filestate << "filesize = " << pcm.size()
+            << std::endl;
 
   if (filestate && sample_rate == 16000 && num_channels == 1) {
-    client.PlayStream(
-        "example", std::to_string(unitree::common::GetCurrentTimeMillisecond()),
-        pcm);
-    std::cout << "start play stream" << std::endl;
-    unitree::common::Sleep(3);
-    std::cout << "stop play stream" << std::endl;
-    ret = client.PlayStop("example");
+    size_t total_size = pcm.size();
+    size_t offset = 0;
+    int chunk_index = 0;
+    std::string stream_id =
+        std::to_string(unitree::common::GetCurrentTimeMillisecond());
+
+    while (offset < total_size) {
+      size_t remaining = total_size - offset;
+      size_t current_chunk_size =
+          std::min(static_cast<size_t>(CHUNK_SIZE), remaining);
+      std::vector<uint8_t> chunk(pcm.begin() + offset,
+                                 pcm.begin() + offset + current_chunk_size);
+      client.PlayStream("example", stream_id, chunk);
+      unitree::common::Sleep(1);
+      std::cout << "Playing size: " << offset << std::endl;
+      offset += current_chunk_size;
+    }
+
+    ret = client.PlayStop(stream_id);  // stop playback after transmission ends
+
   } else {
     std::cout << "audio file format error, please check!" << std::endl;
   }
