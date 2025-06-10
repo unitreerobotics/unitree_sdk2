@@ -23,6 +23,7 @@ class G1ArmActionClient : public Client {
     void Init() {
       SetApiVersion(ARM_ACTION_API_VERSION);
       UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_ARM_ACTION_EXECUTE_ACTION);
+      UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_ARM_ACTION_GET_ACTION_LIST);
   }
   
   /*API Call*/
@@ -34,6 +35,11 @@ class G1ArmActionClient : public Client {
     parameter = common::ToJsonString(json);
   
     return Call(ROBOT_API_ID_ARM_ACTION_EXECUTE_ACTION, parameter, data);
+  }
+
+  int32_t GetActionList(std::string &data) {
+    std::string parameter;
+    return Call(ROBOT_API_ID_ARM_ACTION_GET_ACTION_LIST, parameter, data);
   }
 
   /*Action List*/
