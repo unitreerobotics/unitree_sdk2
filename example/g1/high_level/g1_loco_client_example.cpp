@@ -255,6 +255,11 @@ int main(int argc, char const *argv[]) {
       std::cout << "wave hand with turn" << std::endl;
     }
 
+    if (arg_pair.first == "set_speed_mode") {
+      client.SetSpeedMode(std::stoi(arg_pair.second));
+      std::cout << "set speed mode" << std::endl;
+    }
+
     std::cout << "Done!" << std::endl;
   }
 

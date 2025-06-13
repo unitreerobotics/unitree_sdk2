@@ -30,6 +30,7 @@ class LocoClient : public Client {
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_STAND_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_VELOCITY);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_ARM_TASK);
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_SPEED_MODE);
   };
 
   /*Low Level API Call*/
@@ -231,7 +232,17 @@ class LocoClient : public Client {
     }
   }
 
- private:
+  int32_t SetSpeedMode(int speed_mode) {
+    std::string parameter, data;
+
+    go2::JsonizeDataInt json;
+    json.data = speed_mode;
+    parameter = common::ToJsonString(json);
+
+    return Call(ROBOT_API_ID_LOCO_SET_SPEED_MODE, parameter, data);
+  }
+
+private:
   bool continous_move_ = false;
   bool first_shake_hand_stage_ = true;
 };
