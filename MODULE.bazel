@@ -1,7 +1,7 @@
 """Bazel Build of Unitree SDK."""
 
 module(
-    name = "unitree-bazel",
+    name = "unitree_sdk2",
 )
 
 # Platforms:
