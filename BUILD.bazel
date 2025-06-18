@@ -1,0 +1,44 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_import")
+
+link_options = select({
+    "@bazel_tools//src/conditions:darwin": [
+        "-undefined dynamic_lookup",
+        "-pthread",
+        "-dynamiclib",
+    ],
+    "//conditions:default": ["-pthread"],
+})
+
+hdrs = glob([
+    "include/**/*.hpp",
+])
+
+cc_import(
+    name = "static_import_libunitree",
+    hdrs = hdrs,
+    includes = [
+        "include",
+    ],
+    static_library = select({
+        "@platforms//cpu:x86_64": "lib/x86_64/libunitree_sdk2.a",
+        "@platforms//cpu:arm64": "lib/aarch64/libunitree_sdk2.a",
+        "//conditions:default": "@platforms//:incompatible",
+    }),
+)
+
+cc_library(
+    name = "unitree_sdk2",
+    hdrs = hdrs,
+    includes = [
+        "include",
+    ],
+    deps = [
+        ":static_import_libunitree",
+        "//thirdparty:lib_ddsc",
+        "//thirdparty:lib_ddscxx",
+    ],
+    copts = ["-fPIC"],
+    linkopts = link_options,
+    visibility = ["//visibility:public"],
+)
