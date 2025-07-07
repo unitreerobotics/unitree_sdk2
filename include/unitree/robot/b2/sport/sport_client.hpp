@@ -75,7 +75,7 @@ public:
 
     int32_t FastWalk(bool flag);
 
-    int32_t FreeEuler(bool flag);
+    int32_t Euler(float roll, float pitch, float yaw);
     
 };
 }
