@@ -35,6 +35,7 @@ public:
     ~SportClient();
 
     void Init();
+    
     int32_t Damp();
     
     int32_t BalanceStand();
