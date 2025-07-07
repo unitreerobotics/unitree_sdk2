@@ -116,18 +116,20 @@ fi
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
-# Run cmake
-echo -e "${YELLOW}Running cmake...${NC}"
+# Run cmake from the parent directory (unitree_sdk2) to ensure unitree_sdk2 target is available
+echo -e "${YELLOW}Running cmake from parent directory...${NC}"
 CMAKE_ARGS=(
     -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
     -DUNITREE_SDK_PATH="$UNITREE_SDK_PATH"
+    -DBUILD_PYTHON_BINDING=ON
 )
 
 if [ -n "$PYTHON_VERSION" ]; then
     CMAKE_ARGS+=(-DPYTHON_VERSION="$PYTHON_VERSION")
 fi
 
-cmake "${CMAKE_ARGS[@]}" ..
+# Run cmake from the parent directory (..) instead of current directory
+cmake "${CMAKE_ARGS[@]}" ../..
 
 # Build
 echo -e "${YELLOW}Building...${NC}"
@@ -138,14 +140,14 @@ echo -e "${YELLOW}Attempting to generate stub files...${NC}"
 make generate_stubs || echo -e "${YELLOW}Warning: Could not generate stub files${NC}"
 
 # Copy stub files to parent directory if they exist
-if [ -f "g1_interface/g1_interface.pyi" ]; then
-    cp g1_interface/g1_interface.pyi ../g1_interface_generated.pyi
+if [ -f "python_binding/g1_interface/g1_interface.pyi" ]; then
+    cp python_binding/g1_interface/g1_interface.pyi ../../g1_interface_generated.pyi
     echo -e "${GREEN}Generated stub file copied to g1_interface_generated.pyi${NC}"
 fi
 
 # Copy compiled module to parent directory for easy testing
-if [ -f "g1_interface*.so" ]; then
-    cp g1_interface*.so ../
+if [ -f "python_binding/g1_interface*.so" ]; then
+    cp python_binding/g1_interface*.so ../../
     echo -e "${GREEN}Compiled module copied to parent directory${NC}"
 fi
 
@@ -160,9 +162,9 @@ echo "     import g1_interface"
 echo "     robot = g1_interface.G1Interface('eth0')"
 echo ""
 echo "Files created:"
-echo "  - build/g1_interface*.so (compiled Python module)"
-if [ -f "g1_interface_generated.pyi" ]; then
-    echo "  - g1_interface_generated.pyi (type hints)"
+echo "  - build/python_binding/g1_interface*.so (compiled Python module)"
+if [ -f "../g1_interface_generated.pyi" ]; then
+    echo "  - ../g1_interface_generated.pyi (type hints)"
 fi
 echo ""
 echo "Example usage:"

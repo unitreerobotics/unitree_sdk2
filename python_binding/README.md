@@ -20,26 +20,17 @@
 ```bash
 mkdir build
 cd build
-cmake -DBUILD_PYTHON_BINDING=ON ..
+cmake -DBUILD_PYTHON_BINDING=ON -DCMAKE_BUILD_TYPE=Release .. 
 make -j$(nproc)
 ```
 
-### 单独编译
+<!-- ### 单独编译
 
 在 `python_binding` 目录中：
 
 ```bash
-./build.sh
-```
-
-或手动编译：
-
-```bash
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-make -j$(nproc)
-```
+./build.sh --sdk-path /opt/unitree_sdk2
+``` -->
 
 ## 系统要求
 

@@ -14,7 +14,7 @@ import math
 import signal
 from typing import Optional
 
-sys.path.append("/home/unitree/haoyang_deploy/unitree_sdk2/build/lib")
+sys.path.append("/home/ANT.AMAZON.COM/zyuanhan/Humanoid/falcon_deploy/unitree_sdk2/build/lib")
 
 try:
     import g1_interface

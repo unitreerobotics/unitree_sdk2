@@ -3,7 +3,7 @@ project(unitree_sdk2 VERSION 2.0.0)
 
 ## Project Options
 option(BUILD_EXAMPLES "Build examples" ON)
-option(BUILD_PYTHON_BINDINGS "Build Python binding" OFF)
+option(BUILD_PYTHON_BINDING "Build Python binding" OFF)
 
 ## Set compiler to use c++ 17 features
 set(CMAKE_CXX_STANDARD 17)
@@ -61,7 +61,7 @@ if (BUILD_EXAMPLES)
     add_subdirectory(example)
 endif ()
 
-if (BUILD_PYTHON_BINDINGS)
+if (BUILD_PYTHON_BINDING)
     add_subdirectory(python_binding)
 endif ()
 
