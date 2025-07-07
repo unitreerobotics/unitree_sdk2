@@ -238,21 +238,12 @@ void UnitreeInterface::WirelessControllerHandler(const void *message) {
     unitree_go::msg::dds_::WirelessController_ wireless_msg = *(const unitree_go::msg::dds_::WirelessController_ *)message;
     
     PyWirelessController controller_tmp;
-    controller_tmp.left_stick[0] = wireless_msg.lx();
-    controller_tmp.left_stick[1] = wireless_msg.ly();
-    controller_tmp.right_stick[0] = wireless_msg.rx();
-    controller_tmp.right_stick[1] = wireless_msg.ry();
     
-    // Map button states
-    const uint16_t keys = wireless_msg.keys();
-    controller_tmp.A = (keys & 0x0100) != 0;
-    controller_tmp.B = (keys & 0x0200) != 0;
-    controller_tmp.X = (keys & 0x0400) != 0;
-    controller_tmp.Y = (keys & 0x0800) != 0;
-    controller_tmp.R1 = (keys & 0x0001) != 0;
-    controller_tmp.L1 = (keys & 0x0002) != 0;
-    controller_tmp.R2 = (keys & 0x0010) != 0;
-    controller_tmp.L2 = (keys & 0x0020) != 0;
+    controller_tmp.lx = wireless_msg.lx();
+    controller_tmp.ly = wireless_msg.ly();
+    controller_tmp.rx = wireless_msg.rx();
+    controller_tmp.ry = wireless_msg.ry();
+    controller_tmp.keys = wireless_msg.keys();
     
     wireless_controller_buffer_.SetData(controller_tmp);
 }

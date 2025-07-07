@@ -117,16 +117,11 @@ struct PyMotorCommand {
 };
 
 struct PyWirelessController {
-  std::array<float, 2> left_stick = {};   // [x, y]
-  std::array<float, 2> right_stick = {};  // [x, y]
-  bool A = false;
-  bool B = false;
-  bool X = false;
-  bool Y = false;
-  bool L1 = false;
-  bool L2 = false;
-  bool R1 = false;
-  bool R2 = false;
+  float lx;
+  float ly;
+  float rx;
+  float ry;
+  uint16_t keys;
 };
 
 struct PyLowState {

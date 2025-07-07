@@ -166,8 +166,9 @@ class GeneralUnitreeController:
             print(f"  Motor {i}: {pos_deg:6.1f}° ({vel_deg:6.1f}°/s)")
             
         # Controller information
-        print(f"Controller: L_stick=[{controller.left_stick[0]:.2f}, {controller.left_stick[1]:.2f}] "
-              f"Buttons: A={controller.A} B={controller.B} X={controller.X} Y={controller.Y}")
+        print(f"Controller: L_stick=[{controller.lx:.2f}, {controller.ly:.2f}] "
+              f"Buttons: A={controller.keys == 0x0100} B={controller.keys == 0x0200} "
+              f"X={controller.keys == 0x0400} Y={controller.keys == 0x0800}")
               
         print(f"Mode machine: {state.mode_machine}")
         
@@ -188,7 +189,7 @@ class GeneralUnitreeController:
                 controller = self.read_controller_input()
                 
                 # Check for emergency stop via controller
-                if controller.B:  # B button for emergency stop
+                if controller.keys == 0x0200:  # B button for emergency stop
                     print("Emergency stop requested via B button!")
                     break
                     

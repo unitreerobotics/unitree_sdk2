@@ -52,16 +52,11 @@ PYBIND11_MODULE(unitree_interface, m) {
     
     py::class_<PyWirelessController>(m, "WirelessController")
         .def(py::init<>())
-        .def_readwrite("left_stick", &PyWirelessController::left_stick)
-        .def_readwrite("right_stick", &PyWirelessController::right_stick)
-        .def_readwrite("A", &PyWirelessController::A)
-        .def_readwrite("B", &PyWirelessController::B)
-        .def_readwrite("X", &PyWirelessController::X)
-        .def_readwrite("Y", &PyWirelessController::Y)
-        .def_readwrite("L1", &PyWirelessController::L1)
-        .def_readwrite("L2", &PyWirelessController::L2)
-        .def_readwrite("R1", &PyWirelessController::R1)
-        .def_readwrite("R2", &PyWirelessController::R2);
+        .def_readwrite("lx", &PyWirelessController::lx)
+        .def_readwrite("ly", &PyWirelessController::ly)
+        .def_readwrite("rx", &PyWirelessController::rx)
+        .def_readwrite("ry", &PyWirelessController::ry)
+        .def_readwrite("keys", &PyWirelessController::keys);
     
     py::class_<PyLowState>(m, "LowState")
         .def(py::init<int>())
