@@ -3,6 +3,7 @@ project(unitree_sdk2 VERSION 2.0.0)
 
 ## Project Options
 option(BUILD_EXAMPLES "Build examples" ON)
+option(BUILD_PYTHON_BINDINGS "Build Python binding" OFF)
 
 ## Set compiler to use c++ 17 features
 set(CMAKE_CXX_STANDARD 17)
@@ -58,6 +59,10 @@ target_include_directories(unitree_sdk2 INTERFACE
 
 if (BUILD_EXAMPLES)
     add_subdirectory(example)
+endif ()
+
+if (BUILD_PYTHON_BINDINGS)
+    add_subdirectory(python_binding)
 endif ()
 
 ## Install the library
