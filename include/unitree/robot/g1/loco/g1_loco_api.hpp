@@ -8,7 +8,7 @@ namespace unitree {
 namespace robot {
 namespace g1 {
 /*service name*/
-const std::string LOCO_SERVICE_NAME = "loco";
+const std::string LOCO_SERVICE_NAME = "sport";
 
 /*api version*/
 const std::string LOCO_API_VERSION = "1.0.0.0";
@@ -27,6 +27,7 @@ const int32_t ROBOT_API_ID_LOCO_SET_SWING_HEIGHT = 7103;
 const int32_t ROBOT_API_ID_LOCO_SET_STAND_HEIGHT = 7104;
 const int32_t ROBOT_API_ID_LOCO_SET_VELOCITY = 7105;
 const int32_t ROBOT_API_ID_LOCO_SET_ARM_TASK = 7106;
+const int32_t ROBOT_API_ID_LOCO_SET_SPEED_MODE = 7107;
 
 using LocoCmd =
     std::map<std::string, std::variant<int, float, std::vector<float>>>;

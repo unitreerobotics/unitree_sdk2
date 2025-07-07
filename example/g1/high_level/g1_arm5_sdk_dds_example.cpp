@@ -245,6 +245,11 @@ int main(int argc, char const *argv[]) {
     std::this_thread::sleep_for(sleep_time);
   }
 
+  // set weight
+  msg.motor_cmd().at(JointIndex::kNotUsedJoint).q(0);
+  // send dds msg
+  arm_sdk_publisher->Write(msg);
+  
   std::cout << "Done!" << std::endl;
 
   return 0;
