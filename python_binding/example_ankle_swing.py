@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """
-G1 Ankle Swing Example
+General Unitree Interface Example
 
-This example demonstrates controlling the G1 robot's ankle joints
-using the Python interface with PR (Pitch/Roll) mode.
-
-Based on the original C++ ankle swing example.
+This example demonstrates how to use the general Unitree interface
+with different robot types (G1, H1, H1_2) and message formats (HG, GO2).
 """
 
 import sys
@@ -17,42 +15,50 @@ from typing import Optional
 sys.path.append("/home/ANT.AMAZON.COM/zyuanhan/Humanoid/falcon_deploy/unitree_sdk2/build/lib")
 
 try:
-    import g1_interface
+    import unitree_interface
 except ImportError:
-    print("Error: g1_interface module not found!")
+    print("Error: unitree_interface module not found!")
     print("Please build the module first using: ./build.sh")
     print("Or make sure the compiled .so file is in your Python path")
     sys.exit(1)
 
-class G1AnkleSwingController:
-    """G1 Ankle swing controller using Python interface"""
+class GeneralUnitreeController:
+    """General Unitree robot controller supporting multiple robot types"""
     
-    def __init__(self, network_interface: str):
+    def __init__(self, network_interface: str, robot_type: unitree_interface.RobotType, 
+                 message_type: unitree_interface.MessageType = unitree_interface.MessageType.HG):
         """
         Initialize the controller
         
         Args:
-            network_interface: Network interface name (e.g., "eth0")
+            network_interface: Network interface name (e.g., "eth0", "lo")
+            robot_type: Type of robot (G1, H1, H1_2)
+            message_type: Message format (HG or GO2)
         """
-        print(f"Initializing G1Interface with network interface: {network_interface}")
+        print(f"Initializing {robot_type} robot with {message_type} messages on interface: {network_interface}")
         
-        self.robot = g1_interface.G1Interface(network_interface)
+        # Create robot interface
+        self.robot = unitree_interface.create_robot(network_interface, robot_type, message_type)
         self.running = True
         
         # Control parameters
         self.control_dt = 0.002  # 2ms control loop, 500Hz
         self.duration_stage = 3.0  # 3 seconds per stage
         self.current_time = 0.0
-        self.stage = 0  # 0: init to zero, 1: PR ankle swing, 2: finished
+        self.stage = 0  # 0: init to zero, 1: joint swing, 2: finished
         
-        # Ankle swing parameters
-        self.max_pitch = math.radians(20.0)  # 30 degrees
-        self.max_roll = math.radians(10.0)   # 10 degrees
+        # Get robot configuration
+        self.config = self.robot.get_config()
+        self.num_motors = self.robot.get_num_motors()
+        
+        print(f"Robot: {self.config.name}")
+        print(f"Motors: {self.num_motors}")
+        print(f"Message type: {self.config.message_type}")
         
         # Set control mode to PR (Pitch/Roll)
-        self.robot.set_control_mode(g1_interface.ControlMode.PR)
+        self.robot.set_control_mode(unitree_interface.ControlMode.PR)
         control_mode = self.robot.get_control_mode()
-        print(f"Control mode set to: PR" if control_mode == g1_interface.ControlMode.PR else f"AB")
+        print(f"Control mode set to: {'PR' if control_mode == unitree_interface.ControlMode.PR else 'AB'}")
         
         # Setup signal handler for graceful shutdown
         signal.signal(signal.SIGINT, self._signal_handler)
@@ -63,15 +69,15 @@ class G1AnkleSwingController:
         print(f"\nReceived signal {signum}, shutting down gracefully...")
         self.running = False
         
-    def read_robot_state(self) -> g1_interface.LowState:
+    def read_robot_state(self) -> unitree_interface.LowState:
         """Read current robot state"""
         return self.robot.read_low_state()
         
-    def read_controller_input(self) -> g1_interface.WirelessController:
+    def read_controller_input(self) -> unitree_interface.WirelessController:
         """Read wireless controller input"""
         return self.robot.read_wireless_controller()
         
-    def create_zero_position_command(self, current_state: g1_interface.LowState) -> g1_interface.MotorCommand:
+    def create_zero_position_command(self, current_state: unitree_interface.LowState) -> unitree_interface.MotorCommand:
         """
         Create command to move robot to zero position
         
@@ -86,73 +92,78 @@ class G1AnkleSwingController:
         # Gradually transition to zero position
         ratio = min(self.current_time / self.duration_stage, 1.0)
         
-        q_target = list(cmd.q_target)
-        dq_target = list(cmd.dq_target)
-        for i in range(g1_interface.G1_NUM_MOTOR):
+        for i in range(self.num_motors):
             # Interpolate from current position to zero
             current_q = current_state.motor.q[i]
             target_q = 0.0
-            q_target[i] = current_q * (1.0 - ratio) + target_q * ratio
-            dq_target[i] = 0.0
-            
-        cmd.q_target = q_target
-        cmd.dq_target = dq_target
-        
-        return cmd
-        
-    def create_ankle_swing_command(self) -> g1_interface.MotorCommand:
-        """
-        Create ankle swing command using PR mode
-        
-        Returns:
-            Motor command for ankle swing
-        """
-        cmd = self.robot.create_zero_command()
-        
-        # Time within the ankle swing stage
-        t = self.current_time - self.duration_stage
-        
-        # Generate sinusoidal ankle movements
-        left_pitch = self.max_pitch * math.sin(2.0 * math.pi * t)
-        left_roll = self.max_roll * math.sin(2.0 * math.pi * t)
-        right_pitch = self.max_pitch * math.sin(2.0 * math.pi * t)
-        right_roll = -self.max_roll * math.sin(2.0 * math.pi * t)  # Opposite phase
-
-        # Set ankle targets (using PR mode indices)
-        q_target = list(cmd.q_target)
-        q_target[g1_interface.LeftAnklePitch] = left_pitch
-        q_target[g1_interface.LeftAnkleRoll] = left_roll
-        q_target[g1_interface.RightAnklePitch] = right_pitch
-        q_target[g1_interface.RightAnkleRoll] = right_roll
-        cmd.q_target = q_target
-
-        # Set all dq_target to 0
-        for i in range(g1_interface.G1_NUM_MOTOR):
+            cmd.q_target[i] = current_q * (1.0 - ratio) + target_q * ratio
             cmd.dq_target[i] = 0.0
             
         return cmd
         
-    def print_robot_status(self, state: g1_interface.LowState, controller: g1_interface.WirelessController):
+    def create_joint_swing_command(self) -> unitree_interface.MotorCommand:
+        """
+        Create joint swing command for demonstration
+        
+        Returns:
+            Motor command for joint swing
+        """
+        cmd = self.robot.create_zero_command()
+        # Time within the joint swing stage
+        t = self.current_time - self.duration_stage
+
+        # Generate sinusoidal joint movements for different robot types
+        if self.config.robot_type == unitree_interface.RobotType.G1:
+            # G1: Ankle swing for humanoid (29 motors)
+            q_target = list(cmd.q_target)
+            max_amplitude = math.radians(20.0)
+            for i in range(4, 6):  # Left ankle joints
+                q_target[i] = max_amplitude * math.sin(2.0 * math.pi * t)
+            for i in range(10, 12):  # Right ankle joints
+                q_target[i] = max_amplitude * math.sin(2.0 * math.pi * t)
+            cmd.q_target = q_target
+                
+        elif self.config.robot_type == unitree_interface.RobotType.H1:
+            # H1: General joint swing for humanoid (19 motors)
+            q_target = list(cmd.q_target)
+            max_amplitude = math.radians(15.0)
+            for i in range(min(6, self.num_motors)):
+                q_target[i] = max_amplitude * math.sin(2.0 * math.pi * t + i * 0.5)
+            cmd.q_target = q_target
+                
+        elif self.config.robot_type == unitree_interface.RobotType.H1_2:
+            # H1-2: Ankle swing for humanoid (29 motors)
+            q_target = list(cmd.q_target)
+            max_amplitude = math.radians(20.0)
+            for i in range(4, 6):  # Left ankle joints
+                q_target[i] = max_amplitude * math.sin(2.0 * math.pi * t)
+            for i in range(10, 12):  # Right ankle joints
+                q_target[i] = max_amplitude * math.sin(2.0 * math.pi * t)
+            cmd.q_target = q_target
+
+        # Set all dq_target to 0 (position control)
+        dq_target = list(cmd.dq_target)
+        for i in range(self.num_motors):
+            dq_target[i] = 0.0
+        cmd.dq_target = dq_target
+            
+        return cmd
+        
+    def print_robot_status(self, state: unitree_interface.LowState, controller: unitree_interface.WirelessController):
         """Print robot status information"""
-        print(f"\n=== Robot Status (t={self.current_time:.1f}s, stage={self.stage}) ===")
+        print(f"\n=== {self.config.name} Status (t={self.current_time:.1f}s, stage={self.stage}) ===")
         
         # IMU information
         rpy = state.imu.rpy
         print(f"IMU RPY: [{rpy[0]:.3f}, {rpy[1]:.3f}, {rpy[2]:.3f}] rad")
         
-        # Ankle joint positions
-        ankle_joints = [
-            ("Left Ankle Pitch", g1_interface.LeftAnklePitch),
-            ("Left Ankle Roll", g1_interface.LeftAnkleRoll),
-            ("Right Ankle Pitch", g1_interface.RightAnklePitch),
-            ("Right Ankle Roll", g1_interface.RightAnkleRoll),
-        ]
-        
-        print("Ankle positions:")
-        for name, idx in ankle_joints:
-            pos_deg = math.degrees(state.motor.q[idx])
-            vel_deg = math.degrees(state.motor.dq[idx])
-            print(f"  {name}: {pos_deg:6.1f}° ({vel_deg:6.1f}°/s)")
+        # Motor positions (show first few motors)
+        num_to_show = min(6, self.num_motors)
+        print(f"Motor positions (first {num_to_show}):")
+        for i in range(num_to_show):
+            pos_deg = math.degrees(state.motor.q[i])
+            vel_deg = math.degrees(state.motor.dq[i])
+            print(f"  Motor {i}: {pos_deg:6.1f}° ({vel_deg:6.1f}°/s)")
             
         # Controller information
         print(f"Controller: L_stick=[{controller.left_stick[0]:.2f}, {controller.left_stick[1]:.2f}] "
@@ -181,22 +192,26 @@ class G1AnkleSwingController:
                     print("Emergency stop requested via B button!")
                     break
                     
+                # Check for controller-based movement (A button)
+                # Normal control sequence
                 # Determine current stage
                 if self.current_time < self.duration_stage:
                     # Stage 0: Move to zero position
                     if self.stage != 0:
                         self.stage = 0
-                        # print(f"Stage 1: Ankle swing in PR mode (3s)")
                         
                     cmd = self.create_zero_position_command(state)
                     
                 else:
-                    # Stage 1: Ankle swing
+                    # Stage 1: Joint swing
                     if self.stage != 1:
                         self.stage = 1
-                        # print(f"Stage 1: Ankle swing in PR mode (3s)")
+                        print(f"Stage 1: Joint swing demonstration")
+                        print(f"  Robot type: {self.config.robot_type}")
+                        print(f"  Number of motors: {self.num_motors}")
+                        print(f"  Message type: {self.config.message_type}")
                         
-                    cmd = self.create_ankle_swing_command()
+                    cmd = self.create_joint_swing_command()
                     
                 # Send command to robot
                 self.robot.write_low_command(cmd)
@@ -244,27 +259,66 @@ class G1AnkleSwingController:
 
 def main():
     """Main function"""
-    if len(sys.argv) != 2:
-        print("Usage: python3 example_ankle_swing.py <network_interface>")
-        print("Example: python3 example_ankle_swing.py eth0")
+    if len(sys.argv) < 3:
+        print("Usage: python3 example_general_interface.py <network_interface> <robot_type> [message_type]")
+        print("Robot types: G1, H1, H1_2")
+        print("Message types: HG, GO2")
+        print("Note: H1 uses GO2 messages by default, G1 and H1_2 use HG messages")
+        print("Examples:")
+        print("  python3 example_general_interface.py eth0 G1")
+        print("  python3 example_general_interface.py eth0 H1 GO2")
+        print("  python3 example_general_interface.py lo H1_2")
         return 1
         
     network_interface = sys.argv[1]
+    robot_type_str = sys.argv[2].upper()
+    message_type_str = sys.argv[3].upper() if len(sys.argv) > 3 else "HG"
     
-    print("=== G1 Ankle Swing Example ===")
+    # Parse robot type
+    robot_type_map = {
+        "G1": unitree_interface.RobotType.G1,
+        "H1": unitree_interface.RobotType.H1,
+        "H1_2": unitree_interface.RobotType.H1_2
+    }
+    
+    if robot_type_str not in robot_type_map:
+        print(f"Error: Unknown robot type '{robot_type_str}'")
+        print("Supported types: G1, H1, H1_2")
+        return 1
+    
+    robot_type = robot_type_map[robot_type_str]
+    
+    # Parse message type
+    message_type_map = {
+        "HG": unitree_interface.MessageType.HG,
+        "GO2": unitree_interface.MessageType.GO2
+    }
+    
+    if message_type_str not in message_type_map:
+        print(f"Error: Unknown message type '{message_type_str}'")
+        print("Supported types: HG, GO2")
+        return 1
+    
+    message_type = message_type_map[message_type_str]
+    
+    print("=== General Unitree Interface Example ===")
     print(f"Network interface: {network_interface}")
+    print(f"Robot type: {robot_type_str}")
+    print(f"Message type: {message_type_str}")
     print("Control sequence:")
     print("  1. Move to zero position (3s)")
-    print("  2. Ankle swing in PR mode (3s)")
-    print("  3. Hold zero position")
-    print("Press Ctrl+C or B button on controller to stop")
+    print("  2. Joint swing demonstration (continuous)")
+    print("Controller options:")
+    print("  - A button: Manual control with joysticks")
+    print("  - B button: Emergency stop")
+    print("Press Ctrl+C to stop")
     print("")
     
-    controller: Optional[G1AnkleSwingController] = None
+    controller: Optional[GeneralUnitreeController] = None
     
     try:
         # Create controller
-        controller = G1AnkleSwingController(network_interface)
+        controller = GeneralUnitreeController(network_interface, robot_type, message_type)
         
         # Wait a moment for initialization
         time.sleep(1.0)

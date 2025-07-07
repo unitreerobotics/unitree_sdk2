@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# G1 Interface Python Binding Build Script
+# Unitree Interface Python Binding Build Script
 
 set -e  # Exit on any error
 
-echo "=== G1 Interface Python Binding Build Script ==="
+echo "=== Unitree Interface Python Binding Build Script ==="
 
 # Colors for output
 RED='\033[0;31m'
@@ -140,14 +140,14 @@ echo -e "${YELLOW}Attempting to generate stub files...${NC}"
 make generate_stubs || echo -e "${YELLOW}Warning: Could not generate stub files${NC}"
 
 # Copy stub files to parent directory if they exist
-if [ -f "python_binding/g1_interface/g1_interface.pyi" ]; then
-    cp python_binding/g1_interface/g1_interface.pyi ../../g1_interface_generated.pyi
-    echo -e "${GREEN}Generated stub file copied to g1_interface_generated.pyi${NC}"
+if [ -f "python_binding/unitree_interface.pyi" ]; then
+    cp python_binding/unitree_interface.pyi ../../unitree_interface_generated.pyi
+    echo -e "${GREEN}Generated stub file copied to unitree_interface_generated.pyi${NC}"
 fi
 
 # Copy compiled module to parent directory for easy testing
-if [ -f "python_binding/g1_interface*.so" ]; then
-    cp python_binding/g1_interface*.so ../../
+if [ -f "python_binding/unitree_interface*.so" ]; then
+    cp python_binding/unitree_interface*.so ../../
     echo -e "${GREEN}Compiled module copied to parent directory${NC}"
 fi
 
@@ -157,15 +157,15 @@ echo -e "${GREEN}Build completed successfully!${NC}"
 echo ""
 echo "Usage:"
 echo "  1. Copy the compiled .so file to your Python path"
-echo "  2. Use the g1_interface module in Python:"
-echo "     import g1_interface"
-echo "     robot = g1_interface.G1Interface('eth0')"
+echo "  2. Use the unitree_interface module in Python:"
+echo "     import unitree_interface"
+echo "     robot = unitree_interface.create_robot('eth0', unitree_interface.RobotType.G1)"
 echo ""
 echo "Files created:"
-echo "  - build/python_binding/g1_interface*.so (compiled Python module)"
-if [ -f "../g1_interface_generated.pyi" ]; then
-    echo "  - ../g1_interface_generated.pyi (type hints)"
+echo "  - build/python_binding/unitree_interface*.so (compiled Python module)"
+if [ -f "../unitree_interface_generated.pyi" ]; then
+    echo "  - ../unitree_interface_generated.pyi (type hints)"
 fi
 echo ""
 echo "Example usage:"
-echo "  python3 example_ankle_swing.py eth0" 
+echo "  python3 example_general_interface.py eth0 G1" 
