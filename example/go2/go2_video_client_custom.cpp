@@ -1,8 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
-#include <ctime>
-#include <cmath>
+#include <chrono>
 
 #include <opencv2/opencv.hpp>  // OpenCV for image processing
 
@@ -40,6 +39,7 @@ int main()
 
     while (true)
     {
+        auto start_time = std::chrono::steady_clock::now();  // frame start time
         ret = video_client.GetImageSample(image_sample);
 
         if (ret == 0 && !image_sample.empty()) {
@@ -89,6 +89,10 @@ int main()
             } else {
                 std::cout << "Waiting for valid pose data..." << std::endl;
             }
+
+            auto end_time = std::chrono::steady_clock::now();
+            auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+            std::cout << "Elapsed time: " << elapsed_time << " ms" << std::endl;
         }
 
         usleep(50000);  // 0.05 seconds
