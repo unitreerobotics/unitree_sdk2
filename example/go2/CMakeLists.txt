@@ -1,3 +1,9 @@
+find_package(OpenCV REQUIRED)
+
+add_executable(go2_video_client_custom go2_video_client_custom.cpp)
+target_include_directories(go2_video_client_custom PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(go2_video_client_custom unitree_sdk2 ${OpenCV_LIBS})
+
 # add_executable(go2_trajectory_follow go2_trajectory_follow.cpp)
 # target_link_libraries(go2_trajectory_follow unitree_sdk2)
 
@@ -16,6 +22,9 @@ target_link_libraries(go2_robot_state_client unitree_sdk2)
 
 add_executable(go2_video_client go2_video_client.cpp)
 target_link_libraries(go2_video_client unitree_sdk2)
+
+# add_executable(go2_video_client_custom go2_video_client_custom.cpp)
+# target_link_libraries(go2_video_client_custom unitree_sdk2)
 
 add_executable(go2_vui_client go2_vui_client.cpp)
 target_link_libraries(go2_vui_client unitree_sdk2)
