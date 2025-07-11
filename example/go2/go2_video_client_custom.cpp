@@ -4,6 +4,7 @@
 #include <chrono>
 
 #include <opencv2/opencv.hpp>  // OpenCV for image processing
+#include <curl/curl.h> // HTTP request
 
 #include <unitree/robot/go2/video/video_client.hpp>
 #include <unitree/robot/channel/channel_subscriber.hpp>
@@ -19,6 +20,57 @@ void state_callback(const void* message)
 {
     g_state = *(unitree_go::msg::dds_::SportModeState_*)message;
 }
+
+void send_to_vllm_server(const std::string& image_path,
+    const std::array<float, 3>& pos,
+    const std::array<float, 3>& rpy)
+{
+    CURL *curl;
+    CURLcode res;
+    curl_mime *form = nullptr;
+    curl_mimepart *field = nullptr;
+
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+    if (curl) {
+        form = curl_mime_init(curl);
+
+        // 이미지 전송
+        field = curl_mime_addpart(form);
+        curl_mime_name(field, "image");
+        curl_mime_filedata(field, image_path.c_str());
+
+        // 위치 (position)
+        std::string pos_json = "{\"x\":" + std::to_string(pos[0]) +
+          ",\"y\":" + std::to_string(pos[1]) +
+          ",\"z\":" + std::to_string(pos[2]) + "}";
+        field = curl_mime_addpart(form);
+        curl_mime_name(field, "position");
+        curl_mime_data(field, pos_json.c_str(), CURL_ZERO_TERMINATED);
+
+        // RPY (roll/pitch/yaw)
+        std::string rpy_json = "{\"roll\":" + std::to_string(rpy[0]) +
+          ",\"pitch\":" + std::to_string(rpy[1]) +
+          ",\"yaw\":" + std::to_string(rpy[2]) + "}";
+        field = curl_mime_addpart(form);
+        curl_mime_name(field, "rpy");
+        curl_mime_data(field, rpy_json.c_str(), CURL_ZERO_TERMINATED);
+
+        // 전송 URL 설정 (VLLM 서버 주소)
+        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:5000/analyze");  // IP:PORT 수정
+        curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+
+        res = curl_easy_perform(curl);
+        if (res != CURLE_OK) {
+            std::cerr << "[curl error] " << curl_easy_strerror(res) << std::endl;
+        }
+
+        curl_mime_free(form);
+        curl_easy_cleanup(curl);
+    }
+    curl_global_cleanup();
+}
+    
 
 int main()
 {
@@ -93,6 +145,11 @@ int main()
             auto end_time = std::chrono::steady_clock::now();
             auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
             std::cout << "Elapsed time: " << elapsed_time << " ms" << std::endl;
+
+            // 전송
+            std::array<float, 3> pos_arr = {pos[0], pos[1], pos[2]};
+            std::array<float, 3> rpy_arr = {rpy[0], rpy[1], rpy[2]};
+            send_to_vllm_server(processed_name, pos_arr, rpy_arr);
         }
 
         usleep(50000);  // 0.05 seconds
