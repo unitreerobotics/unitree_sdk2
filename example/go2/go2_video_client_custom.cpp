@@ -56,8 +56,8 @@ void send_to_vllm_server(const std::string& image_path,
         curl_mime_name(field, "rpy");
         curl_mime_data(field, rpy_json.c_str(), CURL_ZERO_TERMINATED);
 
-        // 전송 URL 설정 (VLLM 서버 주소)
-        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:5000/analyze");  // IP:PORT 수정
+        // send to server (http://127.0.0.1:5000/analyze)
+        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:5000/analyze");
         curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
 
         res = curl_easy_perform(curl);
@@ -146,7 +146,7 @@ int main()
             auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
             std::cout << "Elapsed time: " << elapsed_time << " ms" << std::endl;
 
-            // 전송
+            // send to server
             std::array<float, 3> pos_arr = {pos[0], pos[1], pos[2]};
             std::array<float, 3> rpy_arr = {rpy[0], rpy[1], rpy[2]};
             send_to_vllm_server(processed_name, pos_arr, rpy_arr);
