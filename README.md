@@ -6,6 +6,17 @@ Unitree robot sdk version 2.
 * CPU  (aarch64 and x86_64)   
 * Compiler  (gcc version 9.4.0) 
 
+### Dependency
+
+Make sure the necessary packages are installed before building:  
+
+```shell
+sudo apt install cmake
+sudo apt install gcc
+sudo apt install build-essential
+sudo apt install libeigen3-dev
+```
+
 ### Build examples
 
 To build the examples inside this repository:
