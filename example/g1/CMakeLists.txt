@@ -1,4 +1,3 @@
-
 add_executable(g1_loco_client high_level/g1_loco_client_example.cpp)
 target_link_libraries(g1_loco_client unitree_sdk2)
 
@@ -20,6 +19,11 @@ target_link_libraries(g1_audio_client_example unitree_sdk2)
 add_executable(g1_dex3_example dex3/g1_dex3_example.cpp)
 target_link_libraries(g1_dex3_example unitree_sdk2)
 
+find_package(Boost COMPONENTS program_options)
+if(Boost_FOUND)
+    add_executable(g1_termination low_level/terminations.cpp)
+    target_link_libraries(g1_termination unitree_sdk2 Boost::program_options)
+endif()
 
 find_package(yaml-cpp QUIET)
 if(yaml-cpp_FOUND)
