@@ -8,8 +8,11 @@ on:
 
 jobs:
   build:
+    runs-on: ubuntu-latest  # Use latest runner to host the container
 
-    runs-on: ubuntu-20.04
+    container:
+      image: ubuntu:20.04
+      options: --privileged  # Needed for some build tools
 
     steps:
     - uses: actions/checkout@v4
