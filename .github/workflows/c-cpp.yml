@@ -18,8 +18,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: install deps
       run: |
-        sudo apt-get update
-        sudo apt-get install -y cmake g++ build-essential libyaml-cpp-dev libeigen3-dev
+        apt-get update
+        apt-get install -y cmake g++ build-essential libyaml-cpp-dev libeigen3-dev
     - name: cmake
       run: |
         cmake -Bbuild
