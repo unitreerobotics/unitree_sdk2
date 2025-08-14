@@ -6,6 +6,21 @@ Unitree robot sdk version 2.
 * CPU  (aarch64 and x86_64)   
 * Compiler  (gcc version 9.4.0) 
 
+### Environment Setup
+
+Before building or running the SDK, ensure the following dependencies are installed:
+
+- CMake (version 3.10 or higher)
+- GCC (version 9.4.0)
+- Make
+
+You can install the required packages on Ubuntu 20.04 with:
+
+```bash
+apt-get update
+apt-get install -y cmake g++ build-essential libyaml-cpp-dev libeigen3-dev
+```
+
 ### Build examples
 
 To build the examples inside this repository:

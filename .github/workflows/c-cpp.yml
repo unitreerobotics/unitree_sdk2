@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: C/C++ Build Workflow
 
 on:
   push:
@@ -16,11 +16,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: install deps
+    
+    - name: Install dependencies
       run: |
+        export DEBIAN_FRONTEND=noninteractive
         apt-get update
         apt-get install -y cmake g++ build-essential libyaml-cpp-dev libeigen3-dev
-    - name: cmake
+        
+    - name: CMake build
       run: |
         cmake -Bbuild
-        cmake --build build -j
+        cmake --build build -j$(nproc)
