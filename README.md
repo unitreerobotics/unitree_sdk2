@@ -18,7 +18,7 @@ You can install the required packages on Ubuntu 20.04 with:
 
 ```bash
 apt-get update
-apt-get install -y cmake g++ build-essential libyaml-cpp-dev libeigen3-dev
+apt-get install -y cmake g++ build-essential libyaml-cpp-dev libeigen3-dev libboost-all-dev libspdlog-dev libfmt-dev
 ```
 
 ### Build examples
