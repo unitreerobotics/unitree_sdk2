@@ -12,7 +12,7 @@
 #include <unitree/idl/hg/LowState_.hpp>
 #include <unitree/idl/hg/HandCmd_.hpp>
 #include <unitree/idl/hg/HandState_.hpp>
-#include <unitree/idl/hg/SportModeState_.hpp>
+// #include <unitree/idl/hg/SportModeState_.hpp>
 #include <unitree/idl/go2/MotorStates_.hpp>
 
 namespace unitree

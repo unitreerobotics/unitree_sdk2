@@ -68,12 +68,13 @@ public:
   }
 
   MessageType msg_;
+  std::mutex mutex_;
+
 protected:
   virtual void pre_communication() {}  // something before receiving message
   virtual void post_communication() {} // something after receiving message
 
   uint32_t timeout_ms_{1000};
-  std::mutex mutex_;
   unitree::robot::ChannelSubscriberPtr<MessageType> sub_;
   std::chrono::steady_clock::time_point last_update_time_;
 };
