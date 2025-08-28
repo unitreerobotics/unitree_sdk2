@@ -23,6 +23,7 @@ class LocoClient : public Client {
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_SWING_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_STAND_HEIGHT);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_PHASE);  // deprecated
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_GET_ARM_SDK_STATUS);
 
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_FSM_ID);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_BALANCE_MODE);
@@ -31,6 +32,7 @@ class LocoClient : public Client {
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_VELOCITY);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_ARM_TASK);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_SPEED_MODE);
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_ARM_SDK_STATUS);
   };
 
   /*Low Level API Call*/
@@ -118,6 +120,20 @@ class LocoClient : public Client {
     return ret;
   }
 
+  int32_t GetArmSdkStatus(bool& arm_sdk_status) {
+    std::string parameter, data;
+
+    int32_t ret = Call(ROBOT_API_ID_LOCO_GET_ARM_SDK_STATUS, parameter, data);
+
+    if (ret == 0) {
+      go2::JsonizeDataBool json;
+      common::FromJsonString(data, json);
+      arm_sdk_status = json.data;
+    }
+
+    return ret;
+  }
+
   int32_t SetFsmId(int fsm_id) {
     std::string parameter, data;
 
@@ -178,6 +194,16 @@ class LocoClient : public Client {
     parameter = common::ToJsonString(json);
 
     return Call(ROBOT_API_ID_LOCO_SET_ARM_TASK, parameter, data);
+  }
+
+  int32_t SetArmSdkStatus(bool arm_sdk_status) {
+    std::string parameter, data;
+
+    go2::JsonizeDataBool json;
+    json.data = arm_sdk_status;
+    parameter = common::ToJsonString(json);
+
+    return Call(ROBOT_API_ID_LOCO_SET_ARM_SDK_STATUS, parameter, data);
   }
 
   /*High Level API Call*/
@@ -241,6 +267,10 @@ class LocoClient : public Client {
 
     return Call(ROBOT_API_ID_LOCO_SET_SPEED_MODE, parameter, data);
   }
+
+  int32_t EnableArmSDK() { return SetArmSdkStatus(true); }
+
+  int32_t DisableArmSDK() { return SetArmSdkStatus(false); }
 
 private:
   bool continous_move_ = false;

@@ -148,6 +148,22 @@ int main(int argc, char const *argv[]) {
       std::cout << "set velocity to " << arg_pair.second << std::endl;
     }
 
+    if (arg_pair.first == "enable_arm_sdk") {
+      client.EnableArmSDK();
+      std::cout << "enable arm sdk" << std::endl;
+    }
+
+    if (arg_pair.first == "disable_arm_sdk") {
+      client.DisableArmSDK();
+      std::cout << "disable arm sdk" << std::endl;
+    }
+
+    if (arg_pair.first == "get_arm_sdk_status") {
+      bool arm_sdk_status;
+      client.GetArmSdkStatus(arm_sdk_status);
+      std::cout << "current arm_sdk_status: " << (arm_sdk_status ? "enabled" : "disabled") << std::endl;
+    }
+
     if (arg_pair.first == "damp") {
       client.Damp();
     }

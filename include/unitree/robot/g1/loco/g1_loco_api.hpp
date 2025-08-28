@@ -20,6 +20,7 @@ const int32_t ROBOT_API_ID_LOCO_GET_BALANCE_MODE = 7003;
 const int32_t ROBOT_API_ID_LOCO_GET_SWING_HEIGHT = 7004;
 const int32_t ROBOT_API_ID_LOCO_GET_STAND_HEIGHT = 7005;
 const int32_t ROBOT_API_ID_LOCO_GET_PHASE = 7006; // deprecated
+const int32_t ROBOT_API_ID_LOCO_GET_ARM_SDK_STATUS = 7007;
 
 const int32_t ROBOT_API_ID_LOCO_SET_FSM_ID = 7101;
 const int32_t ROBOT_API_ID_LOCO_SET_BALANCE_MODE = 7102;
@@ -28,6 +29,7 @@ const int32_t ROBOT_API_ID_LOCO_SET_STAND_HEIGHT = 7104;
 const int32_t ROBOT_API_ID_LOCO_SET_VELOCITY = 7105;
 const int32_t ROBOT_API_ID_LOCO_SET_ARM_TASK = 7106;
 const int32_t ROBOT_API_ID_LOCO_SET_SPEED_MODE = 7107;
+const int32_t ROBOT_API_ID_LOCO_SET_ARM_SDK_STATUS = 7109;
 
 using LocoCmd =
     std::map<std::string, std::variant<int, float, std::vector<float>>>;
