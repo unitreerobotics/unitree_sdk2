@@ -12,6 +12,8 @@
 #include <unitree/idl/hg/LowState_.hpp>
 #include <unitree/idl/go2/MotorCmds_.hpp>
 
+#include "g1_sub.h"
+
 
 namespace unitree
 {
@@ -47,6 +49,16 @@ public:
     {
     }
 
+    bool check_mode_machine(subscription::LowState::SharedPtr lowstate = nullptr) const
+    {
+        auto sub = lowstate == nullptr ? std::make_shared<subscription::LowState>() : lowstate;
+        sub->wait_for_connection();
+        auto m_sub = sub->msg_.mode_machine();
+        auto m_pub = msg_.mode_machine();
+        
+        // 0: simulation environment
+        return !(m_sub != 0 && m_sub != m_pub);
+    }
 private:
     /**
      * @brief Something before sending the message.
