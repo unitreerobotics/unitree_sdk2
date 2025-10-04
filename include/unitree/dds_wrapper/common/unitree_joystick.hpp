@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <iostream>
+#include <chrono>
 
 namespace unitree
 {
@@ -55,36 +56,84 @@ typedef union
   uint8_t buff[40];
 }REMOTE_DATA_RX;
 
-// ***************************** Button & Axis ***************************** //
 
-template <typename T> // int, bool, string
-class Button
+// ***************************** Button & Axis ***************************** //
+class KeyBase
 {
+/**
+ * Example:
+ * >>> btn = KeyBase();
+ * 
+ * >>> btn(1); // update
+ * >>> btn.pressed
+ * >>> if btn.on_pressed:
+ * >>>   print(btn.click_cnt) 
+ * >>> if btn.pressed:
+ * >>>   print(btn.pressed_time)
+ */
 public:
-  void operator()(const T& data){ // update
-    pressed = (data != dataNull_);
-    on_pressed = (pressed && data_ == dataNull_);
-    on_released = (!pressed && data_ != dataNull_);
-    data_ = data;
-  }
-  const T& operator()() { return data_; }
+  KeyBase() = default;
 
   bool pressed = false;
   bool on_pressed = false;
   bool on_released = false;
+  int click_cnt = 0; // used at `on_pressed`
+  float pressed_time = 0.0;
+
+protected:
+  void update(bool is_pressed)
+  {
+    pressed = is_pressed;
+    on_pressed = (pressed && !last_pressed_);
+    on_released = (!pressed && last_pressed_);
+    last_pressed_ = pressed;
+
+    auto now = std::chrono::steady_clock::now();
+    if (on_pressed)
+    {
+      if (std::chrono::duration<float>(now - last_click_time_).count() < double_click_threshold_) {
+        click_cnt++;
+      } else {
+        click_cnt = 1;
+      }
+      last_click_time_ = now;
+    }
+
+    if(pressed) {
+      pressed_time = std::chrono::duration<float>(now - last_click_time_).count();
+    }
+    if (!(pressed || on_released)) { // save once time on released
+      pressed_time = 0.0;
+    }
+  }
+private:
+  bool last_pressed_{false};
+  std::chrono::steady_clock::time_point last_click_time_{};
+  const float double_click_threshold_{0.5}; // Unit: second
+};
+
+template <typename T> // int, bool, string
+class Button : public KeyBase
+{
+public:
+  void operator()(const T& data){
+    bool is_pressed = (data != dataNull_);
+    update(is_pressed);
+    data_ = data;
+  }
+  const T& operator()() { return data_; }
 private:
   T data_{}, dataNull_{};
 };
 
-class Axis
+class Axis : public KeyBase
 {
 public:
   void operator()(const float& data){ // update
     auto data_deadzone = std::fabs(data) < deadzone ? 0.0 : data;
-    double new_data = data_ * (1.0 - smooth) + data_deadzone * smooth;
-    pressed = (new_data > threshold);
-    on_pressed = (pressed && data_ < threshold);
-    on_released = (!pressed && data_ > threshold);
+    float new_data = data_ * (1.0 - smooth) + data_deadzone * smooth;
+    bool is_pressed = (new_data > threshold);
+    update(is_pressed);
     data_ = new_data;
   }
 
@@ -93,11 +142,7 @@ public:
   float smooth = 0.03;
   float deadzone = 0.01;
 
-  // Change an axis value to a button
-  bool pressed = false;
-  bool on_pressed = false;
-  bool on_released = false;
-  float threshold{0.5};
+  float threshold{0.5}; // Change an axis value to a button
 private:
   float data_{};
 };
