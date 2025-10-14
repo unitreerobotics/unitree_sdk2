@@ -7,9 +7,6 @@ target_link_libraries(g1_arm5_sdk_dds_example unitree_sdk2)
 add_executable(g1_arm7_sdk_dds_example high_level/g1_arm7_sdk_dds_example.cpp)
 target_link_libraries(g1_arm7_sdk_dds_example unitree_sdk2)
 
-add_executable(g1_arm_action_example high_level/g1_arm_action_example.cpp)
-target_link_libraries(g1_arm_action_example unitree_sdk2)
-
 add_executable(g1_ankle_swing_example low_level/g1_ankle_swing_example.cpp)
 target_link_libraries(g1_ankle_swing_example unitree_sdk2)
 
@@ -23,6 +20,9 @@ find_package(Boost COMPONENTS program_options)
 if(Boost_FOUND)
     add_executable(g1_termination low_level/terminations.cpp)
     target_link_libraries(g1_termination unitree_sdk2 Boost::program_options)
+
+    add_executable(g1_arm_action_example high_level/g1_arm_action_example.cpp)
+    target_link_libraries(g1_arm_action_example unitree_sdk2 Boost::program_options)
 endif()
 
 find_package(yaml-cpp QUIET)
