@@ -1,11 +1,12 @@
 #pragma once
 
-#include <memory>
-#include <mutex>
-#include <shared_mutex>
 #include <array>
 #include <cmath>
 #include <string>
+#include <vector>
+#include <memory>
+#include <mutex>
+#include <shared_mutex>
 
 // DDS
 #include <unitree/robot/channel/channel_publisher.hpp>
@@ -37,6 +38,7 @@ enum class RobotType {
     G1 = 0,      // G1 humanoid (29 motors)
     H1 = 1,      // H1 humanoid (19 motors) - uses GO2 messages
     H1_2 = 2,    // H1-2 humanoid (29 motors)
+    GO2 = 3,     // Go2 quadruped (12 motors)
     CUSTOM = 99  // Custom robot with specified motor count
 };
 
@@ -61,6 +63,7 @@ namespace RobotConfigs {
     static const RobotConfig G1_HG(RobotType::G1, MessageType::HG, 29, "G1-HG");
     static const RobotConfig H1_GO2(RobotType::H1, MessageType::GO2, 19, "H1-GO2");
     static const RobotConfig H1_2_HG(RobotType::H1_2, MessageType::HG, 29, "H1-2-HG");
+    static const RobotConfig GO2_GO2(RobotType::GO2, MessageType::GO2, 12, "GO2-GO2");
 }
 
 template <typename T>
@@ -269,5 +272,6 @@ class UnitreeInterface {
   static std::shared_ptr<UnitreeInterface> CreateG1(const std::string& networkInterface, MessageType message_type = MessageType::HG);
   static std::shared_ptr<UnitreeInterface> CreateH1(const std::string& networkInterface, MessageType message_type = MessageType::GO2);
   static std::shared_ptr<UnitreeInterface> CreateH1_2(const std::string& networkInterface, MessageType message_type = MessageType::HG);
+  static std::shared_ptr<UnitreeInterface> CreateGO2(const std::string& networkInterface, MessageType message_type = MessageType::GO2);
   static std::shared_ptr<UnitreeInterface> CreateCustom(const std::string& networkInterface, int num_motors, MessageType message_type = MessageType::HG);
-}; 
+};

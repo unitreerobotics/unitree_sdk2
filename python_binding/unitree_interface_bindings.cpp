@@ -13,6 +13,7 @@ PYBIND11_MODULE(unitree_interface, m) {
         .value("G1", RobotType::G1)
         .value("H1", RobotType::H1)
         .value("H1_2", RobotType::H1_2)
+        .value("GO2", RobotType::GO2)
         .value("CUSTOM", RobotType::CUSTOM)
         .export_values();
     
@@ -102,6 +103,8 @@ PYBIND11_MODULE(unitree_interface, m) {
                    py::arg("network_interface"), py::arg("message_type") = MessageType::GO2)
         .def_static("create_h1_2", &UnitreeInterface::CreateH1_2,
                    py::arg("network_interface"), py::arg("message_type") = MessageType::HG)
+        .def_static("create_go2", &UnitreeInterface::CreateGO2,
+                   py::arg("network_interface"), py::arg("message_type") = MessageType::GO2)
         .def_static("create_custom", &UnitreeInterface::CreateCustom,
                    py::arg("network_interface"), py::arg("num_motors"), 
                    py::arg("message_type") = MessageType::HG);
@@ -110,6 +113,7 @@ PYBIND11_MODULE(unitree_interface, m) {
     m.attr("G1_HG_CONFIG") = RobotConfigs::G1_HG;
     m.attr("H1_GO2_CONFIG") = RobotConfigs::H1_GO2;
     m.attr("H1_2_HG_CONFIG") = RobotConfigs::H1_2_HG;
+    m.attr("GO2_GO2_CONFIG") = RobotConfigs::GO2_GO2;
     
     // Module-level functions for convenience
     m.def("create_robot", [](const std::string& network_interface, RobotType robot_type, 
@@ -118,6 +122,7 @@ PYBIND11_MODULE(unitree_interface, m) {
             case RobotType::G1: return UnitreeInterface::CreateG1(network_interface, message_type);
             case RobotType::H1: return UnitreeInterface::CreateH1(network_interface, message_type);
             case RobotType::H1_2: return UnitreeInterface::CreateH1_2(network_interface, message_type);
+            case RobotType::GO2: return UnitreeInterface::CreateGO2(network_interface, message_type);
             default: throw std::runtime_error("Unknown robot type");
         }
     }, py::arg("network_interface"), py::arg("robot_type"), py::arg("message_type") = MessageType::HG);
@@ -130,4 +135,5 @@ PYBIND11_MODULE(unitree_interface, m) {
     m.attr("G1_NUM_MOTOR") = 29;
     m.attr("H1_NUM_MOTOR") = 19;
     m.attr("H1_2_NUM_MOTOR") = 29;
-} 
+    m.attr("GO2_NUM_MOTOR") = 12;
+}

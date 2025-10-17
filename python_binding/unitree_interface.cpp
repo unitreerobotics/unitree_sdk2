@@ -42,6 +42,7 @@ int UnitreeInterface::GetDefaultMotorCount(RobotType robot_type) {
         case RobotType::G1: return 29;
         case RobotType::H1: return 19;
         case RobotType::H1_2: return 29;
+        case RobotType::GO2: return 12;
         default: return 12;
     }
 }
@@ -52,6 +53,7 @@ std::string UnitreeInterface::GetRobotName(RobotType robot_type, MessageType mes
         case RobotType::G1: robot_name = "G1"; break;
         case RobotType::H1: robot_name = "H1"; break;
         case RobotType::H1_2: robot_name = "H1-2"; break;
+        case RobotType::GO2: robot_name = "GO2"; break;
         default: robot_name = "CUSTOM"; break;
     }
     
@@ -96,6 +98,14 @@ void UnitreeInterface::InitDefaultGains() {
             for (int i = 15; i < num_motors; ++i) {  // Arms (4 motors)
                 default_kp_[i] = 40.0f;
                 default_kd_[i] = 1.0f;
+            }
+            break;
+
+        case RobotType::GO2:
+            // GO2 gains (12 motors)
+            for (int i = 0; i < num_motors; ++i) {
+                default_kp_[i] = 20.0f;
+                default_kd_[i] = 0.5f;
             }
             break;
             
@@ -393,6 +403,10 @@ std::shared_ptr<UnitreeInterface> UnitreeInterface::CreateH1_2(const std::string
     return std::make_shared<UnitreeInterface>(networkInterface, RobotType::H1_2, message_type);
 }
 
+std::shared_ptr<UnitreeInterface> UnitreeInterface::CreateGO2(const std::string& networkInterface, MessageType message_type) {
+    return std::make_shared<UnitreeInterface>(networkInterface, RobotType::GO2, message_type);
+}
+
 std::shared_ptr<UnitreeInterface> UnitreeInterface::CreateCustom(const std::string& networkInterface, int num_motors, MessageType message_type) {
     return std::make_shared<UnitreeInterface>(networkInterface, RobotType::CUSTOM, message_type, num_motors);
-} 
+}

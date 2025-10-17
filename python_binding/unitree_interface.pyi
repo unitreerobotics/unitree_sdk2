@@ -8,17 +8,20 @@ from enum import Enum
 G1_NUM_MOTOR: int
 H1_NUM_MOTOR: int
 H1_2_NUM_MOTOR: int
+GO2_NUM_MOTOR: int
 
 # Predefined configurations
 G1_HG_CONFIG: RobotConfig
 H1_GO2_CONFIG: RobotConfig
 H1_2_HG_CONFIG: RobotConfig
+GO2_GO2_CONFIG: RobotConfig
 
 class RobotType(Enum):
     """Robot types supported by the interface"""
     G1: int      # G1 humanoid (29 motors)
     H1: int      # H1 humanoid (19 motors)
     H1_2: int    # H1-2 humanoid (29 motors)
+    GO2: int     # GO2 quadruped (12 motors)
     CUSTOM: int  # Custom robot with specified motor count
 
 class MessageType(Enum):
@@ -108,7 +111,7 @@ class UnitreeInterface:
         
         Args:
             network_interface: Network interface name (e.g., "eth0", "enp2s0")
-            robot_type: Type of robot (G1, H1, H1_2, CUSTOM)
+            robot_type: Type of robot (G1, H1, H1_2, GO2, CUSTOM)
             message_type: Message format (HG or GO2)
         """
         ...
@@ -130,7 +133,7 @@ class UnitreeInterface:
         
         Args:
             network_interface: Network interface name (e.g., "eth0", "enp2s0")
-            robot_type: Type of robot (G1, H1, H1_2, CUSTOM)
+            robot_type: Type of robot (G1, H1, H1_2, GO2, CUSTOM)
             message_type: Message format (HG or GO2)
             num_motors: Number of motors for custom robot
         """
@@ -274,6 +277,20 @@ class UnitreeInterface:
             
         Returns:
             UnitreeInterface instance for H1-2 robot
+        """
+        ...
+
+    @staticmethod
+    def create_go2(network_interface: str, message_type: MessageType = MessageType.GO2) -> 'UnitreeInterface':
+        """
+        Create GO2 robot interface
+        
+        Args:
+            network_interface: Network interface name
+            message_type: Message format (default: GO2)
+            
+        Returns:
+            UnitreeInterface instance for GO2 robot
         """
         ...
 
