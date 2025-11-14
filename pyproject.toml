@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "unitree_sdk2"
+version = "0.1.1"
+description = "Unitree robot SDK bindings"
+requires-python = ">=3.8"
+
+[tool.setuptools.packages.find]
+include = ["unitree_interface"]
+
+[tool.setuptools.package-data]
+unitree_interface = ["unitree_interface.cpython-*.so", "libddsc.so*", "libddscxx.so*", "libfastcdr.so*", "libfastrtps.so*"]
