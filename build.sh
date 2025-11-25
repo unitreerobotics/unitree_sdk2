@@ -19,16 +19,16 @@ echo "Building for $ARCH"
 # Clean and build SDKs
 mkdir -p build
 
-# Build for Python 3.8 and 3.10
-for PYTHON_VER in "3.8" "3.10"; do
+# Build for Python 3.8, 3.10, and 3.11
+for PYTHON_VER in "3.8" "3.10" "3.11"; do
     echo "Building Unitree SDK for Python $PYTHON_VER..."
     
     BUILD_DIR="build_py${PYTHON_VER//.}"
     mkdir -p $BUILD_DIR && cd $BUILD_DIR
     
     # Set Python-specific configuration
-    if [ "$PYTHON_VER" = "3.10" ]; then
-        # For Python 3.10 built from source
+    if [ "$PYTHON_VER" = "3.10" ] || [ "$PYTHON_VER" = "3.11" ]; then
+        # For Python 3.10/3.11 built from source
         cmake .. \
             -DBUILD_PYTHON_BINDING=ON \
             -DCMAKE_BUILD_TYPE=Release \
