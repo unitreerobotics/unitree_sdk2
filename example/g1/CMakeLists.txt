@@ -36,3 +36,6 @@ if(yaml-cpp_FOUND)
         message(STATUS "yaml-cpp version ${yaml-cpp_VERSION} is too old, skipping build of g1_dual_arm_example.")
     endif()
 endif()
+
+add_executable(g1_agv_client_example agv/g1_agv_client_example.cpp)
+target_link_libraries(g1_agv_client_example unitree_sdk2)
