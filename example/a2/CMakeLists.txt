@@ -1,0 +1,5 @@
+add_executable(a2_sport_client  a2_sport_client.cpp)
+target_link_libraries(a2_sport_client unitree_sdk2)
+
+add_executable(a2_sport_state  a2_sport_state.cpp)
+target_link_libraries(a2_sport_state unitree_sdk2)
