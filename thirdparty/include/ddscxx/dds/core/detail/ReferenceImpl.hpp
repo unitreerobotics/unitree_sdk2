@@ -60,7 +60,7 @@ dds::core::Reference<DELEGATE>::Reference(const DELEGATE_REF_T& p) : impl_(p)
 }
 
 template <typename DELEGATE>
-dds::core::Reference<DELEGATE>::~Reference<DELEGATE>()
+dds::core::Reference<DELEGATE>::~Reference()
 {
 }
 
