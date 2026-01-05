@@ -15,6 +15,7 @@
 
 #define WAV_SECOND 5  // record seconds
 #define WAV_LEN (16000 * 2 * WAV_SECOND)
+#define WAV_LEN_ONCE (16000 * 2 * 160 / 1000)
 #define CHUNK_SIZE 96000  // 3 seconds
 int sock;
 
@@ -63,7 +64,7 @@ void thread_mic(void) {
   pcm_data.reserve(WAV_LEN / 2);
   std::cout << "start record!" << std::endl;
   while (total_bytes < WAV_LEN) {
-    char buffer[2048];
+    char buffer[WAV_LEN_ONCE];
     ssize_t len = recvfrom(sock, buffer, sizeof(buffer), 0, nullptr, nullptr);
     if (len > 0) {
       size_t sample_count = len / 2;
