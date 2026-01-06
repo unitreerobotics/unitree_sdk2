@@ -1,0 +1,15 @@
+"""Bazel Build of Unitree SDK."""
+
+module(
+    name = "unitree_sdk2",
+)
+
+# Platforms:
+bazel_dep(name = "platforms", version = "0.0.10")
+
+# cc rules:
+bazel_dep(name = "rules_cc", version = "0.0.2")
+
+# Abseil Cpp:
+bazel_dep(name = "abseil-cpp", version = "20250127.1")
+
