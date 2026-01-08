@@ -134,7 +134,7 @@ void Custom::Init()
     msc.SetTimeout(10.0f); 
     msc.Init();
 
-    /*Shut down  motion control-related service*/
+    /*Shut down motion control-related service*/
     while(queryMotionStatus())
     {
         std::cout << "Try to deactivate the motion control-related service." << std::endl;
@@ -184,7 +184,7 @@ int Custom::queryMotionStatus()
     else
     {
         std::string serviceName = queryServiceName(robotForm,motionName);
-        std::cout << "Service: "<< serviceName<< " is activate" << std::endl;
+        std::cout << "Service: "<< serviceName<< " is active" << std::endl;
         motionStatus = 1;
     }
     return motionStatus;
