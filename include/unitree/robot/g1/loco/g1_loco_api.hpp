@@ -28,9 +28,16 @@ const int32_t ROBOT_API_ID_LOCO_SET_STAND_HEIGHT = 7104;
 const int32_t ROBOT_API_ID_LOCO_SET_VELOCITY = 7105;
 const int32_t ROBOT_API_ID_LOCO_SET_ARM_TASK = 7106;
 const int32_t ROBOT_API_ID_LOCO_SET_SPEED_MODE = 7107;
+const int32_t ROBOT_API_ID_LOCO_SWITCH_TO_USER_CTRL = 7110;
+const int32_t ROBOT_API_ID_LOCO_SWITCH_TO_INTERNAL_CTRL = 7111;
+
 
 using LocoCmd =
     std::map<std::string, std::variant<int, float, std::vector<float>>>;
+
+enum class InternalFsmMode{
+  LAST, PASSIVE, WALKRUN
+};
 
 class JsonizeDataVecFloat : public common::Jsonize {
 public:

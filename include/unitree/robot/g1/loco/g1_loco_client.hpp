@@ -31,6 +31,8 @@ class LocoClient : public Client {
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_VELOCITY);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_ARM_TASK);
     UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SET_SPEED_MODE);
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SWITCH_TO_USER_CTRL);
+    UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_API_ID_LOCO_SWITCH_TO_INTERNAL_CTRL);
   };
 
   /*Low Level API Call*/
@@ -178,6 +180,33 @@ class LocoClient : public Client {
     parameter = common::ToJsonString(json);
 
     return Call(ROBOT_API_ID_LOCO_SET_ARM_TASK, parameter, data);
+  }
+
+  int32_t SwitchToUserCtrl() {
+    std::string parameter, data;
+
+    go2::JsonizeDataBool json;
+    parameter = common::ToJsonString(json);
+    return Call(ROBOT_API_ID_LOCO_SWITCH_TO_USER_CTRL, parameter, data);
+  }
+
+  int32_t SwitchToInternalCtrl(InternalFsmMode mode) {
+    std::string parameter, data;
+    go2::JsonizeDataInt json;
+    switch (mode)
+    {
+    case InternalFsmMode::LAST:
+      json.data = 0;
+      break;
+    case InternalFsmMode::PASSIVE:
+      json.data = 1;
+      break;
+    case InternalFsmMode::WALKRUN:
+      json.data = 2;
+      break;
+    }
+    parameter = common::ToJsonString(json);
+    return Call(ROBOT_API_ID_LOCO_SWITCH_TO_INTERNAL_CTRL, parameter, data);
   }
 
   /*High Level API Call*/
