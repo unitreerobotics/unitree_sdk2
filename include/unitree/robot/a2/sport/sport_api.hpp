@@ -24,9 +24,18 @@ namespace unitree
             const int32_t ROBOT_SPORT_API_ID_RECOVERYSTAND = 1006;
             const int32_t ROBOT_SPORT_API_ID_EULER = 1007;
             const int32_t ROBOT_SPORT_API_ID_MOVE = 1008;
+            const int32_t ROBOT_SPORT_API_ID_BODYPOSITION = 1009;
             const int32_t ROBOT_SPORT_API_ID_SWITCHGAIT = 1011;
             const int32_t ROBOT_SPORT_API_ID_BODYHEIGHT = 1013;
             const int32_t ROBOT_SPORT_API_ID_SPEEDLEVEL = 1015;
+           
+            const int32_t ROBOT_SPORT_API_ID_LEFTSIDEGAIT = 1016;
+            const int32_t ROBOT_SPORT_API_ID_RIGHTSIDEGAIT = 1017;
+            const int32_t ROBOT_SPORT_API_ID_HANDSTAND = 1018;
+            const int32_t ROBOT_SPORT_API_ID_BIPEDSTAND = 1019;
+            const int32_t ROBOT_SPORT_API_ID_FRONTFLIP = 1020;
+            const int32_t ROBOT_SPORT_API_ID_BACKFLIP = 1021;
+            
             const int32_t ROBOT_SPORT_API_ID_SETAUTORECOVERY = 1040;
 
             // Get state

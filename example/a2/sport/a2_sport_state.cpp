@@ -4,7 +4,7 @@
 #include <unitree/robot/channel/channel_subscriber.hpp>
 #include <unitree/idl/go2/SportModeState_.hpp>
 
-#define TOPIC_HIGHSTATE "rt/sportmodestate"
+#define TOPIC_HIGHSTATE "rt/lf/sportmodestate"
 using namespace unitree::common;
 
 const std::vector<std::string> FSM_STATE_STR = {
