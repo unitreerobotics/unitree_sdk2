@@ -1,0 +1,75 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_import")
+
+link_options = select({
+    "@bazel_tools//src/conditions:darwin": [
+        "-undefined dynamic_lookup",
+        "-pthread",
+        "-dynamiclib",
+    ],
+    "//conditions:default": ["-pthread"],
+})
+
+dds_hdrs = glob([
+    "include/dds/*.h",
+    "include/dds/**/*.h",
+])
+ddsc_hdrs = glob(["include/ddsc/*.h",])
+ddscxx_hdrs = glob([
+    "include/ddscxx/**/*.hpp",
+])
+
+cc_import(
+    name = "shared_import_ddsc",
+    hdrs = dds_hdrs + ddsc_hdrs,
+    includes = [
+        "include",
+        "include/ddsc",
+    ],
+    shared_library = select({
+        "@platforms//cpu:x86_64": "lib/x86_64/libddsc.so.0",
+        "@platforms//cpu:arm64": "lib/aarch64/libddsc.so.0",
+        "//conditions:default": "@platforms//:incompatible",
+    }),
+)
+
+cc_library(
+    name = "lib_ddsc",
+    hdrs = dds_hdrs + ddsc_hdrs,
+    includes = [
+        "include",
+        "include/ddsc",
+    ],
+    deps = [":shared_import_ddsc"],
+    copts = ["-fPIC"],
+    linkopts = link_options,
+    alwayslink = True,
+    visibility = ["//visibility:public"],
+)
+
+cc_import(
+    name = "shared_import_ddscxx",
+    hdrs = dds_hdrs + ddscxx_hdrs,
+    includes = [
+        "include",
+        "include/ddscxx",
+    ],
+    shared_library = select({
+        "@platforms//cpu:x86_64": "lib/x86_64/libddscxx.so.0",
+        "@platforms//cpu:arm64": "lib/aarch64/libddscxx.so.0",
+        "//conditions:default": "@platforms//:incompatible",
+    }),
+)
+
+cc_library(
+    name = "lib_ddscxx",
+    hdrs = dds_hdrs + ddscxx_hdrs,
+    includes = [
+        "include",
+        "include/ddscxx",
+    ],
+    deps = [":shared_import_ddscxx"],
+    copts = ["-fPIC"],
+    linkopts = link_options,
+    alwayslink = True,
+    visibility = ["//visibility:public"],
+)
