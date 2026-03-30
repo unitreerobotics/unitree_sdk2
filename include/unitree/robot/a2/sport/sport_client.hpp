@@ -26,6 +26,42 @@ namespace unitree
       const int ID_BACK_FLIP = 11;
       const int ID_RECOVERY = 12;
       const int ID_BASE_HEIGHT_CTRL = 13;
+      const int ID_POSE = 14;
+      const int ID_EULER = 15;
+
+      class PoseVec4 : public common::Jsonize
+      {
+      public:
+        PoseVec4() : x(0.0F), y(0.0F), z(0.0F), yaw(0.0F)
+        {
+        }
+
+        ~PoseVec4()
+        {
+        }
+
+        void fromJson(common::JsonMap &json)
+        {
+          common::FromJson(json["x"], x);
+          common::FromJson(json["y"], y);
+          common::FromJson(json["z"], z);
+          common::FromJson(json["yaw"], yaw);
+        }
+
+        void toJson(common::JsonMap &json) const
+        {
+          common::ToJson(x, json["x"]);
+          common::ToJson(y, json["y"]);
+          common::ToJson(z, json["z"]);
+          common::ToJson(yaw, json["yaw"]);
+        }
+
+      public:
+        float x;
+        float y;
+        float z;
+        float yaw;
+      };
 
       class SportClient : public Client
       {
@@ -146,17 +182,17 @@ namespace unitree
           return Call(ROBOT_SPORT_API_ID_SPEEDLEVEL, parameter, data);
         }
 
-        int32_t BodyPosition(float x, float y, float z)
+        int32_t BodyPosition(float x, float y, float z, float yaw)
         {
           std::string parameter, data;
-          go2::JsonizeVec3 json;
+          PoseVec4 json;
           json.x = x;
           json.y = y;
           json.z = z;
+          json.yaw = yaw;
           parameter = common::ToJsonString(json);
           return Call(ROBOT_SPORT_API_ID_BODYPOSITION, parameter, data);
         }
-
 
         int32_t LeftSideGait(int enter)
         {

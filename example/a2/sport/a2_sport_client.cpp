@@ -36,7 +36,9 @@ const vector<TestOption> option_list =
         {"enter_handstand", 14},
         {"exit_handstand", 15},
         {"front_flip", 16},
-        {"back_flip", 17}
+        {"back_flip", 17},
+        {"pose", 18},
+        {"euler", 19}
 
 };
 
@@ -196,6 +198,14 @@ int main(int argc, char **argv)
         else if (test_option.id == 17)
         {
             res = sport_client.BackFlip();
+        }
+        else if (test_option.id == 18)
+        {
+            res = sport_client.BodyPosition(0.2f, 0.2f, -0.2f, 0.2f);
+        }
+        else if (test_option.id == 19)
+        {
+            res = sport_client.Euler(0.2f, 0.3f, 0.3f);
         }
 
 
