@@ -2,9 +2,9 @@
 Unitree robot sdk version 2.
 
 ### Prebuild environment
-* OS  (Ubuntu 20.04 LTS)  
-* CPU  (aarch64 and x86_64)   
-* Compiler  (gcc version 9.4.0) 
+* OS  (Ubuntu 20.04 LTS)
+* CPU  (aarch64 and x86_64)
+* Compiler  (gcc version 9.4.0)
 
 ### Environment Setup
 
@@ -21,6 +21,12 @@ apt-get update
 apt-get install -y cmake g++ build-essential libyaml-cpp-dev libeigen3-dev libboost-all-dev libspdlog-dev libfmt-dev
 ```
 
+or if you have the catkin/colcon workspace:
+```bash
+apt-get update && rosdep update
+rosdep install -iqry --from-paths unitree_sdk2
+```
+
 ### Build examples
 
 To build the examples inside this repository:
@@ -30,6 +36,13 @@ mkdir build
 cd build
 cmake ..
 make
+```
+
+or if you have the catkin/colcon workspace:
+
+```bash
+catkin bt # for catkin
+colcon build --packages-select unitree_sdk2 # for colcon. Execute it under the toplevel of the colcon workspace
 ```
 
 ### Installation
@@ -52,7 +65,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=/opt/unitree_robotics
 sudo make install
 ```
 
-You can refer to `example/cmake_sample` on how to import the unitree_sdk2 into your CMake project. 
+You can refer to `example/cmake_sample` on how to import the unitree_sdk2 into your CMake project.
 
 Note that if you install the library to other places other than `/opt/unitree_robotics`, you need to make sure the path is added to "${CMAKE_PREFIX_PATH}" so that cmake can find it with "find_package()".
 
