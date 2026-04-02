@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>unitree_sdk2</name>
+  <version>2.0.0</version>
+  <description>Unitree SDK2: DDS-based communication library for Unitree robots (pre-built)</description>
+  <maintainer email="support@unitree.com">Unitree Robotics</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <depend>yaml-cpp</depend>
+  <depend>eigen</depend>
+  <depend>boost</depend>
+  <depend>spdlog</depend>
+  <depend>fmt</depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
