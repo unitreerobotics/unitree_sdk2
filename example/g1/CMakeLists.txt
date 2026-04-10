@@ -40,5 +40,8 @@ if(yaml-cpp_FOUND)
     endif()
 endif()
 
-add_executable(g1_agv_client_example agv/g1_agv_client_example.cpp)
+add_executable(g1_agv_client_example g1d/g1_agv_client_example.cpp)
 target_link_libraries(g1_agv_client_example unitree_sdk2)
+
+add_executable(g1d_arm_example g1d/g1d_arm_example.cpp)
+target_link_libraries(g1d_arm_example unitree_sdk2)
