@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.10)
+
+add_executable(h2_loco_client high_level/h2_loco_client_example.cpp)
+target_link_libraries(h2_loco_client unitree_sdk2)
+
+add_executable(h2_ankle_swing_example low_level/h2_ankle_swing_example.cpp)
+target_link_libraries(h2_ankle_swing_example unitree_sdk2)
