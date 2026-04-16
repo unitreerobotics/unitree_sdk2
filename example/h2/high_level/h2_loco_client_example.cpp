@@ -2,8 +2,8 @@
 #include <iostream>
 #include <thread>
 
-#include "unitree/robot/r1/loco/r1_loco_api.hpp"
-#include "unitree/robot/r1/loco/r1_loco_client.hpp"
+#include "unitree/robot/h2/loco/h2_loco_api.hpp"
+#include "unitree/robot/h2/loco/h2_loco_client.hpp"
 
 std::vector<float> stringToFloatVector(const std::string &str) {
   std::vector<float> result;
@@ -47,7 +47,7 @@ int main(int argc, char const *argv[]) {
   std::string network_interface = args["network_interface"];
   unitree::robot::ChannelFactory::Instance()->Init(0, network_interface);
 
-  unitree::robot::r1::LocoClient client;
+  unitree::robot::h2::LocoClient client;
 
   client.Init();
   client.SetTimeout(10.f);
