@@ -46,7 +46,7 @@ class DataBuffer {
   std::shared_mutex mutex;
 };
 
-const int H2_NUM_MOTOR = 26;
+const int H2_NUM_MOTOR = 31;
 struct ImuState {
   std::array<float, 3> rpy = {};
   std::array<float, 3> omega = {};
@@ -67,9 +67,9 @@ struct MotorState {
 std::array<float, H2_NUM_MOTOR> Kp{
     200, 200, 200, 200, 200, 200,     // legs
     200, 200, 200, 200, 200, 200,     // legs
-    300, 300,                         // waist
-    100, 100, 100, 100, 50,           // arms
-    100, 100, 100, 100, 50,           // arms
+    300, 300, 300,                    // waist
+    100, 100, 100, 100, 50, 50, 50,   // arms
+    100, 100, 100, 100, 50, 50, 50,   // arms
     50, 10                            // head
 };
 
@@ -77,18 +77,18 @@ std::array<float, H2_NUM_MOTOR> Kp{
 std::array<float, H2_NUM_MOTOR> Kd{
     3, 3, 3, 3, 3, 3,                 // legs
     3, 3, 3, 3, 3, 3,                 // legs
-    5, 5,                             // waist
-    2, 2, 2, 2, 2,                    // arms
-    2, 2, 2, 2, 2,                    // arms
+    5, 5, 5,                          // waist
+    2, 2, 2, 2, 2, 2, 2,              // arms
+    2, 2, 2, 2, 2, 2, 2,              // arms
     2, 0.1                              // head
 };
 
 std::array<float, H2_NUM_MOTOR> joint_idx_in_idl{
     0, 1, 2, 3, 4, 5,
     6, 7, 8, 9, 10, 11,
-    12, 13,
-    15, 16, 17, 18, 19,
-    22, 23, 24, 25, 26,
+    12, 13, 14,
+    15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28,
     29, 30
 };
 
@@ -114,20 +114,27 @@ enum H2JointIndex {
   RightAnkleB = 10,
   RightAnkleRoll = 11,
   RightAnkleA = 11,
-  WaistRoll = 12,
-  WaistYaw = 13,
-  LeftShoulderPitch = 14,
-  LeftShoulderRoll = 15,
-  LeftShoulderYaw = 16,
-  LeftElbow = 17,
-  LeftWristRoll = 18,
-  RightShoulderPitch = 29,
-  RightShoulderRoll = 20,
-  RightShoulderYaw = 21,
-  RightElbow = 22,
-  RightWristRoll = 23,
-  HEAD_PITCH = 24,
-  HEAD_YAW = 25,
+  WaistYaw = 12,
+  WaistRoll = 13,       
+  WaistA = 13,    
+  WaistPitch = 14,   
+  WaistB = 14,
+  LeftShoulderPitch = 15,
+  LeftShoulderRoll = 16,
+  LeftShoulderYaw = 17,
+  LeftElbow = 18,
+  LeftWristRoll = 19,
+  LeftWristpitch = 20,
+  LeftWristyaw = 21,
+  RightShoulderPitch = 22,
+  RightShoulderRoll = 23,
+  RightShoulderYaw = 24,
+  RightElbow = 25,
+  RightWristRoll = 26,
+  RightWristpitch = 27,
+  RightWristyaw = 28,
+  HEAD_PITCH = 29,
+  HEAD_YAW = 30,
 };
 
 
