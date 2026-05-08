@@ -78,6 +78,10 @@ public:
 
     int32_t Euler(float roll, float pitch, float yaw);
     
+    int32_t FreeHeight(bool flag);
+    
+    int32_t GaitHeight(bool flag);
+
 };
 }
 }
