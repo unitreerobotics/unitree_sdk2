@@ -45,3 +45,6 @@ target_link_libraries(g1_agv_client_example unitree_sdk2)
 
 add_executable(g1d_arm_example g1d/g1d_arm_example.cpp)
 target_link_libraries(g1d_arm_example unitree_sdk2)
+
+add_executable(g1_hand_sdk_example high_level/g1_hand_sdk_example.cpp)
+target_link_libraries(g1_hand_sdk_example unitree_sdk2)
