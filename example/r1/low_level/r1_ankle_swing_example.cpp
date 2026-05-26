@@ -121,7 +121,7 @@ enum R1JointIndex {
   LeftShoulderYaw = 16,
   LeftElbow = 17,
   LeftWristRoll = 18,
-  RightShoulderPitch = 29,
+  RightShoulderPitch = 19,
   RightShoulderRoll = 20,
   RightShoulderYaw = 21,
   RightElbow = 22,
