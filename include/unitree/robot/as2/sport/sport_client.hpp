@@ -1,0 +1,260 @@
+#ifndef __UT_ROBOT_AS2_SPORT_CLIENT_HPP__
+#define __UT_ROBOT_AS2_SPORT_CLIENT_HPP__
+
+#include <limits>
+#include <unitree/robot/client/client.hpp>
+#include <unitree/robot/go2/public/jsonize_type.hpp>
+#include "sport_api.hpp"
+
+namespace unitree
+{
+  namespace robot
+  {
+    namespace as2
+    {
+      class PoseVec4 : public common::Jsonize
+      {
+      public:
+        PoseVec4() : x(0.0F), y(0.0F), z(0.0F), yaw(0.0F)
+        {
+        }
+
+        ~PoseVec4()
+        {
+        }
+
+        void fromJson(common::JsonMap &json)
+        {
+          common::FromJson(json["x"], x);
+          common::FromJson(json["y"], y);
+          common::FromJson(json["z"], z);
+          common::FromJson(json["yaw"], yaw);
+        }
+
+        void toJson(common::JsonMap &json) const
+        {
+          common::ToJson(x, json["x"]);
+          common::ToJson(y, json["y"]);
+          common::ToJson(z, json["z"]);
+          common::ToJson(yaw, json["yaw"]);
+        }
+
+      public:
+        float x;
+        float y;
+        float z;
+        float yaw;
+      };
+
+      class SportClient : public Client
+      {
+      public:
+        SportClient() : Client(ROBOT_SPORT_SERVICE_NAME, false) {}
+        ~SportClient() {}
+
+        /*Init*/
+        void Init()
+        {
+          SetApiVersion(ROBOT_SPORT_API_VERSION);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_DAMP);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BALANCESTAND);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_STOPMOVE);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_STANDUP);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_STANDDOWN);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_RECOVERYSTAND);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_EULER);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_MOVE);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SWITCHGAIT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BODYHEIGHT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SPEEDLEVEL);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SETAUTORECOVERY);
+
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BODYPOSITION);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_LEFTSIDEGAIT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_RIGHTSIDEGAIT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_HANDSTAND);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BIPEDSTAND);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_FRONTFLIP);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BACKFLIP);
+
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SWITCHJOYSTICK);
+
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_GETSTATE);
+        }
+
+        /*High Level API Call*/
+        int32_t Damp()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_DAMP, parameter, data);
+        }
+
+        int32_t BalanceStand()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_BALANCESTAND, parameter, data);
+        }
+        int32_t StopMove()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_STOPMOVE, parameter, data);
+        }
+
+        int32_t StandUp()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_STANDUP, parameter, data);
+        }
+
+        int32_t StandDown()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_STANDDOWN, parameter, data);
+        }
+
+        int32_t RecoveryStand()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_RECOVERYSTAND, parameter, data);
+        }
+
+        int32_t Euler(float roll, float pitch, float yaw)
+        {
+          std::string parameter, data;
+          go2::JsonizeVec3 json;
+          json.x = roll;
+          json.y = pitch;
+          json.z = yaw;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_EULER, parameter, data);
+        }
+
+        int32_t Move(float vx, float vy, float vyaw)
+        {
+          std::string parameter, data;
+          go2::JsonizeVec3 json;
+          json.x = vx;
+          json.y = vy;
+          json.z = vyaw;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_MOVE, parameter, data);
+        }
+
+        int32_t SwitchGait(int gait_type)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = gait_type;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_SWITCHGAIT, parameter, data);
+        }
+
+        int32_t BodyHeight(float height)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataFloat json;
+          json.data = height;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_BODYHEIGHT, parameter, data);
+        }
+
+        int32_t SpeedLevel(int level)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = level;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_SPEEDLEVEL, parameter, data);
+        }
+
+        int32_t BodyPosition(float x, float y, float z, float yaw)
+        {
+          std::string parameter, data;
+          PoseVec4 json;
+          json.x = x;
+          json.y = y;
+          json.z = z;
+          json.yaw = yaw;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_BODYPOSITION, parameter, data);
+        }
+
+        int32_t LeftSideGait(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_LEFTSIDEGAIT, parameter, data);
+        }
+
+        int32_t RightSideGait(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_RIGHTSIDEGAIT, parameter, data);
+        }
+
+        int32_t HandStand(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_HANDSTAND, parameter, data);
+        }
+
+        int32_t BipedStand(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_BIPEDSTAND, parameter, data);
+        }
+
+        int32_t FrontFlip()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_FRONTFLIP, parameter, data);
+        }
+
+        int32_t BackFlip()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_BACKFLIP, parameter, data);
+        }
+
+        int32_t SetAutoRecovery(int switch_on)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = switch_on;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_SETAUTORECOVERY, parameter, data);
+        }
+
+        int32_t SwitchJoystick(int switch_on)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = switch_on;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_SWITCHJOYSTICK, parameter, data);
+        }
+
+        int32_t GetState(std::map<std::string, std::string> &state_map)
+        {
+          std::string parameter, data;
+          int32_t ret = Call(ROBOT_SPORT_API_ID_GETSTATE, parameter, data);
+          common::FromJsonString(data, state_map);
+          return ret;
+        }
+      };
+    } // namespace as2
+
+  } // namespace robot
+} // namespace unitree
+#endif // __UT_ROBOT_AS2_LOCO_CLIENT_HPP__
