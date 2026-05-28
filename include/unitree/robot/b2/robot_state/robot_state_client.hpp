@@ -39,6 +39,7 @@ public:
     int32_t SetReportFreq(int32_t interval, int32_t duration);
     int32_t LowPowerSwitch(int32_t swit);
     int32_t LowPowerStatus(int32_t& status);
+    int32_t GetPkgVersion(std::string& packageVersion, std::map<std::string,std::string>& moduleVersionMap);
 };
 
 }

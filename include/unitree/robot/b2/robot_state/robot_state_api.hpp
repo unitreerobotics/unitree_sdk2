@@ -27,6 +27,7 @@ const int32_t ROBOT_STATE_API_ID_SET_REPORT_FREQ = 1002;
 const int32_t ROBOT_STATE_API_ID_SERVICE_LIST = 1003;
 const int32_t ROBOT_STATE_API_ID_LOWPOWER_SWITCH = 1004;
 const int32_t ROBOT_STATE_API_ID_LOWPOWER_STATUS = 1005;
+const int32_t ROBOT_STATE_API_ID_GET_PKG_VERSION  = 1006;
 
 /*
  * request parameter for 1001
@@ -197,6 +198,35 @@ public:
 
 public:
     int32_t status;
+};
+
+/*
+ * response data for 1006
+ */
+class PkgVersionData : public common::Jsonize
+{
+public:
+    PkgVersionData()
+    {}
+
+    ~PkgVersionData()
+    {}
+
+    void fromJson(common::JsonMap& json)
+    {
+        common::FromJson(json["packageVersion"], packageVersion);
+        common::FromJson(json["moduleVersionMap"], moduleVersionMap);
+    }
+
+    void toJson(common::JsonMap& json) const
+    {
+        common::ToJson(packageVersion, json["packageVersion"]);
+        common::ToJson(moduleVersionMap, json["moduleVersionMap"]);
+    }
+
+public:
+    std::string packageVersion;
+    std::map<std::string,std::string> moduleVersionMap;
 };
 
 }
