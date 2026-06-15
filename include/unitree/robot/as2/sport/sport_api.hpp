@@ -35,7 +35,18 @@ namespace unitree
             const int32_t ROBOT_SPORT_API_ID_BIPEDSTAND = 1019;
             const int32_t ROBOT_SPORT_API_ID_FRONTFLIP = 1020;
             const int32_t ROBOT_SPORT_API_ID_BACKFLIP = 1021;
-            
+            const int32_t ROBOT_SPORT_API_ID_GREETING = 1022;
+            const int32_t ROBOT_SPORT_API_ID_HEART = 1023;
+            const int32_t ROBOT_SPORT_API_ID_CONTENT = 1024;
+            const int32_t ROBOT_SPORT_API_ID_DANCE1 = 1025;
+            const int32_t ROBOT_SPORT_API_ID_DANCE2 = 1026;
+            const int32_t ROBOT_SPORT_API_ID_HANDSHAKE = 1027;
+            const int32_t ROBOT_SPORT_API_ID_STRETCH = 1028;
+            const int32_t ROBOT_SPORT_API_ID_SIT = 1029;
+            const int32_t ROBOT_SPORT_API_ID_FRONTJUMP = 1030;
+            const int32_t ROBOT_SPORT_API_ID_PUSHUP = 1031;
+            const int32_t ROBOT_SPORT_API_ID_UPJUMP = 1032;
+
             const int32_t ROBOT_SPORT_API_ID_SETAUTORECOVERY = 1040;
             const int32_t ROBOT_SPORT_API_ID_SWITCHJOYSTICK = 1041;
 
