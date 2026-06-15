@@ -38,7 +38,8 @@ const vector<TestOption> option_list =
         {"front_flip", 16},
         {"back_flip", 17},
         {"pose", 18},
-        {"euler", 19}
+        {"euler", 19},
+        {"reset_estimator", 20}
 
 };
 
@@ -206,6 +207,10 @@ int main(int argc, char **argv)
         else if (test_option.id == 19)
         {
             res = sport_client.Euler(0.2f, 0.3f, 0.3f);
+        }
+        else if (test_option.id == 20)
+        {
+            res = sport_client.ResetEstimator();
         }
 
 

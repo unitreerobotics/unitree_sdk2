@@ -94,6 +94,8 @@ namespace unitree
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_FRONTFLIP);
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BACKFLIP);
 
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_RESET_ESTIMATOR);
+
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_GETSTATE);
         }
 
@@ -240,6 +242,12 @@ namespace unitree
         {
           std::string parameter, data;
           return Call(ROBOT_SPORT_API_ID_BACKFLIP, parameter, data);
+        }
+
+        int32_t ResetEstimator()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_RESET_ESTIMATOR, parameter, data);
         }
 
         int32_t SetAutoRecovery(int switch_on)

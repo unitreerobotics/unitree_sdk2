@@ -76,6 +76,17 @@ namespace unitree
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BIPEDSTAND);
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_FRONTFLIP);
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BACKFLIP);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_GREETING);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_HEART);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_CONTENT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_DANCE1);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_DANCE2);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_HANDSHAKE);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_STRETCH);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SIT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_FRONTJUMP);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_PUSHUP);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_UPJUMP);
 
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SWITCHJOYSTICK);
 
@@ -225,6 +236,75 @@ namespace unitree
         {
           std::string parameter, data;
           return Call(ROBOT_SPORT_API_ID_BACKFLIP, parameter, data);
+        }
+
+        int32_t Greeting()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_GREETING, parameter, data);
+        }
+
+        int32_t Heart()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_HEART, parameter, data);
+        }
+
+        int32_t Content()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_CONTENT, parameter, data);
+        }
+
+        int32_t Dance1()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_DANCE1, parameter, data);
+        }
+
+        int32_t Dance2()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_DANCE2, parameter, data);
+        }
+
+        int32_t Handshake()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_HANDSHAKE, parameter, data);
+        }
+
+        int32_t Stretch()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_STRETCH, parameter, data);
+        }
+
+        int32_t Sit(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_SIT, parameter, data);
+        }
+
+        int32_t FrontJump()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_FRONTJUMP, parameter, data);
+        }
+
+        int32_t PushUp()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_PUSHUP, parameter, data);
+        }
+
+        int32_t UpJump()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_UPJUMP, parameter, data);
         }
 
         int32_t SetAutoRecovery(int switch_on)
