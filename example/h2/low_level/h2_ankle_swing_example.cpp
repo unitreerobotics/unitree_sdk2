@@ -248,7 +248,7 @@ public:
     // update mode machine
     if (mode_machine_ != low_state.mode_machine()) {
       if (mode_machine_ == 0)
-        std::cout << "G1 type: " << unsigned(low_state.mode_machine())
+        std::cout << "H2 type: " << unsigned(low_state.mode_machine())
                   << std::endl;
       mode_machine_ = low_state.mode_machine();
     }
@@ -368,7 +368,7 @@ public:
 
 int main(int argc, char const *argv[]) {
   if (argc < 2) {
-    std::cout << "Usage: g1_ankle_swing_example network_interface" << std::endl;
+    std::cout << "Usage: h2_ankle_swing_example network_interface" << std::endl;
     exit(0);
   }
   std::string networkInterface = argv[1];
