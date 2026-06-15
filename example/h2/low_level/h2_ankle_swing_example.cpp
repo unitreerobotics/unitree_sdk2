@@ -23,9 +23,8 @@ using namespace unitree::common;
 using namespace unitree::robot;
 using namespace unitree_hg::msg::dds_;
 
-template <typename T>
-class DataBuffer {
- public:
+template <typename T> class DataBuffer {
+public:
   void SetData(const T &newData) {
     std::unique_lock<std::shared_mutex> lock(mutex);
     data = std::make_shared<T>(newData);
@@ -41,7 +40,7 @@ class DataBuffer {
     data = nullptr;
   }
 
- private:
+private:
   std::shared_ptr<T> data;
   std::shared_mutex mutex;
 };
@@ -65,36 +64,27 @@ struct MotorState {
 
 // Stiffness for all H2 Joints
 std::array<float, H2_NUM_MOTOR> Kp{
-    200, 200, 200, 200, 200, 200,     // legs
-    200, 200, 200, 200, 200, 200,     // legs
-    300, 300, 300,                    // waist
-    100, 100, 100, 100, 50, 50, 50,   // arms
-    100, 100, 100, 100, 50, 50, 50,   // arms
-    50, 10                            // head
+    150, 150, 150, 250, 60, 90,
+    150, 150, 150, 250, 60, 90,
+    200, 200, 200,
+    90,  60,  20,  60,  4,  4,  4,
+    90,  60,  20,  60,  4,  4,  4,
+    30,  30,
 };
 
 // Damping for all H2 Joints
 std::array<float, H2_NUM_MOTOR> Kd{
-    3, 3, 3, 3, 3, 3,                 // legs
-    3, 3, 3, 3, 3, 3,                 // legs
-    5, 5, 5,                          // waist
-    2, 2, 2, 2, 2, 2, 2,              // arms
-    2, 2, 2, 2, 2, 2, 2,              // arms
-    2, 0.1                              // head
-};
-
-std::array<float, H2_NUM_MOTOR> joint_idx_in_idl{
-    0, 1, 2, 3, 4, 5,
-    6, 7, 8, 9, 10, 11,
-    12, 13, 14,
-    15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28,
-    29, 30
+    2.0, 2.0, 2.0, 2.0, 0.3, 0.1,
+    2.0, 2.0, 2.0, 2.0, 0.3, 0.1,
+    2.5, 5.0, 5.0,
+    2.0, 1.0, 0.4, 1.0, 0.2, 0.2, 0.2,
+    2.0, 1.0, 0.4, 1.0, 0.2, 0.2, 0.2,
+    1.0, 1.0,
 };
 
 enum class Mode {
-  PR = 0,  // Series Control for Ptich/Roll Joints
-  AB = 1   // Parallel Control for A/B Joints
+  PR = 0, // Series Control for Ptich/Roll Joints
+  AB = 1  // Parallel Control for A/B Joints
 };
 
 enum H2JointIndex {
@@ -137,7 +127,6 @@ enum H2JointIndex {
   HEAD_YAW = 30,
 };
 
-
 inline uint32_t Crc32Core(uint32_t *ptr, uint32_t len) {
   uint32_t xbit = 0;
   uint32_t data = 0;
@@ -152,7 +141,8 @@ inline uint32_t Crc32Core(uint32_t *ptr, uint32_t len) {
         CRC32 ^= dwPolynomial;
       } else
         CRC32 <<= 1;
-      if (data & xbit) CRC32 ^= dwPolynomial;
+      if (data & xbit)
+        CRC32 ^= dwPolynomial;
 
       xbit >>= 1;
     }
@@ -161,10 +151,10 @@ inline uint32_t Crc32Core(uint32_t *ptr, uint32_t len) {
 };
 
 class H2Example {
- private:
+private:
   double time_;
-  double control_dt_;  // [2ms]
-  double duration_;    // [3 s]
+  double control_dt_; // [2ms]
+  double duration_;   // [3 s]
   int counter_;
   Mode mode_pr_;
   uint8_t mode_machine_;
@@ -183,14 +173,10 @@ class H2Example {
 
   std::shared_ptr<unitree::robot::b2::MotionSwitcherClient> msc_;
 
- public:
+public:
   H2Example(std::string networkInterface)
-      : time_(0.0),
-        control_dt_(0.002),
-        duration_(3.0),
-        counter_(0),
-        mode_pr_(Mode::PR),
-        mode_machine_(0) {
+      : time_(0.0), control_dt_(0.002), duration_(3.0), counter_(0),
+        mode_pr_(Mode::PR), mode_machine_(0) {
     ChannelFactory::Instance()->Init(0, networkInterface);
 
     // try to shutdown motion control-related service
@@ -208,13 +194,19 @@ class H2Example {
     lowcmd_publisher_.reset(new ChannelPublisher<LowCmd_>(HG_CMD_TOPIC));
     lowcmd_publisher_->InitChannel();
     // create subscriber
-    lowstate_subscriber_.reset(new ChannelSubscriber<LowState_>(HG_STATE_TOPIC));
-    lowstate_subscriber_->InitChannel(std::bind(&H2Example::LowStateHandler, this, std::placeholders::_1), 1);
+    lowstate_subscriber_.reset(
+        new ChannelSubscriber<LowState_>(HG_STATE_TOPIC));
+    lowstate_subscriber_->InitChannel(
+        std::bind(&H2Example::LowStateHandler, this, std::placeholders::_1), 1);
     imutorso_subscriber_.reset(new ChannelSubscriber<IMUState_>(HG_IMU_TORSO));
-    imutorso_subscriber_->InitChannel(std::bind(&H2Example::imuTorsoHandler, this, std::placeholders::_1), 1);
+    imutorso_subscriber_->InitChannel(
+        std::bind(&H2Example::imuTorsoHandler, this, std::placeholders::_1), 1);
     // create threads
-    command_writer_ptr_ = CreateRecurrentThreadEx("command_writer", UT_CPU_ID_NONE, 2000, &H2Example::LowCommandWriter, this);
-    control_thread_ptr_ = CreateRecurrentThreadEx("control", UT_CPU_ID_NONE, 2000, &H2Example::Control, this);
+    command_writer_ptr_ =
+        CreateRecurrentThreadEx("command_writer", UT_CPU_ID_NONE, 2000,
+                                &H2Example::LowCommandWriter, this);
+    control_thread_ptr_ = CreateRecurrentThreadEx(
+        "control", UT_CPU_ID_NONE, 2000, &H2Example::Control, this);
   }
 
   void imuTorsoHandler(const void *message) {
@@ -226,7 +218,8 @@ class H2Example {
 
   void LowStateHandler(const void *message) {
     LowState_ low_state = *(const LowState_ *)message;
-    if (low_state.crc() != Crc32Core((uint32_t *)&low_state, (sizeof(LowState_) >> 2) - 1)) {
+    if (low_state.crc() !=
+        Crc32Core((uint32_t *)&low_state, (sizeof(LowState_) >> 2) - 1)) {
       std::cout << "[ERROR] CRC Error" << std::endl;
       return;
     }
@@ -234,10 +227,11 @@ class H2Example {
     // get motor state
     MotorState ms_tmp;
     for (int i = 0; i < H2_NUM_MOTOR; ++i) {
-      ms_tmp.q.at(i) = low_state.motor_state()[joint_idx_in_idl[i]].q();
-      ms_tmp.dq.at(i) = low_state.motor_state()[joint_idx_in_idl[i]].dq();
-      if (low_state.motor_state()[joint_idx_in_idl[i]].motorstate() && joint_idx_in_idl[i] <= RightAnkleRoll)
-        std::cout << "[ERROR] motor " << joint_idx_in_idl[i] << " with code " << low_state.motor_state()[joint_idx_in_idl[i]].motorstate() << "\n";
+      ms_tmp.q.at(i) = low_state.motor_state()[i].q();
+      ms_tmp.dq.at(i) = low_state.motor_state()[i].dq();
+      if (low_state.motor_state()[i].motorstate() && i <= RightAnkleRoll)
+        std::cout << "[ERROR] motor " << i << " with code "
+                  << low_state.motor_state()[i].motorstate() << "\n";
     }
     motor_state_buffer_.SetData(ms_tmp);
 
@@ -253,7 +247,9 @@ class H2Example {
 
     // update mode machine
     if (mode_machine_ != low_state.mode_machine()) {
-      if (mode_machine_ == 0) std::cout << "H2 type: " << unsigned(low_state.mode_machine()) << std::endl;
+      if (mode_machine_ == 0)
+        std::cout << "G1 type: " << unsigned(low_state.mode_machine())
+                  << std::endl;
       mode_machine_ = low_state.mode_machine();
     }
 
@@ -274,23 +270,33 @@ class H2Example {
       auto &ms = low_state.motor_state();
       printf("All %d Motors:", H2_NUM_MOTOR);
       printf("\nmode: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%u,", ms[joint_idx_in_idl[i]].mode());
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%u,", ms[i].mode());
       printf("\npos: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%.2f,", ms[joint_idx_in_idl[i]].q());
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%.2f,", ms[i].q());
       printf("\nvel: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%.2f,", ms[joint_idx_in_idl[i]].dq());
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%.2f,", ms[i].dq());
       printf("\ntau_est: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%.2f,", ms[joint_idx_in_idl[i]].tau_est());
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%.2f,", ms[i].tau_est());
       printf("\ntemperature: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%d,%d;", ms[joint_idx_in_idl[i]].temperature()[0], ms[joint_idx_in_idl[i]].temperature()[1]);
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%d,%d;", ms[i].temperature()[0], ms[i].temperature()[1]);
       printf("\nvol: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%.2f,", ms[joint_idx_in_idl[i]].vol());
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%.2f,", ms[i].vol());
       printf("\nsensor: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%u,%u;", ms[joint_idx_in_idl[i]].sensor()[0], ms[joint_idx_in_idl[i]].sensor()[1]);
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%u,%u;", ms[i].sensor()[0], ms[i].sensor()[1]);
       printf("\nmotorstate: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%u,", ms[joint_idx_in_idl[i]].motorstate());
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%u,", ms[i].motorstate());
       printf("\nreserve: ");
-      for (int i = 0; i < H2_NUM_MOTOR; ++i) printf("%u,%u,%u,%u;", ms[joint_idx_in_idl[i]].reserve()[0], ms[joint_idx_in_idl[i]].reserve()[1], ms[joint_idx_in_idl[i]].reserve()[2], ms[joint_idx_in_idl[i]].reserve()[3]);
+      for (int i = 0; i < H2_NUM_MOTOR; ++i)
+        printf("%u,%u,%u,%u;", ms[i].reserve()[0], ms[i].reserve()[1],
+               ms[i].reserve()[2], ms[i].reserve()[3]);
       printf("\n");
     }
   }
@@ -300,18 +306,20 @@ class H2Example {
     dds_low_command.mode_pr() = static_cast<uint8_t>(mode_pr_);
     dds_low_command.mode_machine() = mode_machine_;
 
-    const std::shared_ptr<const MotorCommand> mc = motor_command_buffer_.GetData();
+    const std::shared_ptr<const MotorCommand> mc =
+        motor_command_buffer_.GetData();
     if (mc) {
       for (size_t i = 0; i < H2_NUM_MOTOR; i++) {
-        dds_low_command.motor_cmd().at(joint_idx_in_idl[i]).mode() = 1;  // 1:Enable, 0:Disable
-        dds_low_command.motor_cmd().at(joint_idx_in_idl[i]).tau() = mc->tau_ff.at(i);
-        dds_low_command.motor_cmd().at(joint_idx_in_idl[i]).q() = mc->q_target.at(i);
-        dds_low_command.motor_cmd().at(joint_idx_in_idl[i]).dq() = mc->dq_target.at(i);
-        dds_low_command.motor_cmd().at(joint_idx_in_idl[i]).kp() = mc->kp.at(i);
-        dds_low_command.motor_cmd().at(joint_idx_in_idl[i]).kd() = mc->kd.at(i);
+        dds_low_command.motor_cmd().at(i).mode() = 1; // 1:Enable, 0:Disable
+        dds_low_command.motor_cmd().at(i).tau() = mc->tau_ff.at(i);
+        dds_low_command.motor_cmd().at(i).q() = mc->q_target.at(i);
+        dds_low_command.motor_cmd().at(i).dq() = mc->dq_target.at(i);
+        dds_low_command.motor_cmd().at(i).kp() = mc->kp.at(i);
+        dds_low_command.motor_cmd().at(i).kd() = mc->kd.at(i);
       }
 
-      dds_low_command.crc() = Crc32Core((uint32_t *)&dds_low_command, (sizeof(dds_low_command) >> 2) - 1);
+      dds_low_command.crc() = Crc32Core((uint32_t *)&dds_low_command,
+                                        (sizeof(dds_low_command) >> 2) - 1);
       lowcmd_publisher_->Write(dds_low_command);
     }
   }
@@ -340,7 +348,7 @@ class H2Example {
         // [Stage 2]: swing ankle using PR mode
         mode_pr_ = Mode::PR;
         double max_P = M_PI * 30.0 / 180.0;
-        double max_R = M_PI * 30.0 / 180.0;
+        double max_R = M_PI * 10.0 / 180.0;
         double t = time_ - duration_;
         double L_P_des = max_P * std::sin(2.0 * M_PI * t);
         double L_R_des = max_R * std::sin(2.0 * M_PI * t);
@@ -351,21 +359,6 @@ class H2Example {
         motor_command_tmp.q_target.at(LeftAnkleRoll) = L_R_des;
         motor_command_tmp.q_target.at(RightAnklePitch) = R_P_des;
         motor_command_tmp.q_target.at(RightAnkleRoll) = R_R_des;
-      } else {
-        // [Stage 3]: swing ankle using AB mode
-        mode_pr_ = Mode::AB;
-        double max_A = M_PI * 30.0 / 180.0;
-        double max_B = M_PI * 10.0 / 180.0;
-        double t = time_ - duration_ * 2;
-        double L_A_des = +max_A * std::sin(M_PI * t);
-        double L_B_des = +max_B * std::sin(M_PI * t + M_PI);
-        double R_A_des = -max_A * std::sin(M_PI * t);
-        double R_B_des = -max_B * std::sin(M_PI * t + M_PI);
-
-        motor_command_tmp.q_target.at(LeftAnklePitchRaw) = L_A_des;
-        motor_command_tmp.q_target.at(LeftAnkleRollRaw) = L_B_des;
-        motor_command_tmp.q_target.at(RightAnklePitchRaw) = R_A_des;
-        motor_command_tmp.q_target.at(RightAnkleRollRaw) = R_B_des;
       }
 
       motor_command_buffer_.SetData(motor_command_tmp);
@@ -375,11 +368,13 @@ class H2Example {
 
 int main(int argc, char const *argv[]) {
   if (argc < 2) {
-    std::cout << "Usage: h2_ankle_swing_example network_interface" << std::endl;
+    std::cout << "Usage: g1_ankle_swing_example network_interface" << std::endl;
     exit(0);
   }
   std::string networkInterface = argv[1];
   H2Example custom(networkInterface);
-  while (true) sleep(10);
+  while (true)
+    sleep(10);
   return 0;
 }
+
