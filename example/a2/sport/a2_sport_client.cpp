@@ -5,6 +5,7 @@
 #include <thread>
 #include <pthread.h>
 #include <stdexcept>
+#include <cmath>
 #include <unitree/robot/a2/sport/sport_client.hpp>
 
 using namespace std;
@@ -39,8 +40,10 @@ const vector<TestOption> option_list =
         {"back_flip", 17},
         {"pose", 18},
         {"euler", 19},
-        {"reset_estimator", 20}
-
+        {"reset_estimator", 20},
+        {"square_trajectory", 21},
+        {"circle_trajectory", 22},
+        
 };
 
 int ConvertToInt(const std::string &str)
@@ -211,6 +214,88 @@ int main(int argc, char **argv)
         else if (test_option.id == 20)
         {
             res = sport_client.ResetEstimator();
+        }
+        else if (test_option.id == 21)
+        {
+            // 矩形轨迹: 1.0m x 1.0m, 带加减速过程的密集路径点
+            std::vector<unitree::robot::a2::PathPoint> path;
+            unitree::robot::a2::PathPoint pt;
+
+            // ===== 边1: (0,0)→(1,0), 向前 1m, 0-4s =====
+            pt.t_from_start = 0.0f;  pt.x = 0.00f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 0.5f;  pt.x = 0.03f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 1.0f;  pt.x = 0.12f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 1.5f;  pt.x = 0.28f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 2.0f;  pt.x = 0.45f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 2.5f;  pt.x = 0.62f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 3.0f;  pt.x = 0.78f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 3.5f;  pt.x = 0.94f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 4.0f;  pt.x = 1.00f; pt.y = 0.0f; pt.yaw = 0.0f; path.push_back(pt);
+
+            // ===== 边2: (1,0)→(1,1), 左移 1m, 4-8s =====
+            pt.t_from_start = 4.5f;  pt.x = 1.00f; pt.y = 0.03f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 5.0f;  pt.x = 1.00f; pt.y = 0.12f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 5.5f;  pt.x = 1.00f; pt.y = 0.28f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 6.0f;  pt.x = 1.00f; pt.y = 0.45f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 6.5f;  pt.x = 1.00f; pt.y = 0.62f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 7.0f;  pt.x = 1.00f; pt.y = 0.78f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 7.5f;  pt.x = 1.00f; pt.y = 0.94f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 8.0f;  pt.x = 1.00f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+
+            // ===== 边3: (1,1)→(0,1), 后退 1m, 8-13s =====
+            pt.t_from_start = 8.5f;  pt.x = 0.97f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 9.0f;  pt.x = 0.90f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 9.5f;  pt.x = 0.78f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 10.0f; pt.x = 0.62f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 10.5f; pt.x = 0.45f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 11.0f; pt.x = 0.28f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 11.5f; pt.x = 0.12f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 12.0f; pt.x = 0.03f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 13.0f; pt.x = 0.00f; pt.y = 1.00f; pt.yaw = 0.0f; path.push_back(pt);
+
+            // ===== 边4: (0,1)→(0,0), 右移 1m, 13-16s =====
+            pt.t_from_start = 13.5f; pt.x = 0.00f; pt.y = 0.94f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 14.0f; pt.x = 0.00f; pt.y = 0.78f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 14.5f; pt.x = 0.00f; pt.y = 0.55f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 15.0f; pt.x = 0.00f; pt.y = 0.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 15.5f; pt.x = 0.00f; pt.y = 0.00f; pt.yaw = 0.0f; path.push_back(pt);
+            pt.t_from_start = 16.0f; pt.x = 0.00f; pt.y = 0.00f; pt.yaw = 0.0f; path.push_back(pt);
+
+            res = sport_client.Trajectory(path, 1);
+        }
+        else if (test_option.id == 22)
+        {
+            // 圆形轨迹: 半径1.0m, 圆心(0.0,1.0), 逆时针
+            const float R = 1.0f, cx = 0.0f, cy = 1.0f;
+            const float TOTAL_TIME = 20.0f;          // <-- 修改此处调整总时长(s)
+            const float T_ACCEL  = 0.25f * TOTAL_TIME;  // 加速段
+            const float T_CRUISE = 0.50f * TOTAL_TIME;  // 匀速段
+            const float T_DECEL  = 0.25f * TOTAL_TIME;  // 减速段
+            const int   N = 36;
+            std::vector<unitree::robot::a2::PathPoint> path;
+
+            for (int i = 0; i <= N; ++i)
+            {
+                float frac = (float)i / N;
+                float t;
+                if (frac <= 0.25f)
+                    t = T_ACCEL * (frac / 0.25f);
+                else if (frac <= 0.75f)
+                    t = T_ACCEL + T_CRUISE * ((frac - 0.25f) / 0.5f);
+                else
+                    t = T_ACCEL + T_CRUISE + T_DECEL * ((frac - 0.75f) / 0.25f);
+
+                float angle = -M_PI_2 + 2.0f * M_PI * frac;
+
+                unitree::robot::a2::PathPoint pt;
+                pt.t_from_start = t;
+                pt.x = cx + R * cosf(angle);
+                pt.y = cy + R * sinf(angle);
+                pt.yaw = 0.0f;
+                path.push_back(pt);
+            }
+
+            res = sport_client.Trajectory(path, 1);
         }
 
 
