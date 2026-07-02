@@ -241,7 +241,7 @@ class LocoClient : public Client {
   /*High Level API Call*/
   int32_t Damp() { return SetFsmId(1); }
 
-  int32_t Start() { return SetFsmId(500); }
+  int32_t Start() { return SetFsmId(601); }
 
   int32_t Squat() { return SetFsmId(2); }
 
