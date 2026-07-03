@@ -8,3 +8,6 @@ target_link_libraries(r1_ankle_swing_example unitree_sdk2)
 
 add_executable(r1_audio_client_example  audio/r1_audio_client_example.cpp)
 target_link_libraries(r1_audio_client_example unitree_sdk2)
+
+add_executable(r1A_wrist_swing_example low_level/r1A_wrist_swing_example.cpp)
+target_link_libraries(r1A_wrist_swing_example unitree_sdk2)
