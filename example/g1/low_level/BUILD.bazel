@@ -1,0 +1,12 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "g1_ankle_swing_example",
+    srcs = ["g1_ankle_swing_example.cpp", "gamepad.hpp"],
+    deps = [
+        "@abseil-cpp//absl/status:status",
+        "@abseil-cpp//absl/log:absl_check",
+	"//:unitree_sdk2",
+    ],
+    visibility = ["//visibility:public"],
+)
