@@ -56,5 +56,10 @@ You can refer to `example/cmake_sample` on how to import the unitree_sdk2 into y
 
 Note that if you install the library to other places other than `/opt/unitree_robotics`, you need to make sure the path is added to "${CMAKE_PREFIX_PATH}" so that cmake can find it with "find_package()".
 
+### macOS Note
+The C++ SDK currently only supports Linux (Ubuntu 20.04) with pre-built binaries for x86_64 and aarch64. The static library `libunitree_sdk2.a` is ELF format and cannot be used on macOS.
+
+For macOS users, use the Python SDK instead: [unitree_sdk2_python](https://github.com/unitreerobotics/unitree_sdk2_python), which uses CycloneDDS Python bindings and works cross-platform.
+
 ### Notice
 For more reference information, please go to [Unitree Document Center](https://support.unitree.com/home/zh/developer).
