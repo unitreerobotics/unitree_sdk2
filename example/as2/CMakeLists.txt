@@ -3,3 +3,6 @@ target_link_libraries(as2_sport_client unitree_sdk2)
 
 add_executable(as2_sport_state  sport/as2_sport_state.cpp)
 target_link_libraries(as2_sport_state unitree_sdk2)
+
+add_executable(as2_audio_client_example  audio/as2_audio_client_example.cpp)
+target_link_libraries(as2_audio_client_example unitree_sdk2)
