@@ -116,6 +116,14 @@ int main(int argc, char const *argv[]) {
     //   client.Sit();
     // }
 
+    if (arg_pair.first == "lie_down") {
+      client.LieDown();
+    }
+
+    if (arg_pair.first == "get_up") {
+      client.GetUp();
+    }
+
     if (arg_pair.first == "stand_up") {
       client.StandUp();
     }

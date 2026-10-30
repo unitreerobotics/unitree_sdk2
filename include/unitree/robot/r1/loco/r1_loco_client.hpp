@@ -1,6 +1,8 @@
 #pragma once
 
+#include <chrono>
 #include <limits>
+#include <thread>
 #include <unitree/robot/client/client.hpp>
 #include <unitree/robot/go2/public/jsonize_type.hpp>
 #include "r1_loco_api.hpp"
@@ -86,6 +88,17 @@ class LocoClient : public Client {
   // int32_t Squat() { return SetFsmId(2); }
 
   // int32_t Sit() { return SetFsmId(3); }
+
+  int32_t LieDown() { return SetFsmId(702); }
+
+  int32_t GetUp() {
+    int32_t ret = StandUp();
+    if (ret != 0) {
+      return ret;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    return SetFsmId(701);
+  }
 
   int32_t StandUp() { return SetFsmId(4); }
 
