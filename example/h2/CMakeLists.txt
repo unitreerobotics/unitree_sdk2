@@ -25,3 +25,15 @@ if(Boost_FOUND)
     add_executable(h2_arm_action_example high_level/h2_arm_action_example.cpp)
     target_link_libraries(h2_arm_action_example unitree_sdk2 Boost::program_options)
 endif()
+
+add_executable(h2d_agv_client_example h2d/h2d_agv_client_example.cpp)
+target_link_libraries(h2d_agv_client_example unitree_sdk2)
+
+add_executable(h2d_arm_example h2d/h2d_arm_example.cpp)
+target_link_libraries(h2d_arm_example unitree_sdk2)
+
+add_executable(h2d_height_control h2d/h2d_height_control.cpp)
+target_link_libraries(h2d_height_control unitree_sdk2)
+
+add_executable(h2d_waist_example h2d/h2d_waist_example.cpp)
+target_link_libraries(h2d_waist_example unitree_sdk2)
