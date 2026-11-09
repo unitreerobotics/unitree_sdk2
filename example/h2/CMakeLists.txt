@@ -9,8 +9,8 @@ target_link_libraries(h2_arm_sdk_dds_example unitree_sdk2)
 add_executable(h2_ankle_swing_example low_level/h2_ankle_swing_example.cpp)
 target_link_libraries(h2_ankle_swing_example unitree_sdk2)
 
-find_package(yaml-cpp QUIET)
-if(yaml-cpp_FOUND AND ${yaml-cpp_VERSION} VERSION_GREATER_EQUAL "0.6")
+find_package(yaml-cpp 0.6 QUIET)
+if(yaml-cpp_FOUND)
     add_executable(h2_dual_arm_example low_level/h2_dual_arm_example.cpp)
     target_link_libraries(h2_dual_arm_example PRIVATE unitree_sdk2 yaml-cpp)
     target_compile_definitions(h2_dual_arm_example PUBLIC
