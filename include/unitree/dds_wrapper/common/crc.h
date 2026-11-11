@@ -4,6 +4,12 @@
 #pragma once
 
 #include <stdint.h>
+#include <array>
+#include <cstddef>
+#include <cstring>
+
+#include <unitree/idl/hg/LowCmd_.hpp>
+#include <unitree/idl/hg/LowState_.hpp>
 
 inline uint16_t crc16_core (const uint8_t *nData, unsigned short wLength){
     static const uint16_t wCRCTable[] = {
@@ -77,4 +83,109 @@ inline uint32_t crc32_core(uint32_t* ptr, uint32_t len){
         }
     }
     return CRC32;
+}
+
+// Packed-wire CRC for HG (G1/H1) LowCmd_.
+//
+// Required because computing CRC over the raw in-memory struct
+// (`crc32_core((uint32_t*)&cmd, ...)`) walks compiler-inserted alignment
+// padding bytes that are NOT necessarily zero, producing a CRC that disagrees
+// with what the firmware recomputes from the received bytes — the firmware
+// then silently drops the frame and the motor never goes under user control
+// (LowState reports motor.mode=0 in spite of motor_cmd[i].mode=1).
+//
+// The packed buffer matches the Python SDK's __packFmtHGLowCmd
+// ('<2B2x' + 'B3x5fI' * 35 + '5I') — 1004 bytes total, CRC over the first
+// 1000 bytes (250 uint32 words). The trailing 4-byte CRC slot is left zero
+// and excluded from the CRC.
+inline uint32_t crc32_core(const unitree_hg::msg::dds_::LowCmd_& cmd)
+{
+    alignas(uint32_t) std::array<uint8_t, 1004> buf{};
+    std::size_t off = 0;
+    buf[off++] = static_cast<uint8_t>(cmd.mode_pr());
+    buf[off++] = static_cast<uint8_t>(cmd.mode_machine());
+    off += 2;  // pad to 4-byte boundary
+    for (std::size_t i = 0; i < 35; ++i) {
+        const auto& m = cmd.motor_cmd().at(i);
+        buf[off++] = static_cast<uint8_t>(m.mode());
+        off += 3;  // pad to 4-byte boundary
+        auto write_float = [&](float v) {
+            std::memcpy(buf.data() + off, &v, sizeof(float));
+            off += sizeof(float);
+        };
+        write_float(m.q());
+        write_float(m.dq());
+        write_float(m.tau());
+        write_float(m.kp());
+        write_float(m.kd());
+        uint32_t motor_reserve = static_cast<uint32_t>(m.reserve());
+        std::memcpy(buf.data() + off, &motor_reserve, sizeof(uint32_t));
+        off += sizeof(uint32_t);
+    }
+    for (std::size_t i = 0; i < 4; ++i) {
+        uint32_t v = static_cast<uint32_t>(cmd.reserve()[i]);
+        std::memcpy(buf.data() + off, &v, sizeof(uint32_t));
+        off += sizeof(uint32_t);
+    }
+    // bytes [1000..1003] are the crc slot, left zero — excluded from CRC.
+    return crc32_core(reinterpret_cast<uint32_t*>(buf.data()), 250U);
+}
+
+// Packed-wire CRC for HG (G1/H1) LowState_. Same rationale as the LowCmd
+// overload above. Matches Python SDK's __packFmtHGLowState
+// ('<2I2B2xI' + '13fh2x' + 'B3x4f2hf7I' * 35 + '40B5I') — 2092 bytes total,
+// CRC over the first 2088 bytes (522 uint32 words).
+inline uint32_t crc32_core(const unitree_hg::msg::dds_::LowState_& state)
+{
+    alignas(uint32_t) std::array<uint8_t, 2092> buf{};
+    std::size_t off = 0;
+    auto write_u32 = [&](uint32_t v) {
+        std::memcpy(buf.data() + off, &v, sizeof(uint32_t));
+        off += sizeof(uint32_t);
+    };
+    auto write_f32 = [&](float v) {
+        std::memcpy(buf.data() + off, &v, sizeof(float));
+        off += sizeof(float);
+    };
+    auto write_i16 = [&](int16_t v) {
+        std::memcpy(buf.data() + off, &v, sizeof(int16_t));
+        off += sizeof(int16_t);
+    };
+
+    write_u32(state.version()[0]);
+    write_u32(state.version()[1]);
+    buf[off++] = static_cast<uint8_t>(state.mode_pr());
+    buf[off++] = static_cast<uint8_t>(state.mode_machine());
+    off += 2;  // pad
+    write_u32(state.tick());
+
+    const auto& imu = state.imu_state();
+    for (float v : imu.quaternion())    write_f32(v);
+    for (float v : imu.gyroscope())     write_f32(v);
+    for (float v : imu.accelerometer()) write_f32(v);
+    for (float v : imu.rpy())           write_f32(v);
+    write_i16(imu.temperature());
+    off += 2;  // pad
+
+    for (std::size_t i = 0; i < 35; ++i) {
+        const auto& m = state.motor_state().at(i);
+        buf[off++] = static_cast<uint8_t>(m.mode());
+        off += 3;  // pad to 4-byte boundary
+        write_f32(m.q());
+        write_f32(m.dq());
+        write_f32(m.ddq());
+        write_f32(m.tau_est());
+        write_i16(m.temperature()[0]);
+        write_i16(m.temperature()[1]);
+        write_f32(m.vol());
+        write_u32(m.sensor()[0]);
+        write_u32(m.sensor()[1]);
+        write_u32(m.motorstate());
+        for (uint32_t r : m.reserve()) write_u32(r);
+    }
+
+    for (uint8_t b : state.wireless_remote()) buf[off++] = b;
+    for (uint32_t r : state.reserve())        write_u32(r);
+    // bytes [2088..2091] are the crc slot, left zero — excluded from CRC.
+    return crc32_core(reinterpret_cast<uint32_t*>(buf.data()), 522U);
 }
