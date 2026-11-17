@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Unitree SDK2 environment script (one copy per architecture, generated from
+# this template by scripts/make_dist.sh).
+#
+# Usage (bash / zsh):
+#   source <dist>/unitree-sdk2-env.sh
+#
+# Only PATH and UNITREE_SDK2_* are modified. LD_LIBRARY_PATH / CPATH /
+# LIBRARY_PATH / CMAKE_PREFIX_PATH are not exported. Example programs locate
+# libraries through RPATH; CMake consumers locate the package with
+# -Dunitree_sdk2_DIR="$UNITREE_SDK2_CMAKE_DIR".
+
+if [ -z "${BASH_SOURCE:-}${ZSH_VERSION:-}" ]; then
+    echo "unitree-sdk2-env.sh must be sourced from bash or zsh" >&2
+    return 1 2>/dev/null || exit 1
+fi
+
+if [ -n "${BASH_SOURCE:-}" ]; then
+    _unitree_sdk2_script=${BASH_SOURCE[0]}
+else
+    # zsh: ${(%):-%x} is the path of the script being sourced
+    _unitree_sdk2_script=${(%):-%x}
+fi
+# Resolve symlinks so this script can itself be sourced through a symlink.
+if command -v readlink >/dev/null 2>&1; then
+    _unitree_sdk2_script=$(readlink -f -- "$_unitree_sdk2_script" 2>/dev/null \
+        || printf '%s' "$_unitree_sdk2_script")
+fi
+_unitree_sdk2_root=$(CDPATH= cd -- "$(dirname -- "$_unitree_sdk2_script")" && pwd -P)
+unset _unitree_sdk2_script
+
+if [ ! -d "${_unitree_sdk2_root}/lib" ] || [ ! -d "${_unitree_sdk2_root}/include" ]; then
+    echo "unitree-sdk2-env.sh: '${_unitree_sdk2_root}' is not a valid Unitree SDK2 output (missing lib/ or include/)" >&2
+    unset _unitree_sdk2_root
+    return 1 2>/dev/null || exit 1
+fi
+
+UNITREE_SDK2_ROOT=${_unitree_sdk2_root}
+unset _unitree_sdk2_root
+UNITREE_SDK2_ARCH=__ARCH__
+UNITREE_SDK2_INCLUDE_DIR=${UNITREE_SDK2_ROOT}/include
+UNITREE_SDK2_LIB_DIR=${UNITREE_SDK2_ROOT}/lib
+UNITREE_SDK2_BIN_DIR=${UNITREE_SDK2_ROOT}/bin
+UNITREE_SDK2_CMAKE_DIR=${UNITREE_SDK2_ROOT}/lib/cmake/unitree_sdk2
+# Compatibility with the variable name used by older versions.
+UT_SDK_PREFIX=${UNITREE_SDK2_ROOT}
+
+# Toolchain file variable from older outputs; no longer used.
+unset UNITREE_SDK2_CMAKE_TOOLCHAIN_FILE
+
+case ":${PATH:-}:" in
+    *":${UNITREE_SDK2_BIN_DIR}:"*) ;;
+    *) PATH=${UNITREE_SDK2_BIN_DIR}${PATH:+:${PATH}} ;;
+esac
+export PATH
+export UNITREE_SDK2_ROOT UNITREE_SDK2_ARCH UNITREE_SDK2_INCLUDE_DIR \
+       UNITREE_SDK2_LIB_DIR UNITREE_SDK2_BIN_DIR UNITREE_SDK2_CMAKE_DIR \
+       UT_SDK_PREFIX
+
+if [ "${UNITREE_SDK2_ENV_QUIET:-0}" = "1" ]; then
+    return 0 2>/dev/null || exit 0
+fi
+
+printf '%-34s = %s\n' \
+    UNITREE_SDK2_ROOT "$UNITREE_SDK2_ROOT" \
+    UNITREE_SDK2_ARCH "$UNITREE_SDK2_ARCH" \
+    UNITREE_SDK2_INCLUDE_DIR "$UNITREE_SDK2_INCLUDE_DIR" \
+    UNITREE_SDK2_LIB_DIR "$UNITREE_SDK2_LIB_DIR" \
+    UNITREE_SDK2_BIN_DIR "$UNITREE_SDK2_BIN_DIR" \
+    UNITREE_SDK2_CMAKE_DIR "$UNITREE_SDK2_CMAKE_DIR" \
+    UT_SDK_PREFIX "$UT_SDK_PREFIX"

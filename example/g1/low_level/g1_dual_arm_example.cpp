@@ -1,5 +1,7 @@
 #include <yaml-cpp/yaml.h>
 
+#include "../../common/behavior_dir.hpp"
+
 #include <cmath>
 #include <memory>
 #include <mutex>
@@ -215,7 +217,7 @@ class G1Example {
   }
 
   void loadBehaviorLibrary(std::string behavior_name) {
-    std::string resource_dir = BLIB_DIR;
+    std::string resource_dir = unitree_example::ResolveBehaviorDir("g1");
     YAML::Node motion = YAML::LoadFile(resource_dir + behavior_name + ".seq");
 
     std::string content = motion["components"][1]["content"].as<std::string>();

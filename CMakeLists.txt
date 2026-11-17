@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-## Chosse build type
-set(default_build_type "Release")
+## Choose build type
+set(default_build_type "Debug")
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
     set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
@@ -22,6 +22,29 @@ endif ()
 
 ## Use GNUInstallDirs to install libraries into correct locations on all platforms.
 include(GNUInstallDirs)
+
+## Installed executables locate lib/ under the same prefix relative to $ORIGIN;
+## no absolute build or source-tree paths are written, so the entire install
+## prefix can be copied anywhere and still run.
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+# Use RPATH instead of RUNPATH to keep the old build behavior ($ORIGIN-relative lookup).
+if (UNIX AND NOT APPLE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
+endif ()
+
+## Strip source-tree absolute paths from __FILE__ and debug info: artifacts no
+## longer carry this repository's path, and builds become independent of the
+## source directory location (reproducible builds). Skipped automatically when
+## the compiler does not support the flag.
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag(
+    "-ffile-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}=/usr/src/unitree_sdk2"
+    UNITREE_SDK2_HAS_FILE_PREFIX_MAP)
+if (UNITREE_SDK2_HAS_FILE_PREFIX_MAP)
+    add_compile_options(
+        "$<$<COMPILE_LANGUAGE:CXX>:-ffile-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}=/usr/src/unitree_sdk2>")
+endif ()
 
 ## Put all binary files into /bin and libraries into /lib
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -58,6 +81,8 @@ target_include_directories(unitree_sdk2 INTERFACE
 
 if (BUILD_EXAMPLES)
     add_subdirectory(example)
+    # Recursively collect executable targets under example/ and install them to <prefix>/bin.
+    include(cmake/InstallExamples.cmake)
 endif ()
 
 ## Install the library
@@ -68,7 +93,7 @@ install(FILES ${UNITREE_SDK_LIB}
     DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 install(FILES cmake/unitree_sdk2Targets.cmake
-    DESTINATION lib/cmake/unitree_sdk2)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/unitree_sdk2)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
@@ -79,4 +104,4 @@ write_basic_package_version_file(
 configure_file(cmake/unitree_sdk2Config.cmake.in unitree_sdk2Config.cmake @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/unitree_sdk2Config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/unitree_sdk2ConfigVersion.cmake"
-    DESTINATION lib/cmake/unitree_sdk2)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/unitree_sdk2)

@@ -3,6 +3,15 @@
 
 # cpp
 build
+compile_commands.json
 
-#cland
+# clangd
 .cache
+
+# local build / artifacts
+output/
+buildout/
+dist/
+
+# local git worktrees
+.worktrees/

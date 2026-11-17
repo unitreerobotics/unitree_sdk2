@@ -1,35 +1,32 @@
-FROM ubuntu:20.04
+ARG BASE_IMAGE=ubuntu:20.04
+FROM ${BASE_IMAGE}
 
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone 
+ARG DEBIAN_FRONTEND=noninteractive
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-USER root
-
-# install zsh and oh-my-zsh
-RUN apt update && apt-get install -y git wget zsh && \
-    wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh && chmod +x install.sh
-RUN ./install.sh
-RUN git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
-    apt install zsh-syntax-highlighting
-# configure zsh
-RUN echo 'export ZSH=$HOME/.oh-my-zsh' >> ~/.zshrc && \
-    echo 'ZSH_THEME="ys"' >> ~/.zshrc && \
-    echo 'plugins=(git zsh-autosuggestions)' >> ~/.zshrc && \
-    echo 'source $ZSH/oh-my-zsh.sh' >> ~/.zshrc && \
-    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> ~/.zshrc
-RUN chsh -s /bin/zsh 
-
-# install build tools
-RUN apt-get install -y build-essential gcc-9  g++-9 gdb  cmake  ninja-build
-
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 100 \
-    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 100
-
-# install libraries
-RUN apt-get install -y libyaml-cpp-dev libeigen3-dev
+# Host build dependencies; the x86_64 image additionally installs the aarch64
+# cross toolchain and Boost runtime.
+# arm64 packages come from ports, amd64 packages from the default archive.
+# Boost runtime is Multi-Arch: headers and the .so symlink are reused from the
+# amd64 dev package. The yaml-cpp dev package in focal is not Multi-Arch, so
+# cross builds skip examples that depend on it and cannot accidentally link the
+# host library into an aarch64 artifact.
+RUN dpkg --add-architecture arm64 \
+ && sed -i 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list \
+ && printf '%s\n' \
+      'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal main restricted universe multiverse' \
+      'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main restricted universe multiverse' \
+      'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-security main restricted universe multiverse' \
+      > /etc/apt/sources.list.d/arm64.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends \
+      build-essential cmake git ca-certificates \
+      libyaml-cpp-dev libeigen3-dev libboost-program-options-dev \
+ && if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
+        apt-get install -y --no-install-recommends \
+            g++-aarch64-linux-gnu libboost-program-options1.71.0:arm64 \
+        && ln -sf libboost_program_options.so.1.71.0 \
+                  /usr/lib/aarch64-linux-gnu/libboost_program_options.so; \
+    fi \
+ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
-
-CMD ["zsh"]

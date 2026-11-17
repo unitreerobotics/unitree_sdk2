@@ -14,6 +14,8 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "../../common/behavior_dir.hpp"
+
 #include <unitree/idl/hg/LowCmd_.hpp>
 #include <unitree/idl/hg/LowState_.hpp>
 #include <unitree/robot/b2/motion_switcher/motion_switcher_client.hpp>
@@ -112,7 +114,8 @@ int main(int argc, char** argv) {
 
   try {
     const std::string network = argv[1];
-    const std::string trajectory_path = std::string(H2_DUAL_ARM_BEHAVIOR_DIR) + "motion.seq";
+    const std::string trajectory_path =
+        unitree_example::ResolveBehaviorDir("h2") + "motion.seq";
     const auto trajectory = LoadTrajectory(trajectory_path);
     std::cout << "Loaded " << trajectory.size() << " frames from " << trajectory_path << std::endl;
 

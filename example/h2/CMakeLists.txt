@@ -10,11 +10,9 @@ add_executable(h2_ankle_swing_example low_level/h2_ankle_swing_example.cpp)
 target_link_libraries(h2_ankle_swing_example unitree_sdk2)
 
 find_package(yaml-cpp QUIET)
-if(yaml-cpp_FOUND AND ${yaml-cpp_VERSION} VERSION_GREATER_EQUAL "0.6")
+if(yaml-cpp_FOUND AND "${yaml-cpp_VERSION}" VERSION_GREATER_EQUAL "0.6")
     add_executable(h2_dual_arm_example low_level/h2_dual_arm_example.cpp)
     target_link_libraries(h2_dual_arm_example PRIVATE unitree_sdk2 yaml-cpp)
-    target_compile_definitions(h2_dual_arm_example PUBLIC
-        H2_DUAL_ARM_BEHAVIOR_DIR="${CMAKE_CURRENT_SOURCE_DIR}/low_level/behavior_lib/")
 endif()
 
 find_package(Boost COMPONENTS program_options)
