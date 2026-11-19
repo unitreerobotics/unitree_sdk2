@@ -38,7 +38,7 @@ private:
         auto data = joystick->combine();
         memcpy(&msg_.wireless_remote()[0], &data, sizeof(unitree::common::REMOTE_DATA_RX));
       }
-      msg_.crc() = crc32_core((uint32_t*)&msg_, (sizeof(MsgType)>>2)-1);
+      msg_.crc() = crc32_core(msg_);
     }
   };
 
@@ -64,7 +64,7 @@ private:
      * @brief Something before sending the message.
      */
     void pre_communication() override {
-        msg_.crc() = crc32_core((uint32_t*)&msg_, (sizeof(MsgType)>>2)-1);
+        msg_.crc() = crc32_core(msg_);
     }
 };
 
